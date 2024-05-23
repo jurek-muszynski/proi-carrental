@@ -2,6 +2,14 @@
 
 # Projekt: Symulator Wypożyczalni Aut w C++
 
+## Instrukcja obsługi
+
+```bash
+cd build
+cmake ..
+make
+./MyProject
+```
 ## Cel Projektu
 Celem projektu jest stworzenie aplikacji w języku C++, która symuluje działanie wypożyczalni samochodów. Aplikacja będzie umożliwiać zarządzanie flotą pojazdów, klientami oraz procesem wypożyczania i zwracania samochodów.
 
