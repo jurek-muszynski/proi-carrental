@@ -1,5 +1,3 @@
-# 24L-PROI-Lewko-Muszyński
-
 # Projekt: Symulator Wypożyczalni Aut w C++
 
 ## Instrukcja obsługi
