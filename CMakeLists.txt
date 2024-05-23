@@ -15,7 +15,12 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 set(PROJECT_SOURCES
-    src
+    src/customer/customer.cpp
+    src/customer/customer_management.cpp
+    src/fleet/fleet_management.cpp
+    src/rental/rental.cpp
+    src/rental/rental_management.cpp
+    src/vehicle/vehicle.cpp
     main.cpp
     gui.cpp
 )
@@ -24,5 +29,5 @@ add_executable(MyProject ${PROJECT_SOURCES})
 
 # target_link_libraries(MyProject Qt5::Widgets) GUI
 
-# add_executable(testGoogle tests/test_flist.cpp tests/test_logger.cpp ${PROJECT_SOURCES})
+# add_executable(testGoogle tests/ tests/ ${PROJECT_SOURCES})
 # target_link_libraries(testGoogle PUBLIC gtest_main)
