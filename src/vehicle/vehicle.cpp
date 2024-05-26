@@ -6,6 +6,7 @@ Vehicle::Vehicle(std::string make, std::string model, int year, std::string colo
 
 // Getters
 std::string Vehicle::getMake() { return make; }
+std::string Vehicle::getId() { return std::string(); }
 std::string Vehicle::getModel() { return model; }
 int Vehicle::getYear() { return year; }
 std::string Vehicle::getColor() { return color; }
@@ -27,6 +28,7 @@ void Vehicle::setAvailabilityStatus(bool availabilityStatus) { this->availabilit
 void Vehicle::setRentalRates(double rentalRates) { this->rentalRates = rentalRates; }
 
 // Method to update availability status
-void Vehicle::updateAvailabilityStatus(bool status) {
+void Vehicle::updateAvailabilityStatus(bool status)
+{
     this->availabilityStatus = status;
 }
