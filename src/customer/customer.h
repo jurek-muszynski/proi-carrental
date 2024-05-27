@@ -2,11 +2,12 @@
 
 #include <string>
 #include <ctime>
+#include "../address/address.h"
 
 class Customer
 {
 public:
-    Customer(std::string id, std::string fname, std::string lname, std::tm birthDate, std::string gender, std::string email, std::string contact);
+    Customer(std::string id, std::string fname, std::string lname, std::tm birthDate, std::string gender, std::string email, std::string contact, Address address);
     void updatePhoneNumber(std::string new_number);
     void updateEmail(std::string new_email);
     std::string getId();
@@ -16,6 +17,8 @@ public:
     std::string getGender();
     std::string getEmail();
     std::string getPhoneNumber();
+    Address getAddress();
+    void updateAddress(Address new_address);
 
 private:
     std::string id;
@@ -25,9 +28,9 @@ private:
     std::string gender;
     std::string email;
     std::string phoneNumber;
+    Address address;
     // password ?????????????
 };
-
 
 // Tworzenie daty urodzenia:
 // std::tm birthDate = {};

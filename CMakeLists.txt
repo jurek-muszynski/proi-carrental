@@ -15,11 +15,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 set(PROJECT_SOURCES
+    src/address/address.cpp
     src/customer/customer.cpp
     src/customer/customer_management.cpp
     src/fleet/fleet_management.cpp
     src/rental/rental.cpp
     src/rental/rental_management.cpp
+    src/location/location.cpp
     src/vehicle/vehicle.cpp
     main.cpp
     gui.cpp

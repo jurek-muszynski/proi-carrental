@@ -9,7 +9,9 @@ int main()
     birthDate.tm_mon = 12-1; // months since January (0-11)
     birthDate.tm_mday = 25; // day of the month (1-31)
 
-    Customer customer("1", "John", "Doe", birthDate, "Male", "johndoe@example.com", "1234567890");
+    Address address("1", "123 Main St", "New York", "NY", "10001");
+
+    Customer customer("1", "John", "Doe", birthDate, "Male", "johndoe@example.com", "1234567890", address);
 
     std::cout << customer.getId() << std::endl;
     std::cout << customer.getFname() << std::endl;
@@ -18,6 +20,11 @@ int main()
     std::cout << customer.getGender() << std::endl;
     std::cout << customer.getEmail() << std::endl;
     std::cout << customer.getPhoneNumber() << std::endl;
+    std::cout << customer.getAddress().getId() << std::endl;
+    std::cout << customer.getAddress().getStreet() << std::endl;
+    std::cout << customer.getAddress().getCity() << std::endl;
+    std::cout << customer.getAddress().getState() << std::endl;
+    std::cout << customer.getAddress().getZipCode() << std::endl;
     
     return 0;
 }
