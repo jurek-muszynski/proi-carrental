@@ -18,6 +18,11 @@ private:
     std::string id;
     Customer *customer;
     Vehicle *vehicle;
+    // std::string pickupLocation;
+    // std::string dropoffLocation;
+    // std::string rentalStartDate;
+    // std::string rentalEndDate;
     int duration;
-    static double rate;
+    // double totalCharges;
+    // static double rate;
 };
