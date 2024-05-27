@@ -24,5 +24,5 @@ private:
     // std::string rentalEndDate;
     int duration;
     // double totalCharges;
-    // static double rate;
+    static double rate;
 };

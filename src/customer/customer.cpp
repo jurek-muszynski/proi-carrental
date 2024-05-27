@@ -30,7 +30,7 @@ std::string Customer::getLname() {
 std::string Customer::getBirthDate()
 {
     char buffer[11];
-    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", &this->birthDate);
+    std::strftime(buffer, sizeof(buffer), "%d-%m-%Y", &this->birthDate);
     return std::string(buffer);
 }
 
