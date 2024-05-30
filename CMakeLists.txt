@@ -13,6 +13,9 @@ FetchContent_Declare(
    GIT_TAG main
 )
 FetchContent_MakeAvailable(googletest)
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz)
+FetchContent_MakeAvailable(json)
+
 
 set(PROJECT_SOURCES
     src/address/address.cpp
@@ -33,3 +36,4 @@ add_executable(MyProject ${PROJECT_SOURCES})
 
 # add_executable(testGoogle tests/ tests/ ${PROJECT_SOURCES})
 # target_link_libraries(testGoogle PUBLIC gtest_main)
+target_link_libraries(MyProject PRIVATE nlohmann_json::nlohmann_json)
