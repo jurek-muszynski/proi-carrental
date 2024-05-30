@@ -1,4 +1,14 @@
+
+
 # Projekt: Symulator Wypożyczalni Aut w C++
+
+- [Projekt: Symulator Wypożyczalni Aut w C++](#projekt-symulator-wypoyczalni-aut-w-c)
+   * [Instrukcja obsługi](#instrukcja-obsługi)
+   * [Cel Projektu](#cel-projektu)
+   * [Główne Funkcjonalności](#główne-funkcjonalności)
+   * [Diagram UML](#diagram-uml)
+
+
 
 ## Instrukcja obsługi
 
@@ -8,6 +18,7 @@ cmake ..
 make
 ./MyProject
 ```
+
 ## Cel Projektu
 Celem projektu jest stworzenie aplikacji w języku C++, która symuluje działanie wypożyczalni samochodów. Aplikacja będzie umożliwiać zarządzanie flotą pojazdów, klientami oraz procesem wypożyczania i zwracania samochodów.
 
@@ -33,3 +44,6 @@ Celem projektu jest stworzenie aplikacji w języku C++, która symuluje działan
 4. **Raportowanie i Statystyki**
    - Generowanie raportów o stanie floty (np. liczba dostępnych pojazdów, pojazdy w naprawie).
    - Generowanie statystyk dotyczących wypożyczeń (np. najczęściej wypożyczane pojazdy, najbardziej aktywni klienci).
+
+## Diagram UML
+<img src = "figures/diagram.png" width = "80%">
