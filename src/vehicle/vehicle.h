@@ -21,19 +21,20 @@ private:
 public:
     // Constructor
     Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates);
-
+    // Destructor
+    ~Vehicle() = default;
     // Getters
-    std::string getId();
-    std::string getLicensePlate();
-    std::string getMake();
-    std::string getModel();
-    int getYear();
-    std::string getColor();
-    std::string getTransmissionType();
-    std::string getFuelType();
-    int getSeatingCapacity();
-    bool getAvailabilityStatus();
-    double getRentalRates();
+    std::string getId() const;
+    std::string getLicensePlate() const;
+    std::string getMake() const;
+    std::string getModel() const;
+    int getYear() const;
+    std::string getColor() const;
+    std::string getTransmissionType() const;
+    std::string getFuelType() const;
+    int getSeatingCapacity() const;
+    bool getAvailabilityStatus() const;
+    double getRentalRates() const;
 
     // Setters
     void setMake(std::string make);

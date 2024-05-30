@@ -8,11 +8,14 @@ class Rental
 {
 public:
     Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration);
-    double calculateCost();
-    std::string getId();
-    Customer *getCustomer();
-    Vehicle *getVehicle();
-    int getDuration();
+    double calculateCost() const;
+    std::string getId() const;
+    Customer *getCustomer() const;
+    Vehicle *getVehicle() const;
+    int getDuration() const;
+
+    // destructor
+    ~Rental();
 
 private:
     std::string id;

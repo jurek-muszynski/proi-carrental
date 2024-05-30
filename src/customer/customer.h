@@ -6,20 +6,6 @@
 
 class Customer
 {
-public:
-    Customer(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string contact, Address address);
-    void updatePhoneNumber(std::string new_number);
-    void updateEmail(std::string new_email);
-    std::string getId();
-    std::string getFirstName();
-    std::string getLastName();
-    std::string getBirthDate();
-    std::string getGender();
-    std::string getEmail();
-    std::string getPhoneNumber();
-    Address getAddress();
-    void updateAddress(Address new_address);
-
 private:
     std::string id;
     std::string firstName;
@@ -28,8 +14,22 @@ private:
     std::string gender;
     std::string email;
     std::string phoneNumber;
-    Address address;
+    Address *address;
     // password ?????????????
+public:
+    Customer(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string contact, Address *address);
+    void updatePhoneNumber(std::string new_number);
+    void updateEmail(std::string new_email);
+    std::string getId() const;
+    std::string getFirstName() const;
+    std::string getLastName() const;
+    std::string getBirthDate() const;
+    std::string getGender() const;
+    std::string getEmail() const;
+    std::string getPhoneNumber() const;
+    Address *getAddress() const;
+    void updateAddress(Address *new_address);
+    ~Customer();
 };
 
 // Tworzenie daty urodzenia:

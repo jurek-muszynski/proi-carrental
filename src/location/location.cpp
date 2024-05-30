@@ -1,13 +1,16 @@
 #include "location.h"
 
-int Location::getLocationId() const {
+int Location::getLocationId() const
+{
     return locationId;
 }
 
-std::string Location::getName() const {
+std::string Location::getName() const
+{
     return name;
 }
 
-std::string Location::getAddress() const {
+Address *Location::getAddress() const
+{
     return address;
 }

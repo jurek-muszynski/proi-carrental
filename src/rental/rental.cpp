@@ -1,27 +1,37 @@
 #include "rental.h"
 
-// Inicjalizacja statycznego składnika klasy
-double Rental::rate = 10.0; // Przykładowa wartość
-
-Rental::Rental(std::string id, Customer* customer, Vehicle* vehicle, int duration) 
+Rental::Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration)
     : id(id), customer(customer), vehicle(vehicle), duration(duration) {}
 
-double Rental::calculateCost() {
-    return duration * rate;
+double Rental::calculateCost() const
+{
+    return duration * vehicle->getRentalRates();
 }
 
-std::string Rental::getId() {
-    return this->id;
+std::string Rental::getId() const
+{
+    return id;
 }
 
-Customer* Rental::getCustomer() {
+Customer *Rental::getCustomer() const
+{
     return this->customer;
 }
 
-Vehicle* Rental::getVehicle() {
+Vehicle *Rental::getVehicle() const
+{
     return this->vehicle;
 }
 
-int Rental::getDuration() {
+int Rental::getDuration() const
+{
     return this->duration;
+}
+
+Rental::~Rental()
+{
+    delete customer;
+    customer = nullptr;
+    delete vehicle;
+    vehicle = nullptr;
 }

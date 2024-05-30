@@ -1,20 +1,22 @@
-#include <string>
+#pragma once
 
+#include <string>
+#include "../address/address.h"
 class Location
 {
 private:
     int locationId;
     std::string name;
-    std::string address;
-    // std::string latitude;
-    // std::string longitude;
+    Address *address;
 
 public:
-    Location(int id, std::string locName, std::string locAddress)
-        : locationId(id), name(locName), address(locAddress) {}
+    Location(int id, std::string locName, Address *address)
+        : locationId(id), name(locName), address(address)
+    {
+    }
 
     // Getters
     int getLocationId() const;
     std::string getName() const;
-    std::string getAddress() const;
+    Address *getAddress() const;
 };

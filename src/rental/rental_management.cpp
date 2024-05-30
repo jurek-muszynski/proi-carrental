@@ -1,30 +1,33 @@
 #include "rental_management.h"
+#include <algorithm>
 
-void RentalManagement::createRental(Customer *customer, Vehicle *vehicle, int duration)
+void RentalManagement::openRental(Rental *rental)
 {
-    // Generowanie unikalnego ID dla wypożyczenia
-    std::string id = customer->getId() + vehicle->getId(); // Przykładowa metoda generowania ID
-
-    // Tworzenie nowego wypożyczenia i dodawanie go do listy
-    Rental *rental = new Rental(id, customer, vehicle, duration);
     rentals.push_back(rental);
 }
 
-void RentalManagement::closeRental(std::string id)
+void RentalManagement::closeRental(const std::string id)
 {
-    for (int i = 0; i < rentals.size(); i++)
+    // iterator that points to the rental to be closed
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](Rental *rental)
+                           { return rental->getId() == id; });
+
+    if (it != rentals.end())
     {
-        if (rentals[i]->getId() == id)
-        {
-            // Usuwanie wypożyczenia
-            delete rentals[i];
-            rentals.erase(rentals.begin() + i);
-            break;
-        }
+        // Close the rental
+        delete *it;
+        rentals.erase(it);
+
+        // *it = nullptr;
+    }
+    else
+    {
+        // Handle the case where the rental was not found
+        std::cout << "Rental with id " << id << " not found." << std::endl;
     }
 }
 
-Rental *RentalManagement::getRental(std::string id)
+Rental *RentalManagement::getRental(std::string id) const
 {
     for (Rental *rental : rentals)
     {
@@ -33,5 +36,5 @@ Rental *RentalManagement::getRental(std::string id)
             return rental;
         }
     }
-    return nullptr; // Zwraca nullptr, jeśli nie znaleziono wypożyczenia
+    return nullptr;
 }

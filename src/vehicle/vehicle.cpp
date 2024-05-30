@@ -5,17 +5,17 @@ Vehicle::Vehicle(std::string id, std::string licensePlate, std::string make, std
     : id(id), licensePlate(licensePlate), make(make), model(model), year(year), color(color), transmissionType(transmissionType), fuelType(fuelType), seatingCapacity(seatingCapacity), availabilityStatus(availabilityStatus), rentalRates(rentalRates) {}
 
 // Getters
-std::string Vehicle::getMake() { return make; }
-std::string Vehicle::getId() { return id; }
-std::string Vehicle::getLicensePlate() { return licensePlate; }
-std::string Vehicle::getModel() { return model; }
-int Vehicle::getYear() { return year; }
-std::string Vehicle::getColor() { return color; }
-std::string Vehicle::getTransmissionType() { return transmissionType; }
-std::string Vehicle::getFuelType() { return fuelType; }
-int Vehicle::getSeatingCapacity() { return seatingCapacity; }
-bool Vehicle::getAvailabilityStatus() { return availabilityStatus; }
-double Vehicle::getRentalRates() { return rentalRates; }
+std::string Vehicle::getMake() const { return make; }
+std::string Vehicle::getId() const { return id; }
+std::string Vehicle::getLicensePlate() const { return licensePlate; }
+std::string Vehicle::getModel() const { return model; }
+int Vehicle::getYear() const { return year; }
+std::string Vehicle::getColor() const { return color; }
+std::string Vehicle::getTransmissionType() const { return transmissionType; }
+std::string Vehicle::getFuelType() const { return fuelType; }
+int Vehicle::getSeatingCapacity() const { return seatingCapacity; }
+bool Vehicle::getAvailabilityStatus() const { return availabilityStatus; }
+double Vehicle::getRentalRates() const { return rentalRates; }
 
 // Setters
 void Vehicle::setMake(std::string make) { this->make = make; }

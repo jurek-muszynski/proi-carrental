@@ -1,14 +1,14 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
+using ordered_json = nlohmann::ordered_json;
+using namespace nlohmann;
+
 #include "../vehicle/vehicle.h"
 #include <string>
 #include <vector>
 #include <iostream>
 #include <fstream>
-
-#include <nlohmann/json.hpp>
-using ordered_json = nlohmann::ordered_json;
-using namespace nlohmann;
 
 class FleetManagement
 {
