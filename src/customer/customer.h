@@ -7,12 +7,12 @@
 class Customer
 {
 public:
-    Customer(std::string id, std::string fname, std::string lname, std::tm birthDate, std::string gender, std::string email, std::string contact, Address address);
+    Customer(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string contact, Address address);
     void updatePhoneNumber(std::string new_number);
     void updateEmail(std::string new_email);
     std::string getId();
-    std::string getFname();
-    std::string getLname();
+    std::string getFirstName();
+    std::string getLastName();
     std::string getBirthDate();
     std::string getGender();
     std::string getEmail();
@@ -22,8 +22,8 @@ public:
 
 private:
     std::string id;
-    std::string fname;
-    std::string lname;
+    std::string firstName;
+    std::string lastName;
     std::tm birthDate;
     std::string gender;
     std::string email;

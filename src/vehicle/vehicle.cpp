@@ -1,12 +1,13 @@
 #include "vehicle.h"
 
 // Constructor
-Vehicle::Vehicle(std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates)
-    : make(make), model(model), year(year), color(color), transmissionType(transmissionType), fuelType(fuelType), seatingCapacity(seatingCapacity), availabilityStatus(availabilityStatus), rentalRates(rentalRates) {}
+Vehicle::Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates)
+    : id(id), licensePlate(licensePlate), make(make), model(model), year(year), color(color), transmissionType(transmissionType), fuelType(fuelType), seatingCapacity(seatingCapacity), availabilityStatus(availabilityStatus), rentalRates(rentalRates) {}
 
 // Getters
 std::string Vehicle::getMake() { return make; }
-std::string Vehicle::getId() { return std::string(); }
+std::string Vehicle::getId() { return id; }
+std::string Vehicle::getLicensePlate() { return licensePlate; }
 std::string Vehicle::getModel() { return model; }
 int Vehicle::getYear() { return year; }
 std::string Vehicle::getColor() { return color; }
@@ -31,4 +32,22 @@ void Vehicle::setRentalRates(double rentalRates) { this->rentalRates = rentalRat
 void Vehicle::updateAvailabilityStatus(bool status)
 {
     this->availabilityStatus = status;
+}
+
+std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle)
+{
+    // print id
+    os << "Id: " << vehicle.id << std::endl;
+    os << "License Plate: " << vehicle.licensePlate << std::endl;
+    os << "Make: " << vehicle.make << std::endl;
+    os << "Model: " << vehicle.model << std::endl;
+    os << "Year: " << vehicle.year << std::endl;
+    os << "Color: " << vehicle.color << std::endl;
+    os << "Transmission Type: " << vehicle.transmissionType << std::endl;
+    os << "Fuel Type: " << vehicle.fuelType << std::endl;
+    os << "Seating Capacity: " << vehicle.seatingCapacity << std::endl;
+    os << "Availability Status: " << (vehicle.availabilityStatus ? "Available" : "Not Available") << std::endl;
+    os << "Rental Rates: " << vehicle.rentalRates << std::endl;
+
+    return os;
 }

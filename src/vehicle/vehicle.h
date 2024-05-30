@@ -1,10 +1,13 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
 class Vehicle
 {
 private:
+    std::string id;
+    std::string licensePlate;
     std::string make;
     std::string model;
     int year;
@@ -14,15 +17,14 @@ private:
     int seatingCapacity;
     bool availabilityStatus;
     double rentalRates;
-    std::string status;
-    std::string id;
 
 public:
     // Constructor
-    Vehicle(std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates);
+    Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates);
 
     // Getters
     std::string getId();
+    std::string getLicensePlate();
     std::string getMake();
     std::string getModel();
     int getYear();
@@ -46,4 +48,7 @@ public:
 
     // Method to update availability status
     void updateAvailabilityStatus(bool status);
+
+    // Overloaded << operator to output vehicle details
+    friend std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle);
 };

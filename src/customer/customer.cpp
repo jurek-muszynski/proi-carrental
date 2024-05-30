@@ -1,7 +1,7 @@
 #include "customer.h"
 
-Customer::Customer(std::string id, std::string fname, std::string lname, std::tm birthDate, std::string gender, std::string email, std::string phoneNumber, Address address) 
-    : id(id), fname(fname), lname(lname), birthDate(birthDate), gender(gender), email(email), phoneNumber(phoneNumber), address(address) {}
+Customer::Customer(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string phoneNumber, Address address)
+    : id(id), firstName(firstName), lastName(lastName), birthDate(birthDate), gender(gender), email(email), phoneNumber(phoneNumber), address(address) {}
 
 void Customer::updatePhoneNumber(std::string new_number)
 {
@@ -18,12 +18,14 @@ std::string Customer::getId()
     return this->id;
 }
 
-std::string Customer::getFname() {
-    return this->fname;
+std::string Customer::getFirstName()
+{
+    return this->firstName;
 }
 
-std::string Customer::getLname() {
-    return this->lname;
+std::string Customer::getLastName()
+{
+    return this->lastName;
 }
 
 std::string Customer::getBirthDate()

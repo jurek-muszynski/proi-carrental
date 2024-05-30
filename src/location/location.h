@@ -1,10 +1,13 @@
 #include <string>
 
-class Location {
+class Location
+{
 private:
     int locationId;
     std::string name;
     std::string address;
+    // std::string latitude;
+    // std::string longitude;
 
 public:
     Location(int id, std::string locName, std::string locAddress)

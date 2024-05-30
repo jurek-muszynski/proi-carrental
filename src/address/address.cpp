@@ -1,7 +1,7 @@
 #include "address.h"
 
-Address::Address(const std::string& id, const std::string& street, const std::string& city, const std::string& state, const std::string& zipCode)
-    : id(id), street(street), city(city), state(state), zipCode(zipCode) {}
+Address::Address(const std::string &id, const std::string &street, const std::string &city, const std::string &country, const std::string &zipCode)
+    : id(id), street(street), city(city), country(country), zipCode(zipCode) {}
 
 std::string Address::getId() const
 {
@@ -13,15 +13,18 @@ std::string Address::getStreet() const
     return this->street;
 }
 
-std::string Address::getCity() const {
+std::string Address::getCity() const
+{
     return this->city;
 }
 
-std::string Address::getState() const {
-    return this->state;
+std::string Address::getCountry() const
+{
+    return this->country;
 }
 
-std::string Address::getZipCode() const {
+std::string Address::getZipCode() const
+{
     return this->zipCode;
 }
 
@@ -35,14 +38,17 @@ void Address::setStreet(const std::string &street)
     this->street = street;
 }
 
-void Address::setCity(const std::string& city) {
+void Address::setCity(const std::string &city)
+{
     this->city = city;
 }
 
-void Address::setState(const std::string& state) {
-    this->state = state;
+void Address::setCountry(const std::string &country)
+{
+    this->country = country;
 }
 
-void Address::setZipCode(const std::string& zipCode) {
+void Address::setZipCode(const std::string &zipCode)
+{
     this->zipCode = zipCode;
 }
