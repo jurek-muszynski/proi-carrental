@@ -1,37 +1,47 @@
 #include "rental_management.h"
+#include <algorithm>
 
-void RentalManagement::createRental(Customer *customer, Vehicle *vehicle, int duration)
+void RentalManagement::openRental(Rental *rental)
 {
-    // Generowanie unikalnego ID dla wypożyczenia
-    std::string id = customer->getId() + vehicle->getId(); // Przykładowa metoda generowania ID
+    // check if the rental has already been opened
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](Rental *r)
+                           { return r->getId() == rental->getId(); });
 
-    // Tworzenie nowego wypożyczenia i dodawanie go do listy
-    Rental *rental = new Rental(id, customer, vehicle, duration);
-    rentals.push_back(rental);
+    // if the rental is not in the list, add it
+    if (it == rentals.end())
+        rentals.push_back(rental);
+    else
+        std::cout << "Rental with id " << rental->getId() << " has already been opened." << std::endl;
 }
 
-void RentalManagement::closeRental(std::string id)
+void RentalManagement::closeRental(const std::string id)
 {
-    for (int i = 0; i < rentals.size(); i++)
+    // iterator that points to the rental to be closed
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](Rental *rental)
+                           { return rental->getId() == id; });
+
+    if (it != rentals.end())
     {
-        if (rentals[i]->getId() == id)
-        {
-            // Usuwanie wypożyczenia
-            delete rentals[i];
-            rentals.erase(rentals.begin() + i);
-            break;
-        }
+        // Close the rental
+        rentals.erase(it);
+        // delete *it;
+        // *it = nullptr;
+    }
+    else
+    {
+        // Handle the case where the rental was not found
+        std::cout << "Rental with id " << id << " not found." << std::endl;
     }
 }
 
-Rental *RentalManagement::getRental(std::string id)
+Rental *RentalManagement::getRental(std::string id) const
 {
-    for (Rental *rental : rentals)
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](Rental *rental)
+                           { return rental->getId() == id; });
+
+    if (it != rentals.end())
     {
-        if (rental->getId() == id)
-        {
-            return rental;
-        }
+        return *it;
     }
-    return nullptr; // Zwraca nullptr, jeśli nie znaleziono wypożyczenia
+    return nullptr;
 }

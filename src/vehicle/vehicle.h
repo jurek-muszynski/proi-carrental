@@ -1,10 +1,14 @@
 #pragma once
 
 #include <string>
+#include <iostream>
+#include "../location/location.h"
 
 class Vehicle
 {
 private:
+    std::string id;
+    std::string licensePlate;
     std::string make;
     std::string model;
     int year;
@@ -14,24 +18,26 @@ private:
     int seatingCapacity;
     bool availabilityStatus;
     double rentalRates;
-    std::string status;
-    std::string id;
+    Location *location;
 
 public:
     // Constructor
-    Vehicle(std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates);
-
+    Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates);
+    // Destructor
+    ~Vehicle();
     // Getters
-    std::string getId();
-    std::string getMake();
-    std::string getModel();
-    int getYear();
-    std::string getColor();
-    std::string getTransmissionType();
-    std::string getFuelType();
-    int getSeatingCapacity();
-    bool getAvailabilityStatus();
-    double getRentalRates();
+    std::string getId() const;
+    std::string getLicensePlate() const;
+    std::string getMake() const;
+    std::string getModel() const;
+    int getYear() const;
+    std::string getColor() const;
+    std::string getTransmissionType() const;
+    std::string getFuelType() const;
+    int getSeatingCapacity() const;
+    bool getAvailabilityStatus() const;
+    double getRentalRates() const;
+    Location *getLocation() const;
 
     // Setters
     void setMake(std::string make);
@@ -44,6 +50,9 @@ public:
     void setAvailabilityStatus(bool availabilityStatus);
     void setRentalRates(double rentalRates);
 
-    // Method to update availability status
     void updateAvailabilityStatus(bool status);
+    void updateLocation(Location *location);
+
+    // Overloaded << operator to output vehicle details
+    friend std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle);
 };
