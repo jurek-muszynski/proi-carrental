@@ -27,28 +27,3 @@ std::string Address::getZipCode() const
 {
     return this->zipCode;
 }
-
-void Address::setId(const std::string &id)
-{
-    this->id = id;
-}
-
-void Address::setStreet(const std::string &street)
-{
-    this->street = street;
-}
-
-void Address::setCity(const std::string &city)
-{
-    this->city = city;
-}
-
-void Address::setCountry(const std::string &country)
-{
-    this->country = country;
-}
-
-void Address::setZipCode(const std::string &zipCode)
-{
-    this->zipCode = zipCode;
-}

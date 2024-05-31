@@ -20,10 +20,4 @@ public:
     std::string getCity() const;
     std::string getCountry() const;
     std::string getZipCode() const;
-
-    void setId(const std::string &id);
-    void setStreet(const std::string &street);
-    void setCity(const std::string &city);
-    void setCountry(const std::string &country);
-    void setZipCode(const std::string &zipCode);
 };
