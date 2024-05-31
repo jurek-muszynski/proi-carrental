@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <string>
 
 class Address
@@ -14,10 +15,12 @@ private:
 public:
     Address(const std::string &id, const std::string &street, const std::string &city, const std::string &country, const std::string &zipCode);
 
-    // Is that all necessary?
     std::string getId() const;
     std::string getStreet() const;
     std::string getCity() const;
     std::string getCountry() const;
     std::string getZipCode() const;
+
+    // << operator
+    friend std::ostream &operator<<(std::ostream &os, const Address &address);
 };

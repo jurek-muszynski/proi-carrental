@@ -34,16 +34,26 @@ TEST(LocationTest, ConsistentAddressReference)
 
 TEST(LocationTest, MultipleLocationsSameAddress)
 {
-    Address *address = new Address("3", "789 Oak St", "Capital City", "USA", "10101");
-    Location location1(104, "Branch Office", address);
-    Location location2(105, "Warehouse", address);
+    Address address("3", "789 Oak St", "Capital City", "USA", "10101");
+    Location location1(104, "Branch Office", &address);
+    Location location2(105, "Warehouse", &address);
 
-    EXPECT_EQ(location1.getAddress(), address);
-    EXPECT_EQ(location2.getAddress(), address);
+    EXPECT_EQ(location1.getAddress(), &address);
+    EXPECT_EQ(location2.getAddress(), &address);
 
     EXPECT_EQ(location1.getAddress()->getId(), location2.getAddress()->getId());
     EXPECT_EQ(location1.getAddress()->getStreet(), location2.getAddress()->getStreet());
     EXPECT_EQ(location1.getAddress()->getCity(), location2.getAddress()->getCity());
     EXPECT_EQ(location1.getAddress()->getCountry(), location2.getAddress()->getCountry());
     EXPECT_EQ(location1.getAddress()->getZipCode(), location2.getAddress()->getZipCode());
+}
+
+TEST(LocationTest, Destructor)
+{
+    Address *address = new Address("4", "123 Main St", "Springfield", "USA", "12345");
+    Location *location = new Location(106, "Main Office", address);
+
+    EXPECT_EQ(location->getAddress(), address);
+    delete location;
+    EXPECT_EQ(location->getAddress(), nullptr);
 }

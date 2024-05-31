@@ -27,3 +27,10 @@ std::string Address::getZipCode() const
 {
     return this->zipCode;
 }
+
+std::ostream &operator<<(std::ostream &os, const Address &address)
+{
+    os << "Street: " << address.street << std::endl;
+    os << "City: " << address.city << std::endl;
+    return os;
+}
