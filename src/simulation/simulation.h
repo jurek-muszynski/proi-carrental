@@ -1,24 +1,25 @@
 #include <chrono>
+#include <ctime>
 
 class Simulation
 {
 private:
-    std::chrono::system_clock::time_point date_time;
+    std::chrono::system_clock::time_point current_time;
 
 public:
     Simulation()
     {
-        date_time = std::chrono::system_clock::now();
+        current_time = std::chrono::system_clock::now();
     }
     void run();
-    void incrementTime()
+    void passTime()
     {
-        date_time += std::chrono::minutes(15);
+        current_time += std::chrono::minutes(30);
     }
 
-    std::chrono::system_clock::time_point getDateTime()
+    std::string getDateTime()
     {
-        // output current date and time
-        return date_time;
+        std::time_t tt = std::chrono::system_clock::to_time_t(current_time);
+        return ctime(&tt);
     }
 };
