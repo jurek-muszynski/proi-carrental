@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include "../location/location.h"
 
 class Vehicle
 {
@@ -17,6 +18,7 @@ private:
     int seatingCapacity;
     bool availabilityStatus;
     double rentalRates;
+    Location *location;
 
 public:
     // Constructor
@@ -35,6 +37,7 @@ public:
     int getSeatingCapacity() const;
     bool getAvailabilityStatus() const;
     double getRentalRates() const;
+    Location *getLocation() const;
 
     // Setters
     void setMake(std::string make);
@@ -47,8 +50,9 @@ public:
     void setAvailabilityStatus(bool availabilityStatus);
     void setRentalRates(double rentalRates);
 
-    // Method to update availability status
     void updateAvailabilityStatus(bool status);
+    void updateLocation(Location *location);
+
 
     // Overloaded << operator to output vehicle details
     friend std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle);

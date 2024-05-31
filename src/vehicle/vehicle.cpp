@@ -2,7 +2,10 @@
 
 // Constructor
 Vehicle::Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates)
-    : id(id), licensePlate(licensePlate), make(make), model(model), year(year), color(color), transmissionType(transmissionType), fuelType(fuelType), seatingCapacity(seatingCapacity), availabilityStatus(availabilityStatus), rentalRates(rentalRates) {}
+    : id(id), licensePlate(licensePlate), make(make), model(model), year(year), color(color), transmissionType(transmissionType), fuelType(fuelType), seatingCapacity(seatingCapacity), availabilityStatus(availabilityStatus), rentalRates(rentalRates)
+{
+    location = nullptr;
+}
 
 // Getters
 std::string Vehicle::getMake() const { return make; }
@@ -16,7 +19,7 @@ std::string Vehicle::getFuelType() const { return fuelType; }
 int Vehicle::getSeatingCapacity() const { return seatingCapacity; }
 bool Vehicle::getAvailabilityStatus() const { return availabilityStatus; }
 double Vehicle::getRentalRates() const { return rentalRates; }
-
+Location *Vehicle::getLocation() const { return location; }
 // Setters
 void Vehicle::setMake(std::string make) { this->make = make; }
 void Vehicle::setModel(std::string model) { this->model = model; }
@@ -34,6 +37,16 @@ void Vehicle::updateAvailabilityStatus(bool status)
     this->availabilityStatus = status;
 }
 
+void Vehicle::updateLocation(Location *newLocation)
+{
+    if (newLocation == nullptr)
+    {
+        this->location = newLocation;
+        setAvailabilityStatus(false);
+    }
+    this->location = newLocation;
+}
+
 std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle)
 {
     // print id
@@ -48,6 +61,14 @@ std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle)
     os << "Seating Capacity: " << vehicle.seatingCapacity << std::endl;
     os << "Availability Status: " << (vehicle.availabilityStatus ? "Available" : "Not Available") << std::endl;
     os << "Rental Rates: " << vehicle.rentalRates << std::endl;
-
+    if (vehicle.location)
+    {
+        os << "Location: \n"
+           << *vehicle.location << std::endl;
+    }
+    else
+    {
+        os << "Location: Not Available" << std::endl;
+    }
     return os;
 }
