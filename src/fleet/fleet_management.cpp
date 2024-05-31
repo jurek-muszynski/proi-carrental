@@ -15,7 +15,7 @@ void FleetManagement::addVehicle(Vehicle *vehicle)
     vehicles.push_back(vehicle);
 }
 
-void FleetManagement::removeVehicle(std::string id)
+void FleetManagement::removeVehicle(const std::string id)
 {
     for (int i = 0; i < vehicles.size(); i++)
     {
@@ -28,7 +28,7 @@ void FleetManagement::removeVehicle(std::string id)
     }
 }
 
-Vehicle *FleetManagement::getVehicle(std::string id)
+Vehicle *FleetManagement::getVehicle(const std::string id) const
 {
     for (Vehicle *vehicle : vehicles)
     {

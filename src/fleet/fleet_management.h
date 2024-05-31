@@ -22,8 +22,10 @@ public:
     FleetManagement(const std::string &filePath);
 
     void addVehicle(Vehicle *vehicle);
-    void removeVehicle(std::string id);
-    Vehicle *getVehicle(std::string id);
+    void removeVehicle(const std::string id);
+    Vehicle *getVehicle(const std::string id) const;
+    // overload the getVehicle() method based on the transmissionType
+
     std::vector<Vehicle *> getAvailableVehicles();
 
     // Function to load vehicles from JSON file

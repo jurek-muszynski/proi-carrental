@@ -3,6 +3,8 @@
 #include "customer.h"
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <iostream>
 
 class CustomerManagement
 {
@@ -11,6 +13,6 @@ private:
 
 public:
     void addCustomer(Customer *customer);
-    void removeCustomer(Customer *customer);
-    Customer *getCustomer(std::string id);
+    void removeCustomer(const std::string id);
+    Customer *getCustomer(const std::string id) const;
 };

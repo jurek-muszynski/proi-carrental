@@ -3,7 +3,15 @@
 
 void RentalManagement::openRental(Rental *rental)
 {
-    rentals.push_back(rental);
+    // check if the rental has already been opened
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](Rental *r)
+                           { return r->getId() == rental->getId(); });
+
+    // if the rental is not in the list, add it
+    if (it == rentals.end())
+        rentals.push_back(rental);
+    else
+        std::cout << "Rental with id " << rental->getId() << " has already been opened." << std::endl;
 }
 
 void RentalManagement::closeRental(const std::string id)
@@ -16,9 +24,8 @@ void RentalManagement::closeRental(const std::string id)
     {
         // Close the rental
         delete *it;
+        *it = nullptr;
         rentals.erase(it);
-
-        // *it = nullptr;
     }
     else
     {
@@ -29,12 +36,12 @@ void RentalManagement::closeRental(const std::string id)
 
 Rental *RentalManagement::getRental(std::string id) const
 {
-    for (Rental *rental : rentals)
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](Rental *rental)
+                           { return rental->getId() == id; });
+
+    if (it != rentals.end())
     {
-        if (rental->getId() == id)
-        {
-            return rental;
-        }
+        return *it;
     }
     return nullptr;
 }
