@@ -23,9 +23,9 @@ void RentalManagement::closeRental(const std::string id)
     if (it != rentals.end())
     {
         // Close the rental
-        delete *it;
-        *it = nullptr;
         rentals.erase(it);
+        // delete *it;
+        // *it = nullptr;
     }
     else
     {

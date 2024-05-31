@@ -22,7 +22,7 @@ void CustomerManagement::removeCustomer(const std::string id)
     if (it != customers.end())
     {
         // Remove the customer
-        delete *it;
+        // delete *it;
         customers.erase(it);
 
         // *it = nullptr;

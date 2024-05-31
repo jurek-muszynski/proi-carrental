@@ -19,7 +19,7 @@ TEST(RentalManagementTest, CreateAndCloseRental)
     birthDate.tm_mday = 2;
     Address *address2 = new Address("id2", "321 Avenue", "Town", "Province", "54321");
     Customer *customer2 = new Customer("2", "Jane", "Doe", birthDate, "Female", "jane.doe@example.com", "0987654321", address2);
-    Vehicle *vehicle2 = new Vehicle("2", "DEF456", "Honda", "Civic", 2021, "Black", "Manual", "Diesel", 4, false, 120.0);
+    Vehicle *vehicle2 = new Vehicle("2", "DEF456", "Honda", "Civic", 2021, "Black", "Manual", "Diesel", 4, true, 120.0);
     Rental *rental2 = new Rental("2", customer2, vehicle2, 7);
     rentalManagement.openRental(rental2);
 
@@ -31,7 +31,65 @@ TEST(RentalManagementTest, CreateAndCloseRental)
 
     rentalManagement.closeRental("2");
     EXPECT_EQ(rentalManagement.getRental("2"), nullptr);
+    delete rental2;
     EXPECT_EQ(rental2->getCustomer(), nullptr);
     EXPECT_EQ(rental2->getVehicle(), nullptr);
     // EXPECT_EQ(rental2, nullptr) TODO: Fix this
+}
+
+TEST(RentalManagementTest, RentUnavailableVehicle)
+{
+    RentalManagement rentalManagement;
+
+    // Create a customer
+    std::tm birthDate = {};
+    birthDate.tm_year = 1990 - 1900; // years since 1900
+    birthDate.tm_mon = 1 - 1;        // months since January (0-11)
+    birthDate.tm_mday = 1;           // day of the month (1-31)
+    Customer customer("C004", "Bob", "Smith", birthDate, "Male", "bob@example.com", "444555666", nullptr);
+
+    // Create an unavailable vehicle
+    Location location(1, "Main Office", nullptr);
+    Vehicle vehicle("V004", "GHI789", "Chevrolet", "Malibu", 2021, "White", "Automatic", "Petrol", 5, false, 70.0);
+    vehicle.updateLocation(&location);
+
+    // Attempt to open a rental for the unavailable vehicle
+    EXPECT_THROW(rentalManagement.openRental(new Rental("R004", &customer, &vehicle, 2)), std::invalid_argument);
+
+    // Check if the rental was not added to the rental management system
+    EXPECT_EQ(rentalManagement.getRental("R004"), nullptr);
+}
+
+// Test for renting a vehicle and returning it to a different location
+TEST(RentalManagementTest, RentAndReturnToDifferentLocation)
+{
+    RentalManagement rentalManagement;
+
+    // Create a customer
+    std::tm birthDate = {};
+    birthDate.tm_year = 1985 - 1900; // years since 1900
+    birthDate.tm_mon = 3 - 1;        // months since January (0-11)
+    birthDate.tm_mday = 15;          // day of the month (1-31)
+    Customer customer("C005", "Emily", "Johnson", birthDate, "Female", "emily@example.com", "777888999", nullptr);
+    Address *address1 = new Address("id1", "123 Street", "City", "State", "12345");
+    Address *address2 = new Address("id2", "123 Street", "City", "State", "12345");
+
+    // Create a vehicle
+    Location pickupLocation(1, "Pickup Location", address1);
+    Vehicle vehicle("V005", "JKL123", "Ford", "Escape", 2020, "Silver", "Automatic", "Petrol", 5, true, 60.0);
+    vehicle.updateLocation(&pickupLocation);
+
+    // Open a rental
+    Rental rental("R005", &customer, &vehicle, 4);
+    rentalManagement.openRental(&rental);
+
+    // Simulate returning the vehicle to a different location
+    Location dropoffLocation(3, "Dropoff Location", address2);
+    vehicle.updateLocation(&dropoffLocation);
+
+    // Close the rental
+    rentalManagement.closeRental("R005");
+
+    // Check if the rental was successfully closed
+    EXPECT_EQ(rentalManagement.getRental("R005"), nullptr);
 }

@@ -133,3 +133,32 @@ TEST(VehicleAvailabilityTest, AvailabilityDuringMaintenance)
     vehicle.updateAvailabilityStatus(true);
     EXPECT_TRUE(vehicle.getAvailabilityStatus());
 }
+
+TEST(VehicleDestructorTest, DestructorCalled)
+{
+    Address address("1", "123 Main St", "Springfield", "USA", "12345");
+    Location location(101, "Main Office", &address);
+
+    Vehicle *vehicle = new Vehicle("V1", "XYZ123", "Toyota", "Camry", 2020, "Red", "Automatic", "Gasoline", 5, true, 50.0);
+    vehicle->updateLocation(&location);
+
+    EXPECT_EQ(vehicle->getLocation(), &location);
+    delete vehicle;
+    EXPECT_EQ(vehicle->getLocation(), nullptr);
+}
+
+TEST(VehicleDestructorTest, MultipleVehiclesSameLocation)
+{
+    Address address("1", "123 Main St", "Springfield", "USA", "12345");
+    Location location(101, "Main Office", &address);
+
+    Vehicle *vehicle1 = new Vehicle("V1", "XYZ123", "Toyota", "Camry", 2020, "Red", "Automatic", "Gasoline", 5, true, 50.0);
+    Vehicle *vehicle2 = new Vehicle("V2", "ABC456", "Honda", "Civic", 2019, "Blue", "Manual", "Diesel", 4, false, 40.0);
+    vehicle1->updateLocation(&location);
+    vehicle2->updateLocation(&location);
+
+    delete vehicle1;
+    delete vehicle2;
+    EXPECT_EQ(vehicle1->getLocation(), nullptr);
+    EXPECT_EQ(vehicle2->getLocation(), nullptr);
+}

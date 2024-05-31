@@ -7,6 +7,11 @@ Vehicle::Vehicle(std::string id, std::string licensePlate, std::string make, std
     location = nullptr;
 }
 
+Vehicle::~Vehicle()
+{
+    location = nullptr;
+}
+
 // Getters
 std::string Vehicle::getMake() const { return make; }
 std::string Vehicle::getId() const { return id; }

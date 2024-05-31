@@ -24,7 +24,7 @@ public:
     // Constructor
     Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates);
     // Destructor
-    ~Vehicle() = default;
+    ~Vehicle();
     // Getters
     std::string getId() const;
     std::string getLicensePlate() const;
@@ -52,7 +52,6 @@ public:
 
     void updateAvailabilityStatus(bool status);
     void updateLocation(Location *location);
-
 
     // Overloaded << operator to output vehicle details
     friend std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle);

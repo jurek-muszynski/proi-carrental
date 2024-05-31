@@ -1,7 +1,14 @@
 #include "rental.h"
 
 Rental::Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration)
-    : id(id), customer(customer), vehicle(vehicle), duration(duration) {}
+    : id(id), customer(customer), vehicle(vehicle), duration(duration)
+{
+    // check happens if the vehicle is unavailable?
+    if (!vehicle->getAvailabilityStatus())
+    {
+        throw std::invalid_argument("Vehicle is not available, please choose another vehicle.");
+    }
+}
 
 double Rental::calculateCost() const
 {
@@ -30,8 +37,6 @@ int Rental::getDuration() const
 
 Rental::~Rental()
 {
-    delete customer;
     customer = nullptr;
-    delete vehicle;
     vehicle = nullptr;
 }

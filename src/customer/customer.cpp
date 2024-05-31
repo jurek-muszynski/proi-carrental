@@ -62,6 +62,5 @@ void Customer::updateAddress(Address *new_address)
 
 Customer::~Customer()
 {
-    delete address;
     address = nullptr;
 }
