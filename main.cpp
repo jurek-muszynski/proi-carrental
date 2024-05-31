@@ -1,18 +1,21 @@
 #include <iostream>
-#include "src/customer/customer.h"
-#include "src/fleet/fleet_management.h"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
-#include "src/vehicle/vehicle.h"
 #include <string>
+
+#include "src/fleet/fleet_management.h"
+#include "src/simulation/simulation.h"
+
+using namespace date;
 
 int main()
 {
     // SAMPLE DEMO
-
+    Simulation sim;
     FleetManagement fleet("data/vehicles.json");
 
-    std::cout << fleet << std::endl;
+    // std::cout << fleet << std::endl;
+    std::cout << sim.getDateTime() << std::endl;
     return 0;
 }

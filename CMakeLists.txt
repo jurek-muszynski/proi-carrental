@@ -25,6 +25,7 @@ set(PROJECT_SOURCES
     src/rental/rental_management.cpp
     src/location/location.cpp
     src/vehicle/vehicle.cpp
+    src/simulation/simulation.h
 )
 
 add_executable(car_rental main.cpp ${PROJECT_SOURCES})
@@ -41,7 +42,7 @@ add_executable(car_rental_tests
     tests/test_rental.cpp
     tests/test_vehicle.cpp
     tests/test_address.cpp
-    tests/test_location.cpp
+
  ${PROJECT_SOURCES})
 target_link_libraries(car_rental_tests PUBLIC gtest_main)
 target_link_libraries(car_rental_tests PRIVATE nlohmann_json::nlohmann_json)
