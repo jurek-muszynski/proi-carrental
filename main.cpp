@@ -9,16 +9,9 @@
 
 int main()
 {
-    // SAMPLE DEMO
-    Simulation sim;
-    // FleetManagement fleet("data/vehicles.json");
-
-    // std::cout << fleet << std::endl;
-    std::cout << sim.getDateTime() << std::endl;
-    for (int i = 0; i < 20; ++i)
-    {
-        sim.passTime();
-        std::cout << sim.getDateTime() << std::endl;
-    }
+    // SAMPLE DEMO -> pass the absolute path to the data folder in case it throws a json file error
+    Simulation sim(3, "data");
+    srand(time(0));
+    sim.run();
     return 0;
 }

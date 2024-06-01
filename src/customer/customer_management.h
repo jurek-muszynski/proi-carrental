@@ -12,7 +12,7 @@ private:
     std::vector<Customer *> customers;
 
 public:
-    void addCustomer(Customer *customer);
-    void removeCustomer(const std::string id);
+    bool addCustomer(Customer *customer);
+    bool removeCustomer(const std::string id);
     Customer *getCustomer(const std::string id) const;
 };

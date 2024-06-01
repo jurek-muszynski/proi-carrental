@@ -64,3 +64,11 @@ Customer::~Customer()
 {
     address = nullptr;
 }
+
+std::ostream &operator<<(std::ostream &os, const Customer &customer)
+{
+    os << customer.firstName << " " << customer.lastName;
+    os << " - " << customer.email << std::endl;
+
+    return os;
+}

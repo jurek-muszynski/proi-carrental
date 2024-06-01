@@ -30,6 +30,8 @@ public:
     Address *getAddress() const;
     void updateAddress(Address *new_address);
     ~Customer();
+
+    friend std::ostream &operator<<(std::ostream &os, const Customer &customer);
 };
 
 // Tworzenie daty urodzenia:
