@@ -1,22 +1,11 @@
 #pragma once
 
+#include <string>
 #include "../vehicle/vehicle.h"
 #include "../customer/customer.h"
-#include <string>
 
 class Rental
 {
-public:
-    Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration);
-    double calculateCost() const;
-    std::string getId() const;
-    Customer *getCustomer() const;
-    Vehicle *getVehicle() const;
-    int getDuration() const;
-
-    // destructor
-    ~Rental();
-
 private:
     std::string id;
     Customer *customer;
@@ -27,5 +16,15 @@ private:
     // std::string rentalEndDate;
     int duration;
     // double totalCharges;
-    static double rate;
+    double rate;
+
+public:
+    Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration);
+    ~Rental();
+
+    double calculateCost() const;
+    int getDuration() const;
+    std::string getId() const;
+    Customer *getCustomer() const;
+    Vehicle *getVehicle() const;
 };

@@ -21,6 +21,5 @@ public:
     std::string getCountry() const;
     std::string getZipCode() const;
 
-    // << operator
     friend std::ostream &operator<<(std::ostream &os, const Address &address);
 };

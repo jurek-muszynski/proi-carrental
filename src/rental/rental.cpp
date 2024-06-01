@@ -3,11 +3,16 @@
 Rental::Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration)
     : id(id), customer(customer), vehicle(vehicle), duration(duration)
 {
-    // check happens if the vehicle is unavailable?
     if (!vehicle->getAvailabilityStatus())
     {
         throw std::invalid_argument("Vehicle is not available, please choose another vehicle.");
     }
+}
+
+Rental::~Rental()
+{
+    customer = nullptr;
+    vehicle = nullptr;
 }
 
 double Rental::calculateCost() const
@@ -22,21 +27,15 @@ std::string Rental::getId() const
 
 Customer *Rental::getCustomer() const
 {
-    return this->customer;
+    return customer;
 }
 
 Vehicle *Rental::getVehicle() const
 {
-    return this->vehicle;
+    return vehicle;
 }
 
 int Rental::getDuration() const
 {
-    return this->duration;
-}
-
-Rental::~Rental()
-{
-    customer = nullptr;
-    vehicle = nullptr;
+    return duration;
 }
