@@ -30,3 +30,24 @@ TEST(CustomerManagementTest, AddAndRemoveCustomer)
     customerManagement.removeCustomer(customer2->getId());
     EXPECT_EQ(customerManagement.getCustomer("2"), nullptr);
 }
+
+// add the same customer test
+TEST(CustomerManagementTest, AddSameCustomer)
+{
+    CustomerManagement customerManagement;
+    std::tm birthDate = {};
+    birthDate.tm_year = 1990 - 1900;
+    birthDate.tm_mon = 1 - 1;
+    birthDate.tm_mday = 1;
+    Address *address = new Address("id1", "123 Street", "Country", "City", "12345");
+    Customer *customer1 = new Customer("id1", "John", "Doe", birthDate, "Male", "john.doe@example.com", "1234567890", address);
+    EXPECT_TRUE(customerManagement.addCustomer(customer1));
+    EXPECT_NE(customerManagement.getCustomer("id1"), nullptr);
+    EXPECT_EQ(customerManagement.getCustomer("id1"), customer1);
+    EXPECT_EQ(customerManagement.getCustomer("id1")->getFirstName(), "John");
+
+    // Add the same customer again
+    EXPECT_FALSE(customerManagement.addCustomer(customer1));
+    EXPECT_EQ(customerManagement.getCustomer("id1"), customer1);
+    EXPECT_EQ(customerManagement.getCustomer("id1")->getFirstName(), "John");
+}
