@@ -25,7 +25,7 @@ set(PROJECT_SOURCES
     src/rental/rental_management.cpp
     src/location/location.cpp
     src/vehicle/vehicle.cpp
-    src/simulation/simulation.h
+    src/simulation/simulation.cpp
 )
 
 add_executable(car_rental main.cpp ${PROJECT_SOURCES})
