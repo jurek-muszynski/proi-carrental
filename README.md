@@ -4,6 +4,7 @@
 
 - [Projekt: Symulator Wypożyczalni Aut w C++](#projekt-symulator-wypoyczalni-aut-w-c)
    * [Roadmap](#roadmap)
+   * [Demo](#przykładowa-demonstracja-symulatora)
    * [Instrukcja obsługi](#instrukcja-obsługi)
    * [Cel Projektu](#cel-projektu)
    * [Główne Funkcjonalności](#główne-funkcjonalności)
