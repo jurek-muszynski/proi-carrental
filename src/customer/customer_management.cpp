@@ -1,6 +1,6 @@
 #include "customer_management.h"
 
-void CustomerManagement::addCustomer(Customer *customer)
+bool CustomerManagement::addCustomer(Customer *customer)
 {
     // check if the customer is already in the list use the find_if method
     auto it = std::find_if(customers.begin(), customers.end(), [&](Customer *c)
@@ -8,12 +8,17 @@ void CustomerManagement::addCustomer(Customer *customer)
 
     // if the customer is not in the list, add it
     if (it == customers.end())
+    {
         customers.push_back(customer);
+        return true;
+    }
+
+    // else std::cout << "Customer with id " << customer->getId() << " already exists." << std::endl;
     else
-        std::cout << "Customer with id " << customer->getId() << " already exists." << std::endl;
+        return false;
 }
 
-void CustomerManagement::removeCustomer(const std::string id)
+bool CustomerManagement::removeCustomer(const std::string id)
 {
     // iterator that points to the customer to be removed
     auto it = std::find_if(customers.begin(), customers.end(), [&](Customer *customer)
@@ -24,13 +29,15 @@ void CustomerManagement::removeCustomer(const std::string id)
         // Remove the customer
         // delete *it;
         customers.erase(it);
+        return true;
 
         // *it = nullptr;
     }
     else
     {
         // Handle the case where the customer was not found
-        std::cout << "Customer with id " << id << " not found." << std::endl;
+        // std::cout << "Customer with id " << id << " not found." << std::endl;
+        return false;
     }
 }
 
