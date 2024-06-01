@@ -7,11 +7,11 @@
 class RentalManagement
 {
 private:
-    std::vector<Rental *> rentals;
+    std::vector<const Rental *> rentals;
 
 public:
-    Rental *getRental(const std::string id) const;
+    const Rental *getRental(const std::string id) const;
 
-    void openRental(Rental *rental);
-    void closeRental(const std::string id);
+    bool openRental(const Rental *rental);
+    bool closeRental(const std::string id);
 };

@@ -12,6 +12,9 @@ private:
 
 public:
     Customer *getCustomer(const std::string id) const;
+    std::vector<Customer *> getCustomers() const;
+
+    size_t getCustomerCount() const;
 
     bool addCustomer(Customer *customer);
     bool removeCustomer(const std::string id);

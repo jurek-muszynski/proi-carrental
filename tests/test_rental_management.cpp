@@ -93,3 +93,27 @@ TEST(RentalManagementTest, RentAndReturnToDifferentLocation)
     // Check if the rental was successfully closed
     EXPECT_EQ(rentalManagement.getRental("R005"), nullptr);
 }
+
+TEST(RentalManagementTest, CustomerTriesToRentSecondVehicle)
+{
+    RentalManagement rentalManagement;
+
+    std::tm birthDate = {};
+    birthDate.tm_year = 1985 - 1900; // years since 1900
+    birthDate.tm_mon = 3 - 1;        // months since January (0-11)
+    birthDate.tm_mday = 15;          // day of the month (1-31)
+    Customer customer("C005", "Emily", "Johnson", birthDate, "Female", "emily@example.com", "777888999", nullptr);
+    Address *address1 = new Address("id1", "123 Street", "City", "State", "12345");
+    Address *address2 = new Address("id2", "123 Street", "City", "State", "12345");
+
+    Location pickupLocation(1, "Pickup Location", address1);
+    Vehicle vehicle("V005", "JKL123", "Ford", "Escape", 2020, "Silver", "Automatic", "Petrol", 5, true, 60.0);
+    Vehicle vehicle2("V006", "JKL124", "Ford", "Escape", 2020, "Silver", "Automatic", "Petrol", 5, true, 60.0);
+    vehicle.updateLocation(&pickupLocation);
+    vehicle2.updateLocation(&pickupLocation);
+
+    Rental rental1("R005", &customer, &vehicle, 4);
+    Rental rental2("R006", &customer, &vehicle2, 4);
+    EXPECT_TRUE(rentalManagement.openRental(&rental1));
+    EXPECT_FALSE(rentalManagement.openRental(&rental2));
+}

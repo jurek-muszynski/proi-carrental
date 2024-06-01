@@ -38,6 +38,11 @@ std::vector<Vehicle *> FleetManagement::getAvailableVehicles()
     return availableVehicles;
 }
 
+size_t FleetManagement::getVehicleCount() const
+{
+    return vehicles.size();
+}
+
 bool FleetManagement::addVehicle(Vehicle *vehicle)
 {
     auto it = std::find_if(vehicles.begin(), vehicles.end(), [&](Vehicle *v)

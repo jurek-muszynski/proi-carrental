@@ -1,4 +1,5 @@
 #include "simulation.h"
+#include "../../utils/generate.h"
 
 Simulation::Simulation(unsigned int sims, const std::string &filePath) : simulations_run(sims)
 {
@@ -20,6 +21,8 @@ Simulation::Simulation(unsigned int sims, CustomerManagement *cm, FleetManagemen
 
     current_time = std::chrono::system_clock::now();
     dataPath = filePath;
+
+    loadData();
 }
 
 void Simulation::passTime()
@@ -40,11 +43,12 @@ void Simulation::run()
     logs.push_back(getDateTime() + "\n");
     for (unsigned int i = 0; i < simulations_run; i++)
     {
-        unsigned int newRegistrations = rand() % 3;
-        for (unsigned int j = 0; j < newRegistrations; j++)
-        {
+        if (generateRandomly(0.95))
             newCustomerRegistered();
-        }
+
+        if (customerManagement->getCustomerCount() > 0 && generateRandomly(0.35))
+            newRentalOpened();
+
         printLogs();
         passTime();
         usleep(2000000);
@@ -154,20 +158,21 @@ void Simulation::loadVehicles()
 
         Location *location = loadedLocations[rand() % loadedLocations.size()];
         Vehicle *newVehicle = new Vehicle(id, licensePlate, make, model, year, color, transmissionType, fuelType, seatingCapacity, status, rentalRates);
-        loadedVehicles.push_back(newVehicle);
+        newVehicle->updateLocation(location);
+        fleetManagement->addVehicle(newVehicle);
     }
 }
 
-Customer *Simulation::chooseRandomCustomer()
+Customer *Simulation::chooseRandomCustomer(std::vector<Customer *> customers)
 {
-    if (loadedCustomers.empty())
-        throw std::runtime_error("No customers loaded");
-    return loadedCustomers[rand() % loadedCustomers.size()];
+    if (customers.empty())
+        throw std::runtime_error("No customers to choose from");
+    return customers[rand() % customers.size()];
 }
 
 void Simulation::newCustomerRegistered()
 {
-    Customer *newCustomer = chooseRandomCustomer();
+    Customer *newCustomer = chooseRandomCustomer(loadedCustomers);
     std::stringstream ss;
     if (customerManagement->addCustomer(newCustomer))
     {
@@ -178,6 +183,24 @@ void Simulation::newCustomerRegistered()
         ss << "Customer: " << *newCustomer << " has already been registered\n";
     }
     logs.push_back(ss.str());
+}
+
+void Simulation::newRentalOpened()
+{
+    Customer *customer = chooseRandomCustomer(customerManagement->getCustomers());
+    std::vector<Vehicle *> availableVehicles = fleetManagement->getAvailableVehicles();
+    Vehicle *vehicle = availableVehicles[rand() % availableVehicles.size()];
+    Location *dropOff = loadedLocations[rand() % loadedLocations.size()];
+
+    const std::string rentalId = "R" + customer->getId() + "/" + vehicle->getLicensePlate();
+    int duration = rand() % 10 + 1;
+    const Rental *newRental = new Rental(rentalId, customer, vehicle, duration);
+    std::stringstream ss;
+    if (rentalManagement->openRental(newRental))
+    {
+        ss << "New rental opened: " << *customer << " rented " << *vehicle;
+        logs.push_back(ss.str());
+    }
 }
 
 void Simulation::printLogs()

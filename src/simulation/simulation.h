@@ -49,9 +49,10 @@ public:
     void loadAddresses();
     void loadLocations();
 
-    Customer *chooseRandomCustomer();
+    Customer *chooseRandomCustomer(std::vector<Customer *> customers);
 
     void newCustomerRegistered();
+    void newRentalOpened();
 
     void printLogs();
 };

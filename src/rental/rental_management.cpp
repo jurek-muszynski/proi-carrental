@@ -1,9 +1,9 @@
 #include "rental_management.h"
 #include <algorithm>
 
-Rental *RentalManagement::getRental(std::string id) const
+const Rental *RentalManagement::getRental(std::string id) const
 {
-    auto it = std::find_if(rentals.begin(), rentals.end(), [&](Rental *rental)
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
                            { return rental->getId() == id; });
 
     if (it != rentals.end())
@@ -13,28 +13,31 @@ Rental *RentalManagement::getRental(std::string id) const
     return nullptr;
 }
 
-void RentalManagement::openRental(Rental *rental)
+bool RentalManagement::openRental(const Rental *rental)
 {
-    auto it = std::find_if(rentals.begin(), rentals.end(), [&](Rental *r)
-                           { return r->getId() == rental->getId(); });
+    auto rentalIndexIterator = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *r)
+                                            { return r->getId() == rental->getId(); });
 
-    if (it == rentals.end())
+    auto customerIndexIterator = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *r)
+                                              { return r->getCustomer()->getId() == rental->getCustomer()->getId(); });
+
+    if (rentalIndexIterator == rentals.end() && customerIndexIterator == rentals.end())
+    {
         rentals.push_back(rental);
-    else
-        std::cout << "Rental with id " << rental->getId() << " has already been opened." << std::endl;
+        return true;
+    }
+    return false;
 }
 
-void RentalManagement::closeRental(const std::string id)
+bool RentalManagement::closeRental(const std::string id)
 {
-    auto it = std::find_if(rentals.begin(), rentals.end(), [&](Rental *rental)
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
                            { return rental->getId() == id; });
 
     if (it != rentals.end())
     {
         rentals.erase(it);
+        return true;
     }
-    else
-    {
-        std::cout << "Rental with id " << id << " not found." << std::endl;
-    }
+    return false;
 }

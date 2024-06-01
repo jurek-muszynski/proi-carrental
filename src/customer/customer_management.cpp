@@ -13,6 +13,16 @@ Customer *CustomerManagement::getCustomer(std::string id) const
     return nullptr;
 }
 
+std::vector<Customer *> CustomerManagement::getCustomers() const
+{
+    return customers;
+}
+
+size_t CustomerManagement::getCustomerCount() const
+{
+    return customers.size();
+}
+
 bool CustomerManagement::addCustomer(Customer *customer)
 {
     auto it = std::find_if(customers.begin(), customers.end(), [&](Customer *c)
