@@ -1,23 +1,31 @@
 #include "simulation.h"
 
-Simulation::Simulation(unsigned int sims, const std::string &filepath) : simulations_run(sims)
+Simulation::Simulation(unsigned int sims, const std::string &filePath) : simulations_run(sims)
 {
     srand(time(0));
+
     customerManagement = new CustomerManagement();
     fleetManagement = new FleetManagement();
     rentalManagement = new RentalManagement();
+
     current_time = std::chrono::system_clock::now();
-    loadData(filepath);
+    dataPath = filePath;
+
+    loadData();
 }
 
-Simulation::Simulation(unsigned int sims, CustomerManagement *cm, FleetManagement *fm, RentalManagement *rm) : simulations_run(sims), customerManagement(cm), fleetManagement(fm), rentalManagement(rm)
+Simulation::Simulation(unsigned int sims, CustomerManagement *cm, FleetManagement *fm, RentalManagement *rm, const std::string &filePath) : simulations_run(sims), customerManagement(cm), fleetManagement(fm), rentalManagement(rm)
 {
+    srand(time(0));
+
     current_time = std::chrono::system_clock::now();
+    dataPath = filePath;
 }
 
 void Simulation::passTime()
 {
-    current_time += std::chrono::minutes(30);
+    current_time += std::chrono::hours(2);
+    logs.push_back("\n" + getDateTime() + "\n");
 }
 
 std::string Simulation::getDateTime() const
@@ -29,26 +37,31 @@ std::string Simulation::getDateTime() const
 
 void Simulation::run()
 {
+    logs.push_back(getDateTime() + "\n");
     for (unsigned int i = 0; i < simulations_run; i++)
     {
-        std::cout << getDateTime() << std::endl;
-        newCustomerRegistered();
-        newCustomerRegistered();
+        unsigned int newRegistrations = rand() % 3;
+        for (unsigned int j = 0; j < newRegistrations; j++)
+        {
+            newCustomerRegistered();
+        }
         printLogs();
         passTime();
+        usleep(2000000);
     }
 }
 
-void Simulation::loadData(const std::string &filePath)
+void Simulation::loadData()
 {
-    loadAddresses(filePath + "/addresses.json");
-    loadCustomers(filePath + "/customers.json");
-    // loadVehicles(filePath + "/vehicles.json");
+    loadAddresses();
+    loadCustomers();
+    loadLocations();
+    loadVehicles();
 }
 
-void Simulation::loadCustomers(const std::string &filePath)
+void Simulation::loadCustomers()
 {
-    std::ifstream file(filePath);
+    std::ifstream file(dataPath + "/customers.json");
 
     if (!file.is_open())
         throw std::runtime_error("Cannot open json file");
@@ -74,9 +87,9 @@ void Simulation::loadCustomers(const std::string &filePath)
     }
 }
 
-void Simulation::loadAddresses(const std::string &filePath)
+void Simulation::loadAddresses()
 {
-    std::ifstream file(filePath);
+    std::ifstream file(dataPath + "/addresses.json");
 
     if (!file.is_open())
         throw std::runtime_error("Cannot open json file");
@@ -93,6 +106,55 @@ void Simulation::loadAddresses(const std::string &filePath)
 
         Address *newAddress = new Address(id, street, city, country, zip);
         loadedAddresses.push_back(newAddress);
+    }
+}
+
+void Simulation::loadLocations()
+{
+    std::ifstream file(dataPath + "/locations.json");
+
+    if (!file.is_open())
+        throw std::runtime_error("Cannot open json file");
+
+    json source = json::parse(file);
+
+    for (const auto &location : source)
+    {
+        int id = location["id"];
+        std::string name = location["name"];
+
+        Address *address = loadedAddresses[rand() % loadedAddresses.size()];
+        Location *newLocation = new Location(id, name, address);
+        loadedLocations.push_back(newLocation);
+    }
+}
+
+void Simulation::loadVehicles()
+{
+    std::ifstream file(dataPath + "/vehicles.json");
+
+    if (!file.is_open())
+        throw std::runtime_error("Cannot open json file");
+
+    json source = json::parse(file);
+
+    for (const auto &vehicle : source)
+    {
+        std::string id = vehicle["id"];
+        std::string make = vehicle["make"];
+        std::string model = vehicle["model"];
+        int year = vehicle["year"];
+        std::string color = vehicle["color"];
+        std::string licensePlate = vehicle["licensePlate"];
+        std::string transmissionType = vehicle["transmissionType"];
+        std::string fuelType = vehicle["fuelType"];
+        int seatingCapacity = vehicle["seatingCapacity"];
+        bool status = vehicle["availabilityStatus"];
+        double rentalRates = vehicle["rentalRates"];
+
+        Location *location = loadedLocations[rand() % loadedLocations.size()];
+        Vehicle *newVehicle = new Vehicle(id, licensePlate, make, model, year, color, transmissionType, fuelType, seatingCapacity, status, rentalRates);
+        loadedVehicles.push_back(newVehicle);
     }
 }
 
@@ -113,7 +175,7 @@ void Simulation::newCustomerRegistered()
     }
     else
     {
-        ss << "Indistinct id: " << newCustomer->getId() << "\n";
+        ss << "Customer: " << *newCustomer << " has already been registered\n";
     }
     logs.push_back(ss.str());
 }
@@ -122,7 +184,13 @@ void Simulation::printLogs()
 {
     for (int i = 0; i < logs.size(); i++)
     {
-        std::cout << i + 1 << ". " << logs[i];
+        if (i > 0)
+        {
+            std::cout << i << ". ";
+        }
+        std::cout << logs[i];
+        usleep(1000000);
     }
+
     logs.clear();
 }
