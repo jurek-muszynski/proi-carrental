@@ -93,16 +93,15 @@ void Vehicle::updateLocation(Location *newLocation)
 
 std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle)
 {
-    os << vehicle.make;
-    os << " License Plate: " << vehicle.licensePlate;
+    os << "Vehicle: " << vehicle.make << " License Plate: " << vehicle.licensePlate << " Rental Rates: " << vehicle.rentalRates;
     if (vehicle.location)
     {
-        os << " Location: "
-           << *vehicle.location << std::endl;
+        os << "\n\t"
+           << *vehicle.location;
     }
     else
     {
-        os << " Location: Not Available" << std::endl;
+        os << " Location: Not Available";
     }
     return os;
 }

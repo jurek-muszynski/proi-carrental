@@ -32,24 +32,31 @@
 ## Przykładowa demonstracja symulatora
 
 ```
-Sun Jun  2 06:48:23 2024
+Sun Jun  2 21:28:05 2024
 
-1. New customer registered: Francis MacRanald - fmacranald15@hhs.gov
+1. New customer registered: Artemis Eastabrook - aeastabrook27@addthis.com
 
-Sun Jun  2 08:48:23 2024
+Sun Jun  2 23:28:05 2024
 
-1. New customer registered: Ira Ridges - iridges2j@geocities.com
-2. New rental opened: Berget Point - bpoint1y@jalbum.net rented Saab License Plate: WBAYB6C53DD967804 Location: Brown(id:3)
+1. New customer registered: Cirillo Walbrun - cwalbrun2c@myspace.com
+2. New rental opened: Artemis Eastabrook - aeastabrook27@addthis.com rented
+        Vehicle: GMC License Plate: MT80587 Rental Rates: 57.3
+        Location ID: 9 Name: Sutherland
+        Address: 6th Street Cashel
+        Duration: 4 hours
 
+Mon Jun  3 01:28:05 2024
 
-Sun Jun  2 10:48:23 2024
+1. New customer registered: Tedra Benezet - tbenezet2m@is.gd
 
-1. New customer registered: Florenza Findon - ffindon1v@w3.org
+Mon Jun  3 03:28:05 2024
 
-Sun Jun  2 12:48:23 2024
-
-1. New customer registered: Maggie Windmill - mwindmillr@hhs.gov
-2. New rental opened: Wally Orleton - worletone@vimeo.com rented Chevrolet License Plate: 5N1BA0ND5FN102533 Location: Ridge Oak(id:1)
+1. New customer registered: Hillie Adolthine - hadolthine26@dropbox.com
+2. Rental closed: Artemis Eastabrook - aeastabrook27@addthis.com returned
+        Vehicle: GMC License Plate: MT80587 Rental Rates: 57.3
+        Location ID: 9 Name: Sutherland
+        Address: 6th Street Cashel
+        Total Cost: 229.2 $
 ```
 
 ## Instrukcja obsługi

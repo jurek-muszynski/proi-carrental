@@ -26,6 +26,7 @@ Location::~Location()
 
 std::ostream &operator<<(std::ostream &os, const Location &location)
 {
-    os << location.name << "(id:" << location.locationId << ")" << std::endl;
+    os << "Location ID: " << location.locationId << " Name: " << location.name;
+    os << "\n\t" << *location.address;
     return os;
 }

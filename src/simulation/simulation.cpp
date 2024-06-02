@@ -46,8 +46,13 @@ void Simulation::run()
         if (generateRandomly(0.95))
             newCustomerRegistered();
 
-        if (customerManagement->getCustomerCount() > 0 && generateRandomly(0.35))
+        if (customerManagement->getCustomerCount() > 0 && generateRandomly(0.55))
             newRentalOpened();
+
+        while (rentalManagement->getRentalsToBeTerminated(current_time).size() > 0)
+        {
+            newRentalClosed();
+        }
 
         printLogs();
         passTime();
@@ -199,6 +204,19 @@ const Customer *Simulation::chooseRandomCustomerToRent(std::vector<const Custome
     return availableCustomersToRent[rand() % availableCustomersToRent.size()];
 }
 
+const Location *Simulation::chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const
+{
+    if (locations.empty())
+        throw std::runtime_error("No locations to choose from");
+
+    Location *location = locations[rand() % locations.size()];
+    while (location == currentLocation)
+    {
+        location = locations[rand() % locations.size()];
+    }
+    return location;
+}
+
 void Simulation::newCustomerRegistered()
 {
     const Customer *newCustomer = chooseRandomCustomerToRegister(loadedCustomers);
@@ -223,11 +241,22 @@ void Simulation::newRentalOpened()
 
     const std::string rentalId = "R" + customer->getId() + "/" + vehicle->getLicensePlate();
     int duration = rand() % 10 + 1;
-    const Rental *newRental = new Rental(rentalId, customer, vehicle, duration);
+    const Rental *newRental = new Rental(rentalId, customer, vehicle, duration, current_time);
     std::stringstream ss;
     if (rentalManagement->openRental(newRental))
     {
-        ss << "New rental opened: " << *customer << " rented " << *vehicle;
+        ss << "New rental opened: " << *customer << " rented\n\t" << *vehicle << "\n\tDuration: " << duration << " hours\n";
+        logs.push_back(ss.str());
+    }
+}
+
+void Simulation::newRentalClosed()
+{
+    const Rental *rental = rentalManagement->getRentalsToBeTerminated(current_time)[0];
+    std::stringstream ss;
+    if (rentalManagement->closeRental(rental->getId()))
+    {
+        ss << "Rental closed: " << *rental->getCustomer() << " returned\n\t" << *rental->getVehicle() << "\n\t" << *rental << "\n";
         logs.push_back(ss.str());
     }
 }

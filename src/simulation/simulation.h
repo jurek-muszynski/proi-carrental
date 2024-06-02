@@ -53,8 +53,11 @@ public:
     const Customer *chooseRandomCustomerToRegister(std::vector<const Customer *> customers) const;
     const Customer *chooseRandomCustomerToRent(std::vector<const Customer *> customers) const;
 
+    const Location *chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const;
+
     void newCustomerRegistered();
     void newRentalOpened();
+    void newRentalClosed();
 
     void printLogs();
 };

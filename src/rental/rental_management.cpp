@@ -23,6 +23,20 @@ const std::vector<const Customer *> RentalManagement::getCurrentCustomers() cons
     return customers;
 }
 
+const std::vector<const Rental *> RentalManagement::getRentalsToBeTerminated(std::chrono::system_clock::time_point current_time) const
+{
+    std::vector<const Rental *> rentalsToBeTerminated;
+
+    for (const Rental *rental : rentals)
+    {
+        if (rental->getRentTime() + std::chrono::hours(rental->getDuration()) <= current_time)
+        {
+            rentalsToBeTerminated.push_back(rental);
+        }
+    }
+    return rentalsToBeTerminated;
+}
+
 bool RentalManagement::isCustomerCurrentlyRenting(const Customer *customer) const
 {
     auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
