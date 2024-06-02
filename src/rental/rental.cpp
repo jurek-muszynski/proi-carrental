@@ -1,13 +1,20 @@
 #include "rental.h"
 
-Rental::Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration)
-    : id(id), customer(customer), vehicle(vehicle), duration(duration)
+Rental::Rental(std::string id, const Customer *customer, Vehicle *vehicle, int duration, std::chrono::system_clock::time_point rent_time)
+    : id(id), customer(customer), vehicle(vehicle), duration(duration), rent_time(rent_time)
 {
-    // check happens if the vehicle is unavailable?
     if (!vehicle->getAvailabilityStatus())
     {
         throw std::invalid_argument("Vehicle is not available, please choose another vehicle.");
     }
+    vehicle->updateAvailabilityStatus(false);
+    pickupLocation = vehicle->getLocation();
+}
+
+Rental::~Rental()
+{
+    customer = nullptr;
+    vehicle = nullptr;
 }
 
 double Rental::calculateCost() const
@@ -20,23 +27,35 @@ std::string Rental::getId() const
     return id;
 }
 
-Customer *Rental::getCustomer() const
+const Customer *Rental::getCustomer() const
 {
-    return this->customer;
+    return customer;
 }
 
 Vehicle *Rental::getVehicle() const
 {
-    return this->vehicle;
+    return vehicle;
+}
+
+std::chrono::system_clock::time_point Rental::getRentTime() const
+{
+    return rent_time;
+}
+
+void Rental::setDropoffLocation(Location *location)
+{
+    dropoffLocation = location;
+    vehicle->updateLocation(location);
 }
 
 int Rental::getDuration() const
 {
-    return this->duration;
+    return duration;
 }
 
-Rental::~Rental()
+std::ostream &operator<<(std::ostream &os, const Rental &rental)
 {
-    customer = nullptr;
-    vehicle = nullptr;
+    os << "Total Cost: " << rental.calculateCost() << " $";
+
+    return os;
 }

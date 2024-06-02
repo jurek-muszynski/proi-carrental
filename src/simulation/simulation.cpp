@@ -1,23 +1,34 @@
 #include "simulation.h"
+#include "../../utils/generate.h"
 
-Simulation::Simulation(unsigned int sims, const std::string &filepath) : simulations_run(sims)
+Simulation::Simulation(unsigned int sims, const std::string &filePath) : simulations_run(sims)
 {
     srand(time(0));
+
     customerManagement = new CustomerManagement();
     fleetManagement = new FleetManagement();
     rentalManagement = new RentalManagement();
+
     current_time = std::chrono::system_clock::now();
-    loadData(filepath);
+    dataPath = filePath;
+
+    loadData();
 }
 
-Simulation::Simulation(unsigned int sims, CustomerManagement *cm, FleetManagement *fm, RentalManagement *rm) : simulations_run(sims), customerManagement(cm), fleetManagement(fm), rentalManagement(rm)
+Simulation::Simulation(unsigned int sims, CustomerManagement *cm, FleetManagement *fm, RentalManagement *rm, const std::string &filePath) : simulations_run(sims), customerManagement(cm), fleetManagement(fm), rentalManagement(rm)
 {
+    srand(time(0));
+
     current_time = std::chrono::system_clock::now();
+    dataPath = filePath;
+
+    loadData();
 }
 
 void Simulation::passTime()
 {
-    current_time += std::chrono::minutes(30);
+    current_time += std::chrono::hours(2);
+    logs.push_back("\n" + getDateTime() + "\n");
 }
 
 std::string Simulation::getDateTime() const
@@ -29,26 +40,37 @@ std::string Simulation::getDateTime() const
 
 void Simulation::run()
 {
+    logs.push_back(getDateTime() + "\n");
     for (unsigned int i = 0; i < simulations_run; i++)
     {
-        std::cout << getDateTime() << std::endl;
-        newCustomerRegistered();
-        newCustomerRegistered();
+        if (generateRandomly(0.95))
+            newCustomerRegistered();
+
+        if (customerManagement->getCustomerCount() > 0 && generateRandomly(0.55))
+            newRentalOpened();
+
+        while (rentalManagement->getRentalsToBeTerminated(current_time).size() > 0)
+        {
+            newRentalClosed();
+        }
+
         printLogs();
         passTime();
+        usleep(2000000);
     }
 }
 
-void Simulation::loadData(const std::string &filePath)
+void Simulation::loadData()
 {
-    loadAddresses(filePath + "/addresses.json");
-    loadCustomers(filePath + "/customers.json");
-    // loadVehicles(filePath + "/vehicles.json");
+    loadAddresses();
+    loadCustomers();
+    loadLocations();
+    loadVehicles();
 }
 
-void Simulation::loadCustomers(const std::string &filePath)
+void Simulation::loadCustomers()
 {
-    std::ifstream file(filePath);
+    std::ifstream file(dataPath + "/customers.json");
 
     if (!file.is_open())
         throw std::runtime_error("Cannot open json file");
@@ -74,9 +96,9 @@ void Simulation::loadCustomers(const std::string &filePath)
     }
 }
 
-void Simulation::loadAddresses(const std::string &filePath)
+void Simulation::loadAddresses()
 {
-    std::ifstream file(filePath);
+    std::ifstream file(dataPath + "/addresses.json");
 
     if (!file.is_open())
         throw std::runtime_error("Cannot open json file");
@@ -96,16 +118,108 @@ void Simulation::loadAddresses(const std::string &filePath)
     }
 }
 
-Customer *Simulation::chooseRandomCustomer()
+void Simulation::loadLocations()
 {
-    if (loadedCustomers.empty())
-        throw std::runtime_error("No customers loaded");
-    return loadedCustomers[rand() % loadedCustomers.size()];
+    std::ifstream file(dataPath + "/locations.json");
+
+    if (!file.is_open())
+        throw std::runtime_error("Cannot open json file");
+
+    json source = json::parse(file);
+
+    for (const auto &location : source)
+    {
+        int id = location["id"];
+        std::string name = location["name"];
+
+        Address *address = loadedAddresses[rand() % loadedAddresses.size()];
+        Location *newLocation = new Location(id, name, address);
+        loadedLocations.push_back(newLocation);
+    }
+}
+
+void Simulation::loadVehicles()
+{
+    std::ifstream file(dataPath + "/vehicles.json");
+
+    if (!file.is_open())
+        throw std::runtime_error("Cannot open json file");
+
+    json source = json::parse(file);
+
+    for (const auto &vehicle : source)
+    {
+        std::string id = vehicle["id"];
+        std::string make = vehicle["make"];
+        std::string model = vehicle["model"];
+        int year = vehicle["year"];
+        std::string color = vehicle["color"];
+        std::string licensePlate = vehicle["licensePlate"];
+        std::string transmissionType = vehicle["transmissionType"];
+        std::string fuelType = vehicle["fuelType"];
+        int seatingCapacity = vehicle["seatingCapacity"];
+        bool status = vehicle["availabilityStatus"];
+        double rentalRates = vehicle["rentalRates"];
+
+        Location *location = loadedLocations[rand() % loadedLocations.size()];
+        Vehicle *newVehicle = new Vehicle(id, licensePlate, make, model, year, color, transmissionType, fuelType, seatingCapacity, status, rentalRates);
+        newVehicle->updateLocation(location);
+        fleetManagement->addVehicle(newVehicle);
+    }
+}
+
+const Customer *Simulation::chooseRandomCustomer(std::vector<const Customer *> customers) const
+{
+    if (customers.empty())
+        throw std::runtime_error("No customers to choose from");
+    return customers[rand() % customers.size()];
+}
+
+const Customer *Simulation::chooseRandomCustomerToRegister(std::vector<const Customer *> customers) const
+{
+    if (customers.empty())
+        throw std::runtime_error("No customers to choose from");
+    const Customer *customer = customers[rand() % customers.size()];
+    while (customerManagement->isCustomerAlreadyRegistered(customer))
+    {
+        customer = customers[rand() % customers.size()];
+    }
+    return customer;
+}
+
+const Customer *Simulation::chooseRandomCustomerToRent(std::vector<const Customer *> customers) const
+{
+    std::vector<const Customer *> availableCustomersToRent;
+    for (const auto &customer : customers)
+    {
+        if (!rentalManagement->isCustomerCurrentlyRenting(customer))
+        {
+            availableCustomersToRent.push_back(customer);
+        }
+    }
+
+    if (availableCustomersToRent.empty())
+        throw std::runtime_error("No customers to choose from");
+
+    return availableCustomersToRent[rand() % availableCustomersToRent.size()];
+}
+
+const Location *Simulation::chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const
+{
+    if (locations.empty())
+        throw std::runtime_error("No locations to choose from");
+
+    Location *location = locations[rand() % locations.size()];
+    while (location == currentLocation)
+    {
+        location = locations[rand() % locations.size()];
+    }
+    return location;
 }
 
 void Simulation::newCustomerRegistered()
 {
-    Customer *newCustomer = chooseRandomCustomer();
+    const Customer *newCustomer = chooseRandomCustomerToRegister(loadedCustomers);
     std::stringstream ss;
     if (customerManagement->addCustomer(newCustomer))
     {
@@ -113,16 +227,51 @@ void Simulation::newCustomerRegistered()
     }
     else
     {
-        ss << "Indistinct id: " << newCustomer->getId() << "\n";
+        ss << "Customer: " << *newCustomer << " has already been registered\n";
     }
     logs.push_back(ss.str());
+}
+
+void Simulation::newRentalOpened()
+{
+    const Customer *customer = chooseRandomCustomerToRent(customerManagement->getCustomers());
+    std::vector<Vehicle *> availableVehicles = fleetManagement->getAvailableVehicles();
+    Vehicle *vehicle = availableVehicles[rand() % availableVehicles.size()];
+    Location *dropOff = loadedLocations[rand() % loadedLocations.size()];
+
+    const std::string rentalId = "R" + customer->getId() + "/" + vehicle->getLicensePlate();
+    int duration = rand() % 10 + 1;
+    const Rental *newRental = new Rental(rentalId, customer, vehicle, duration, current_time);
+    std::stringstream ss;
+    if (rentalManagement->openRental(newRental))
+    {
+        ss << "New rental opened: " << *customer << " rented\n\t" << *vehicle << "\n\tDuration: " << duration << " hours\n";
+        logs.push_back(ss.str());
+    }
+}
+
+void Simulation::newRentalClosed()
+{
+    const Rental *rental = rentalManagement->getRentalsToBeTerminated(current_time)[0];
+    std::stringstream ss;
+    if (rentalManagement->closeRental(rental->getId()))
+    {
+        ss << "Rental closed: " << *rental->getCustomer() << " returned\n\t" << *rental->getVehicle() << "\n\t" << *rental << "\n";
+        logs.push_back(ss.str());
+    }
 }
 
 void Simulation::printLogs()
 {
     for (int i = 0; i < logs.size(); i++)
     {
-        std::cout << i + 1 << ". " << logs[i];
+        if (i > 0)
+        {
+            std::cout << i << ". ";
+        }
+        std::cout << logs[i];
+        usleep(1000000);
     }
+
     logs.clear();
 }

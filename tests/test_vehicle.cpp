@@ -1,35 +1,12 @@
 #include <gtest/gtest.h>
 #include "../src/vehicle/vehicle.h"
 
-TEST(VehicleTest, GettersAndSetters)
-{
-    Vehicle vehicle("1", "ABC123", "Toyota", "Corolla", 2020, "White", "Automatic", "Gasoline", 5, true, 100.0);
-    vehicle.setMake("Honda");
-    vehicle.setModel("Civic");
-    vehicle.setYear(2021);
-    vehicle.setColor("Black");
-    vehicle.setTransmissionType("Manual");
-    vehicle.setFuelType("Diesel");
-    vehicle.setSeatingCapacity(4);
-    vehicle.setAvailabilityStatus(false);
-    vehicle.setRentalRates(120.0);
-
-    EXPECT_EQ(vehicle.getMake(), "Honda");
-    EXPECT_EQ(vehicle.getModel(), "Civic");
-    EXPECT_EQ(vehicle.getYear(), 2021);
-    EXPECT_EQ(vehicle.getColor(), "Black");
-    EXPECT_EQ(vehicle.getTransmissionType(), "Manual");
-    EXPECT_EQ(vehicle.getFuelType(), "Diesel");
-    EXPECT_EQ(vehicle.getSeatingCapacity(), 4);
-    EXPECT_EQ(vehicle.getAvailabilityStatus(), false);
-    EXPECT_EQ(vehicle.getRentalRates(), 120.0);
-}
-
 TEST(VehicleTest, ConstructorAndGetters)
 {
     Address address("1", "123 Main St", "Springfield", "USA", "12345");
     Location location(101, "Main Office", &address);
     Vehicle vehicle("V1", "XYZ123", "Toyota", "Camry", 2020, "Red", "Automatic", "Gasoline", 5, true, 50.0);
+    Vehicle vehicle2("V2", "ABC456", "Honda", "Civic", 2019, "Blue", "Manual", "Diesel", 4, false, 40.0, &location);
     vehicle.updateLocation(&location);
 
     EXPECT_EQ(vehicle.getId(), "V1");
@@ -44,6 +21,19 @@ TEST(VehicleTest, ConstructorAndGetters)
     EXPECT_EQ(vehicle.getAvailabilityStatus(), true);
     EXPECT_EQ(vehicle.getRentalRates(), 50.0);
     EXPECT_EQ(vehicle.getLocation(), &location);
+
+    EXPECT_EQ(vehicle2.getId(), "V2");
+    EXPECT_EQ(vehicle2.getLicensePlate(), "ABC456");
+    EXPECT_EQ(vehicle2.getMake(), "Honda");
+    EXPECT_EQ(vehicle2.getModel(), "Civic");
+    EXPECT_EQ(vehicle2.getYear(), 2019);
+    EXPECT_EQ(vehicle2.getColor(), "Blue");
+    EXPECT_EQ(vehicle2.getTransmissionType(), "Manual");
+    EXPECT_EQ(vehicle2.getFuelType(), "Diesel");
+    EXPECT_EQ(vehicle2.getSeatingCapacity(), 4);
+    EXPECT_EQ(vehicle2.getAvailabilityStatus(), false);
+    EXPECT_EQ(vehicle2.getRentalRates(), 40.0);
+    EXPECT_EQ(vehicle2.getLocation(), &location);
 }
 
 TEST(VehicleTest, InitialLocation)

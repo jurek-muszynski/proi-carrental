@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include <ctime>
+#include <string>
 #include "../address/address.h"
 
 class Customer
@@ -15,11 +15,11 @@ private:
     std::string email;
     std::string phoneNumber;
     Address *address;
-    // password ?????????????
+
 public:
     Customer(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string contact, Address *address);
-    void updatePhoneNumber(std::string new_number);
-    void updateEmail(std::string new_email);
+    ~Customer();
+
     std::string getId() const;
     std::string getFirstName() const;
     std::string getLastName() const;
@@ -28,14 +28,10 @@ public:
     std::string getEmail() const;
     std::string getPhoneNumber() const;
     Address *getAddress() const;
+
+    void updateEmail(std::string new_email);
+    void updatePhoneNumber(std::string new_number);
     void updateAddress(Address *new_address);
-    ~Customer();
 
     friend std::ostream &operator<<(std::ostream &os, const Customer &customer);
 };
-
-// Tworzenie daty urodzenia:
-// std::tm birthDate = {};
-// birthDate.tm_year = year-1900; // years since 1900
-// birthDate.tm_mon = month-1; // months since January (0-11)
-// birthDate.tm_mday = day; // day of the month (1-31)

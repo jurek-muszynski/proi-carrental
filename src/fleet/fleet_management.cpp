@@ -5,26 +5,11 @@ FleetManagement::FleetManagement(std::vector<Vehicle *> vehicles)
 {
 }
 
-FleetManagement::FleetManagement(const std::string &filePath)
+FleetManagement::~FleetManagement()
 {
-    loadVehiclesFromJson(filePath);
-}
-
-void FleetManagement::addVehicle(Vehicle *vehicle)
-{
-    vehicles.push_back(vehicle);
-}
-
-void FleetManagement::removeVehicle(const std::string id)
-{
-    for (int i = 0; i < vehicles.size(); i++)
+    for (Vehicle *vehicle : vehicles)
     {
-        if (vehicles[i]->getId() == id)
-        {
-            delete vehicles[i];
-            vehicles.erase(vehicles.begin() + i);
-            break;
-        }
+        delete vehicle;
     }
 }
 
@@ -37,7 +22,7 @@ Vehicle *FleetManagement::getVehicle(const std::string id) const
             return vehicle;
         }
     }
-    return nullptr; // Zwraca nullptr, jeśli nie znaleziono pojazdu
+    return nullptr;
 }
 
 std::vector<Vehicle *> FleetManagement::getAvailableVehicles()
@@ -53,32 +38,38 @@ std::vector<Vehicle *> FleetManagement::getAvailableVehicles()
     return availableVehicles;
 }
 
-void FleetManagement::loadVehiclesFromJson(const std::string &filePath)
+size_t FleetManagement::getVehicleCount() const
 {
-    std::ifstream file(filePath);
+    return vehicles.size();
+}
 
-    if (!file.is_open())
-        throw std::runtime_error("Cannot open json file");
+bool FleetManagement::addVehicle(Vehicle *vehicle)
+{
+    auto it = std::find_if(vehicles.begin(), vehicles.end(), [&](Vehicle *v)
+                           { return v->getId() == vehicle->getId(); });
 
-    json source = json::parse(file);
-
-    for (const auto &item : source)
+    if (it == vehicles.end())
     {
-        std::string id = item["id"];
-        std::string licensePlate = item["licensePlate"];
-        std::string make = item["make"];
-        std::string model = item["model"];
-        int year = item["year"];
-        std::string color = item["color"];
-        std::string transmissionType = item["transmissionType"];
-        std::string fuelType = item["fuelType"];
-        int seatingCapacity = item["seatingCapacity"];
-        bool availabilityStatus = item["availabilityStatus"];
-        double rentalRates = item["rentalRates"];
-
-        addVehicle(new Vehicle(id, licensePlate, make, model, year, color, transmissionType,
-                               fuelType, seatingCapacity, availabilityStatus, rentalRates));
+        vehicles.push_back(vehicle);
+        return true;
     }
+
+    return false;
+}
+
+bool FleetManagement::removeVehicle(const std::string id)
+{
+    auto it = std::find_if(vehicles.begin(), vehicles.end(), [&](Vehicle *vehicle)
+                           { return vehicle->getId() == id; });
+
+    if (it != vehicles.end())
+    {
+        delete *it;
+        vehicles.erase(it);
+        return true;
+    }
+
+    return false;
 }
 
 std::ostream &operator<<(std::ostream &os, const FleetManagement &fleet)
@@ -88,12 +79,4 @@ std::ostream &operator<<(std::ostream &os, const FleetManagement &fleet)
         os << *vehicle << std::endl;
     }
     return os;
-}
-
-FleetManagement::~FleetManagement()
-{
-    for (Vehicle *vehicle : vehicles)
-    {
-        delete vehicle;
-    }
 }

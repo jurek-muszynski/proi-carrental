@@ -3,12 +3,61 @@
 # Projekt: Symulator Wypożyczalni Aut w C++
 
 - [Projekt: Symulator Wypożyczalni Aut w C++](#projekt-symulator-wypoyczalni-aut-w-c)
+   * [Roadmap](#roadmap)
+   * [Demo](#przykładowa-demonstracja-symulatora)
    * [Instrukcja obsługi](#instrukcja-obsługi)
    * [Cel Projektu](#cel-projektu)
    * [Główne Funkcjonalności](#główne-funkcjonalności)
    * [Diagram UML](#diagram-uml)
 
+## Roadmap
 
+- [ ] Praca nad interfejsem użytkownika - @mlewko #3
+- [ ] Praca nad symulacją systemu, klasa ``Simulation`` - @jmuszyns #4
+- [ ] Implementacja klas projektu
+   - [x] Wstępny wybór i implementacja klas - @mlewko
+   - [x] Refaktoryzacja i dalsza praca - @jmuszyns
+   - [ ] Implementacja klas dziediczących ``User`` & ``Admin`` #1
+   - [ ] Implementacja klas dziediczących ``Car`` & ``Truck`` #1
+   - [ ] Modyfikacja klas ``Vehicle`` & ``Customer`` #1
+- [ ] Implementacja testów jednostkowych
+   - [x] Wstępne testy obecnie używanych klas - @all
+- [ ] Obsługa wyjątków
+   - [ ] W obrębie symulacji - @jmuszyns
+   - [ ] W obrębie interfejsu użytkownika - @mlewko
+- [ ] wydajne zarządzanie wskaźnikami (unique pointers) #2
+- [ ] dokumentacja - @all
+- [~] Implementacja interfejsu graficznego
+
+## Przykładowa demonstracja symulatora
+
+```
+Sun Jun  2 21:28:05 2024
+
+1. New customer registered: Artemis Eastabrook - aeastabrook27@addthis.com
+
+Sun Jun  2 23:28:05 2024
+
+1. New customer registered: Cirillo Walbrun - cwalbrun2c@myspace.com
+2. New rental opened: Artemis Eastabrook - aeastabrook27@addthis.com rented
+        Vehicle: GMC License Plate: MT80587 Rental Rates: 57.3
+        Location ID: 9 Name: Sutherland
+        Address: 6th Street Cashel
+        Duration: 4 hours
+
+Mon Jun  3 01:28:05 2024
+
+1. New customer registered: Tedra Benezet - tbenezet2m@is.gd
+
+Mon Jun  3 03:28:05 2024
+
+1. New customer registered: Hillie Adolthine - hadolthine26@dropbox.com
+2. Rental closed: Artemis Eastabrook - aeastabrook27@addthis.com returned
+        Vehicle: GMC License Plate: MT80587 Rental Rates: 57.3
+        Location ID: 9 Name: Sutherland
+        Address: 6th Street Cashel
+        Total Cost: 229.2 $
+```
 
 ## Instrukcja obsługi
 
@@ -45,5 +94,10 @@ Celem projektu jest stworzenie aplikacji w języku C++, która symuluje działan
    - Generowanie raportów o stanie floty (np. liczba dostępnych pojazdów, pojazdy w naprawie).
    - Generowanie statystyk dotyczących wypożyczeń (np. najczęściej wypożyczane pojazdy, najbardziej aktywni klienci).
 
+
 ## Diagram UML
 <img src = "figures/diagram.png" width = "80%">
+
+
+
+
