@@ -26,6 +26,7 @@
    - [ ] W obrębie symulacji - @jmuszyns
    - [ ] W obrębie interfejsu użytkownika - @mlewko
 - [ ] wydajne zarządzanie wskaźnikami (unique pointers) #2
+- [ ] dokumentacja - @all
 - [~] Implementacja interfejsu graficznego
 
 ## Przykładowa demonstracja symulatora
