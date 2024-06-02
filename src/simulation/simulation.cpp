@@ -163,16 +163,45 @@ void Simulation::loadVehicles()
     }
 }
 
-Customer *Simulation::chooseRandomCustomer(std::vector<Customer *> customers)
+const Customer *Simulation::chooseRandomCustomer(std::vector<const Customer *> customers) const
 {
     if (customers.empty())
         throw std::runtime_error("No customers to choose from");
     return customers[rand() % customers.size()];
 }
 
+const Customer *Simulation::chooseRandomCustomerToRegister(std::vector<const Customer *> customers) const
+{
+    if (customers.empty())
+        throw std::runtime_error("No customers to choose from");
+    const Customer *customer = customers[rand() % customers.size()];
+    while (customerManagement->isCustomerAlreadyRegistered(customer))
+    {
+        customer = customers[rand() % customers.size()];
+    }
+    return customer;
+}
+
+const Customer *Simulation::chooseRandomCustomerToRent(std::vector<const Customer *> customers) const
+{
+    std::vector<const Customer *> availableCustomersToRent;
+    for (const auto &customer : customers)
+    {
+        if (!rentalManagement->isCustomerCurrentlyRenting(customer))
+        {
+            availableCustomersToRent.push_back(customer);
+        }
+    }
+
+    if (availableCustomersToRent.empty())
+        throw std::runtime_error("No customers to choose from");
+
+    return availableCustomersToRent[rand() % availableCustomersToRent.size()];
+}
+
 void Simulation::newCustomerRegistered()
 {
-    Customer *newCustomer = chooseRandomCustomer(loadedCustomers);
+    const Customer *newCustomer = chooseRandomCustomerToRegister(loadedCustomers);
     std::stringstream ss;
     if (customerManagement->addCustomer(newCustomer))
     {
@@ -187,7 +216,7 @@ void Simulation::newCustomerRegistered()
 
 void Simulation::newRentalOpened()
 {
-    Customer *customer = chooseRandomCustomer(customerManagement->getCustomers());
+    const Customer *customer = chooseRandomCustomerToRent(customerManagement->getCustomers());
     std::vector<Vehicle *> availableVehicles = fleetManagement->getAvailableVehicles();
     Vehicle *vehicle = availableVehicles[rand() % availableVehicles.size()];
     Location *dropOff = loadedLocations[rand() % loadedLocations.size()];
