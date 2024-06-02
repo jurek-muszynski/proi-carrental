@@ -12,6 +12,9 @@ private:
 public:
     const Rental *getRental(const std::string id) const;
 
+    const std::vector<const Customer*> getCurrentCustomers() const;
+
+    bool isCustomerCurrentlyRenting(const Customer *customer) const;
     bool openRental(const Rental *rental);
     bool closeRental(const std::string id);
 };

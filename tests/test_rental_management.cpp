@@ -117,3 +117,31 @@ TEST(RentalManagementTest, CustomerTriesToRentSecondVehicle)
     EXPECT_TRUE(rentalManagement.openRental(&rental1));
     EXPECT_FALSE(rentalManagement.openRental(&rental2));
 }
+
+TEST(RentalManagementTest, CurrentCustomers)
+{
+    RentalManagement rentalManagement;
+
+    std::tm birthDate = {};
+    birthDate.tm_year = 1985 - 1900; // years since 1900
+    birthDate.tm_mon = 3 - 1;        // months since January (0-11)
+    birthDate.tm_mday = 15;          // day of the month (1-31)
+    Customer customer1("C005", "Emily", "Johnson", birthDate, "Female", "emily@example.com", "777888999", nullptr);
+    Customer customer2("C006", "John", "Doe", birthDate, "Male", "", "", nullptr);
+    std::vector<const Customer *> customers = {&customer1, &customer2};
+    Address *address1 = new Address("id1", "123 Street", "City", "State", "12345");
+    Address *address2 = new Address("id2", "123 Street", "City", "State", "12345");
+
+    Location pickupLocation(1, "Pickup Location", address1);
+    Vehicle vehicle("V005", "JKL123", "Ford", "Escape", 2020, "Silver", "Automatic", "Petrol", 5, true, 60.0, &pickupLocation);
+    Vehicle vehicle2("V006", "JKL124", "Ford", "Escape", 2020, "Silver", "Automatic", "Petrol", 5, true, 60.0, &pickupLocation);
+
+    Rental rental1("R005", &customer1, &vehicle, 4);
+    Rental rental2("R006", &customer2, &vehicle2, 4);
+
+    EXPECT_TRUE(rentalManagement.openRental(&rental1));
+    EXPECT_TRUE(rentalManagement.openRental(&rental2));
+
+    EXPECT_EQ(rentalManagement.getCurrentCustomers().size(), 2);
+    EXPECT_EQ(rentalManagement.getCurrentCustomers(), customers);
+}

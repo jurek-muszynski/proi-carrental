@@ -8,7 +8,7 @@ class Rental
 {
 private:
     std::string id;
-    Customer *customer;
+    const Customer *customer;
     Vehicle *vehicle;
     // std::string pickupLocation;
     // std::string dropoffLocation;
@@ -19,12 +19,12 @@ private:
     double rate;
 
 public:
-    Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration);
+    Rental(std::string id, const Customer *customer, Vehicle *vehicle, int duration);
     ~Rental();
 
     double calculateCost() const;
     int getDuration() const;
     std::string getId() const;
-    Customer *getCustomer() const;
+    const Customer *getCustomer() const;
     Vehicle *getVehicle() const;
 };

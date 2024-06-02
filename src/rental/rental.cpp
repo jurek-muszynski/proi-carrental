@@ -1,6 +1,6 @@
 #include "rental.h"
 
-Rental::Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration)
+Rental::Rental(std::string id, const Customer *customer, Vehicle *vehicle, int duration)
     : id(id), customer(customer), vehicle(vehicle), duration(duration)
 {
     if (!vehicle->getAvailabilityStatus())
@@ -25,7 +25,7 @@ std::string Rental::getId() const
     return id;
 }
 
-Customer *Rental::getCustomer() const
+const Customer *Rental::getCustomer() const
 {
     return customer;
 }

@@ -1,8 +1,8 @@
 #include "customer_management.h"
 
-Customer *CustomerManagement::getCustomer(std::string id) const
+const Customer *CustomerManagement::getCustomer(std::string id) const
 {
-    auto it = std::find_if(customers.begin(), customers.end(), [&](Customer *customer)
+    auto it = std::find_if(customers.begin(), customers.end(), [&](const Customer *customer)
                            { return customer->getId() == id; });
 
     if (it != customers.end())
@@ -13,7 +13,7 @@ Customer *CustomerManagement::getCustomer(std::string id) const
     return nullptr;
 }
 
-std::vector<Customer *> CustomerManagement::getCustomers() const
+const std::vector<const Customer *> CustomerManagement::getCustomers() const
 {
     return customers;
 }
@@ -23,12 +23,17 @@ size_t CustomerManagement::getCustomerCount() const
     return customers.size();
 }
 
-bool CustomerManagement::addCustomer(Customer *customer)
+bool CustomerManagement::isCustomerAlreadyRegistered(const Customer *customer) const
 {
-    auto it = std::find_if(customers.begin(), customers.end(), [&](Customer *c)
+    auto it = std::find_if(customers.begin(), customers.end(), [&](const Customer *c)
                            { return c->getId() == customer->getId(); });
 
-    if (it == customers.end())
+    return it != customers.end();
+}
+
+bool CustomerManagement::addCustomer(const Customer *customer)
+{
+    if (!isCustomerAlreadyRegistered(customer))
     {
         customers.push_back(customer);
         return true;
@@ -39,7 +44,7 @@ bool CustomerManagement::addCustomer(Customer *customer)
 
 bool CustomerManagement::removeCustomer(const std::string id)
 {
-    auto it = std::find_if(customers.begin(), customers.end(), [&](Customer *customer)
+    auto it = std::find_if(customers.begin(), customers.end(), [&](const Customer *customer)
                            { return customer->getId() == id; });
 
     if (it != customers.end())
