@@ -168,18 +168,18 @@ void Simulation::loadVehicles()
     }
 }
 
-const Customer *Simulation::chooseRandomCustomer(std::vector<const Customer *> customers) const
+Customer *Simulation::chooseRandomCustomer(std::vector<Customer *> customers) const
 {
     if (customers.empty())
         throw std::runtime_error("No customers to choose from");
     return customers[rand() % customers.size()];
 }
 
-const Customer *Simulation::chooseRandomCustomerToRegister(std::vector<const Customer *> customers) const
+Customer *Simulation::chooseRandomCustomerToRegister(std::vector<Customer *> customers) const
 {
     if (customers.empty())
         throw std::runtime_error("No customers to choose from");
-    const Customer *customer = customers[rand() % customers.size()];
+    Customer *customer = customers[rand() % customers.size()];
     while (customerManagement->isCustomerAlreadyRegistered(customer))
     {
         customer = customers[rand() % customers.size()];
@@ -187,10 +187,10 @@ const Customer *Simulation::chooseRandomCustomerToRegister(std::vector<const Cus
     return customer;
 }
 
-const Customer *Simulation::chooseRandomCustomerToRent(std::vector<const Customer *> customers) const
+Customer *Simulation::chooseRandomCustomerToRent(std::vector<Customer *> customers) const
 {
-    std::vector<const Customer *> availableCustomersToRent;
-    for (const auto &customer : customers)
+    std::vector<Customer *> availableCustomersToRent;
+    for (auto &customer : customers)
     {
         if (!rentalManagement->isCustomerCurrentlyRenting(customer))
         {
@@ -204,7 +204,7 @@ const Customer *Simulation::chooseRandomCustomerToRent(std::vector<const Custome
     return availableCustomersToRent[rand() % availableCustomersToRent.size()];
 }
 
-const Location *Simulation::chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const
+Location *Simulation::chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const
 {
     if (locations.empty())
         throw std::runtime_error("No locations to choose from");
@@ -219,7 +219,7 @@ const Location *Simulation::chooseRandomDropOffLocation(std::vector<Location *> 
 
 void Simulation::newCustomerRegistered()
 {
-    const Customer *newCustomer = chooseRandomCustomerToRegister(loadedCustomers);
+    Customer *newCustomer = chooseRandomCustomerToRegister(loadedCustomers);
     std::stringstream ss;
     if (customerManagement->addCustomer(newCustomer))
     {
@@ -234,14 +234,14 @@ void Simulation::newCustomerRegistered()
 
 void Simulation::newRentalOpened()
 {
-    const Customer *customer = chooseRandomCustomerToRent(customerManagement->getCustomers());
+    Customer *customer = chooseRandomCustomerToRent(customerManagement->getCustomers());
     std::vector<Vehicle *> availableVehicles = fleetManagement->getAvailableVehicles();
     Vehicle *vehicle = availableVehicles[rand() % availableVehicles.size()];
     Location *dropOff = loadedLocations[rand() % loadedLocations.size()];
 
     const std::string rentalId = "R" + customer->getId() + "/" + vehicle->getLicensePlate();
     int duration = rand() % 10 + 1;
-    const Rental *newRental = new Rental(rentalId, customer, vehicle, duration, current_time);
+    Rental *newRental = new Rental(rentalId, customer, vehicle, duration, current_time);
     std::stringstream ss;
     if (rentalManagement->openRental(newRental))
     {
@@ -252,7 +252,7 @@ void Simulation::newRentalOpened()
 
 void Simulation::newRentalClosed()
 {
-    const Rental *rental = rentalManagement->getRentalsToBeTerminated(current_time)[0];
+    Rental *rental = rentalManagement->getRentalsToBeTerminated(current_time)[0];
     std::stringstream ss;
     if (rentalManagement->closeRental(rental->getId()))
     {
