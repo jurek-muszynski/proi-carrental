@@ -12,21 +12,21 @@
 
 ## Roadmap
 
-- [ ] Praca nad interfejsem użytkownika - @mlewko
-- [ ] Praca nad symulacją systemu, klasa ``Simulation`` - @jmuszyns
+- [ ] Praca nad interfejsem użytkownika - @mlewko #3
+- [ ] Praca nad symulacją systemu, klasa ``Simulation`` - @jmuszyns #4
 - [ ] Implementacja klas projektu
    - [x] Wstępny wybór i implementacja klas - @mlewko
    - [x] Refaktoryzacja i dalsza praca - @jmuszyns
-   - [ ] Implementacja klas dziediczących ``User`` & ``Admin``
-   - [ ] Implementacja klas dziediczących ``Car`` & ``Truck``
-   - [ ] Modyfikacja klas ``Vehicle`` & ``Customer``
+   - [ ] Implementacja klas dziediczących ``User`` & ``Admin`` #1
+   - [ ] Implementacja klas dziediczących ``Car`` & ``Truck`` #1
+   - [ ] Modyfikacja klas ``Vehicle`` & ``Customer`` #1
 - [ ] Implementacja testów jednostkowych
-   - [x] Wstępne testy obecnie używanych klas
+   - [x] Wstępne testy obecnie używanych klas - @all
 - [ ] Obsługa wyjątków
    - [ ] W obrębie symulacji - @jmuszyns
    - [ ] W obrębie interfejsu użytkownika - @mlewko
+- [ ] wydajne zarządzanie wskaźnikami (unique pointers) #2
 - [~] Implementacja interfejsu graficznego
-
 
 ## Przykładowa demonstracja symulatora
 
