@@ -42,9 +42,9 @@ std::chrono::system_clock::time_point Rental::getRentTime() const
     return rent_time;
 }
 
-void Rental::setDropoffLocation(Location *location)
+void Rental::setDropOffLocation(Location *location)
 {
-    dropoffLocation = location;
+    dropOffLocation = location;
     vehicle->updateLocation(location);
 }
 

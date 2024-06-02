@@ -253,6 +253,7 @@ void Simulation::newRentalOpened()
 void Simulation::newRentalClosed()
 {
     Rental *rental = rentalManagement->getRentalsToBeTerminated(current_time)[0];
+    rental->setDropOffLocation(chooseRandomDropOffLocation(loadedLocations, rental->getVehicle()->getLocation()));
     std::stringstream ss;
     if (rentalManagement->closeRental(rental->getId()))
     {

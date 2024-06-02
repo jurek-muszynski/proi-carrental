@@ -12,7 +12,7 @@ private:
     Customer *customer;
     Vehicle *vehicle;
     Location *pickupLocation;
-    Location *dropoffLocation = nullptr;
+    Location *dropOffLocation = nullptr;
     int duration;
     // double totalCharges;
     double rate;
@@ -29,7 +29,7 @@ public:
     Vehicle *getVehicle() const;
     std::chrono::system_clock::time_point getRentTime() const;
 
-    void setDropoffLocation(Location *location);
+    void setDropOffLocation(Location *location);
 
     friend std::ostream &operator<<(std::ostream &os, const Rental &rental);
 };
