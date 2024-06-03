@@ -8,15 +8,15 @@
 class CustomerManagement
 {
 private:
-    std::vector<const Customer *> customers;
+    std::vector<Customer *> customers;
 
 public:
-    const Customer *getCustomer(const std::string id) const;
-    const std::vector<const Customer *> getCustomers() const;
+    Customer *getCustomer(const std::string id) const;
+    std::vector<Customer *> getCustomers() const;
 
     size_t getCustomerCount() const;
 
     bool isCustomerAlreadyRegistered(const Customer *customer) const;
-    bool addCustomer(const Customer *customer);
+    bool addCustomer(Customer *customer);
     bool removeCustomer(const std::string id);
 };

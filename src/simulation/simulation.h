@@ -27,7 +27,7 @@ private:
     FleetManagement *fleetManagement;
     RentalManagement *rentalManagement;
 
-    std::vector<const Customer *> loadedCustomers;
+    std::vector<Customer *> loadedCustomers;
     std::vector<Vehicle *> loadedVehicles;
     std::vector<Address *> loadedAddresses;
     std::vector<Location *> loadedLocations;
@@ -49,11 +49,11 @@ public:
     void loadAddresses();
     void loadLocations();
 
-    const Customer *chooseRandomCustomer(std::vector<const Customer *> customers) const;
-    const Customer *chooseRandomCustomerToRegister(std::vector<const Customer *> customers) const;
-    const Customer *chooseRandomCustomerToRent(std::vector<const Customer *> customers) const;
+    Customer *chooseRandomCustomer(std::vector<Customer *> customers) const;
+    Customer *chooseRandomCustomerToRegister(std::vector<Customer *> customers) const;
+    Customer *chooseRandomCustomerToRent(std::vector<Customer *> customers) const;
 
-    const Location *chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const;
+    Location *chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const;
 
     void newCustomerRegistered();
     void newRentalOpened();

@@ -1,6 +1,6 @@
 #include "rental.h"
 
-Rental::Rental(std::string id, const Customer *customer, Vehicle *vehicle, int duration, std::chrono::system_clock::time_point rent_time)
+Rental::Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration, std::chrono::system_clock::time_point rent_time)
     : id(id), customer(customer), vehicle(vehicle), duration(duration), rent_time(rent_time)
 {
     if (!vehicle->getAvailabilityStatus())
@@ -27,7 +27,7 @@ std::string Rental::getId() const
     return id;
 }
 
-const Customer *Rental::getCustomer() const
+Customer *Rental::getCustomer() const
 {
     return customer;
 }
@@ -42,9 +42,9 @@ std::chrono::system_clock::time_point Rental::getRentTime() const
     return rent_time;
 }
 
-void Rental::setDropoffLocation(Location *location)
+void Rental::setDropOffLocation(Location *location)
 {
-    dropoffLocation = location;
+    dropOffLocation = location;
     vehicle->updateLocation(location);
 }
 

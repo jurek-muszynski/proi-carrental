@@ -129,7 +129,7 @@ TEST(RentalManagementTest, CurrentCustomers)
 
     Customer customer1("C005", "Emily", "Johnson", birthDate, "Female", "emily@example.com", "777888999", nullptr);
     Customer customer2("C006", "John", "Doe", birthDate, "Male", "", "", nullptr);
-    std::vector<const Customer *> customers = {&customer1, &customer2};
+    std::vector<Customer *> customers = {&customer1, &customer2};
 
     Address *address1 = new Address("id1", "123 Street", "City", "State", "12345");
     Address *address2 = new Address("id2", "123 Street", "City", "State", "12345");
