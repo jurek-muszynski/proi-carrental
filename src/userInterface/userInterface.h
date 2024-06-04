@@ -1,4 +1,8 @@
+#pragma once
+
 #include <nlohmann/json.hpp>
+#include <stdexcept>
+#include <unistd.h>
 #include "../fleet/fleet_management.h"
 #include "../vehicle/vehicle.h"
 #include "../rental/rental.h"
@@ -12,7 +16,7 @@ using namespace nlohmann;
 class UserInterface
 {
 public:
-    UserInterface(const std::string& dataPath, Customer* customer);
+    UserInterface(const std::string &dataPath, Customer *customer);
 
     ~UserInterface();
 
@@ -26,8 +30,8 @@ public:
 
     void loadData();
 
-    void printLocations() const;
-    void printVehicles(int seatingCapacity) const;
+    void printLocations();
+    void printVehicles(int seatingCapacity);
 
 private:
     std::chrono::system_clock::time_point current_time;
@@ -35,7 +39,7 @@ private:
     Customer *customer;
     FleetManagement *fleetManagement;
     RentalManagement *rentalManagement;
-    
+
     std::vector<Address *> loadedAddresses;
     std::vector<Location *> loadedLocations;
     std::vector<Vehicle *> loadedVehicles;

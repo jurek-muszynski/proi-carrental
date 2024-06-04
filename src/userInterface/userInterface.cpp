@@ -1,14 +1,13 @@
-#include <stdexcept>
 #include "userInterface.h"
-
 
 class NotImplementedError : public std::logic_error
 {
 public:
-    NotImplementedError() : std::logic_error("Function not yet implemented") { };
+    NotImplementedError() : std::logic_error("Function not yet implemented"){};
 };
 
-UserInterface::UserInterface(const std::string& dataPath, Customer* customer) : dataPath(dataPath), customer(customer), fleetManagement(fleetManagement), rentalManagement(rentalManagement) {
+UserInterface::UserInterface(const std::string &dataPath, Customer *customer) : dataPath(dataPath), customer(customer), fleetManagement(fleetManagement), rentalManagement(rentalManagement)
+{
 
     srand(time(0));
     fleetManagement = new FleetManagement();
@@ -21,23 +20,26 @@ UserInterface::~UserInterface()
 {
 }
 
-void UserInterface::displayMenu() {
+void UserInterface::displayMenu()
+{
     std::cout << "1. Wypożycz samochód\n";
     std::cout << "2. Oddaj samochód\n";
     std::cout << "Wybierz opcję: ";
 }
 
-void UserInterface::handleUserChoice(int choice) {
-    switch (choice) {
-        case 1:
-            rentCarOption();
-            break;
-        case 2:
-            returnCarOption();
-            break;
-        default:
-            std::cout << "Nieznana opcja\n";
-            break;
+void UserInterface::handleUserChoice(int choice)
+{
+    switch (choice)
+    {
+    case 1:
+        rentCarOption();
+        break;
+    case 2:
+        returnCarOption();
+        break;
+    default:
+        std::cout << "Nieznana opcja\n";
+        break;
     }
 }
 
@@ -114,37 +116,34 @@ void UserInterface::loadAddresses()
 }
 
 void UserInterface::loadData()
-{   
+{
     loadAddresses();
     loadLocations();
     loadVehicles();
 }
 
-void UserInterface::printLocations() const
+void UserInterface::printLocations()
 {
-    for (const auto& location : loadedLocations) {
-    const Address* address = location->getAddress();
-    std::cout << "ID: " << address->getId() << ", "
-                << "ZIP Code: " << address->getZipCode() << ", "
-                << "Street: " << address->getStreet() << ", "
-                << "City: " << address->getCity() << "\n";
+    for (auto location : loadedLocations)
+    {
+        const Address *address = location->getAddress();
+        std::cout << "ID: " << location->getLocationId() << " Zone: " << location->getName() << " City: " << address->getCity() << " Street: " << address->getStreet() << "\n";
     }
 }
 
-void UserInterface::printVehicles(int seatingCapacity) const {
+void UserInterface::printVehicles(int seatingCapacity)
+{
 
     auto availableVehicles = fleetManagement->getAvailableVehicles();
 
-    for (const auto& vehicle : availableVehicles) {
-        if (vehicle->getSeatingCapacity() == seatingCapacity) {
+    for (const auto &vehicle : availableVehicles)
+    {
+        if (vehicle->getSeatingCapacity() == seatingCapacity)
+        {
             std::cout << "ID: " << vehicle->getId() << " "
-                      << "Make: " << vehicle->getMake() << " "
                       << "Model: " << vehicle->getModel() << " "
-                      << "Color: " << vehicle->getColor() << " "
                       << "Transmission type: " << vehicle->getTransmissionType() << " "
-                      << "Fuel type: " << vehicle->getFuelType() << " "
-                      << "Year of production: " << vehicle->getYear() << " "
-                      << "Rental rates: " << vehicle->getRentalRates() << "\n";
+                      << "Rental rates: " << vehicle->getRentalRates() << " $\n";
         }
     }
 }
@@ -152,54 +151,47 @@ void UserInterface::printVehicles(int seatingCapacity) const {
 void UserInterface::rentCarOption()
 {
     std::cout << "1. Choose a location\n";
+    usleep(500000);
     printLocations();
+
+    usleep(500000);
 
     std::string locationId;
     std::cout << "Enter location ID: ";
     std::cin >> locationId;
 
-    Location* selectedLocation = nullptr;
-    for (const auto& location : loadedLocations) {
-        if (location->getAddress()->getId() == locationId) {
+    int selectedLocationId = std::stoi(locationId);
+
+    std::cout << selectedLocationId << "\n";
+
+    Location *selectedLocation = nullptr;
+    for (const auto &location : loadedLocations)
+    {
+        if (location->getLocationId() == selectedLocationId)
+        {
             selectedLocation = location;
             break;
         }
     }
-    if (selectedLocation == nullptr) {
+    if (selectedLocation == nullptr)
+    {
         std::cout << "No location found with the provided ID.\n";
         return;
     }
 
-    std::cout << "2. Choose a drop-off location\n";
-    printLocations();
+    usleep(1000000);
 
-    std::string dropOffLocationId;
-    std::cout << "Enter drop-off location ID: ";
-    std::cin >> dropOffLocationId;
-
-    Location* selectedDropOffLocation = nullptr;
-    for (const auto& location : loadedLocations) {
-        if (location->getAddress()->getId() == dropOffLocationId) {
-            selectedDropOffLocation = location;
-            break;
-        }
-    }
-    if (selectedDropOffLocation == nullptr) {
-        std::cout << "No location found with the provided ID.\n";
-        return;
-    }
-
-    std::cout << "3. Choose rental duration\n";
+    std::cout << "2. Choose rental duration\n";
     int duration;
     std::cout << "Enter rental duration (in days): ";
     std::cin >> duration;
 
-    std::cout << "4. Choose vehicle seating capacity\n";
+    std::cout << "3. Choose vehicle seating capacity\n";
     int seatingCapacity;
     std::cout << "Enter seating capacity: ";
     std::cin >> seatingCapacity;
 
-    std::cout << "5. Choose a vehicle\n";
+    std::cout << "4. Choose a vehicle\n";
     printVehicles(seatingCapacity);
 
     // TODO: jakoś inaczej wybierać samochody
@@ -208,31 +200,63 @@ void UserInterface::rentCarOption()
     std::cout << "Enter vehicle ID: ";
     std::cin >> vehicleId;
 
-    Vehicle* selectedVehicle = nullptr;
-    for (const auto& vehicle : loadedVehicles) {
-        if (vehicle->getId() == vehicleId && vehicle->getSeatingCapacity() == seatingCapacity) {
+    Vehicle *selectedVehicle = nullptr;
+    for (const auto &vehicle : fleetManagement->getAvailableVehicles())
+    {
+        if (vehicle->getId() == vehicleId && vehicle->getSeatingCapacity() == seatingCapacity)
+        {
             selectedVehicle = vehicle;
             break;
         }
     }
-    if (selectedVehicle == nullptr) {
+    if (selectedVehicle == nullptr)
+    {
         std::cout << "No available vehicle found with the provided ID and seating capacity.\n";
         return;
     }
 
-    const std::string rentalId = "R" + customer->getId() + "/" + selectedVehicle->getLicensePlate();
-    Rental* newRental = new Rental(rentalId, customer, selectedVehicle, duration);
+    std::cout << "5. Choose a drop-off location\n";
+    printLocations();
 
-    newRental->setDropOffLocation(selectedDropOffLocation);
+    std::string dropOffLocationId;
+    std::cout << "Enter drop-off location ID: ";
+    std::cin >> dropOffLocationId;
+
+    int selectedDropOffLocationId = std::stoi(dropOffLocationId);
+
+    Location *selectedDropOffLocation = nullptr;
+    for (const auto &location : loadedLocations)
+    {
+        if (location->getLocationId() == selectedDropOffLocationId)
+        {
+            selectedDropOffLocation = location;
+            break;
+        }
+    }
+    if (selectedDropOffLocation == nullptr)
+    {
+        std::cout << "No location found with the provided ID.\n";
+        return;
+    }
+
+    usleep(1000000);
+
+    const std::string rentalId = "R" + customer->getId() + "/" + selectedVehicle->getLicensePlate();
+    Rental *newRental = new Rental(rentalId, customer, selectedVehicle, duration);
 
     double cost = newRental->calculateCost();
-    std::cout << "The cost of the rental will be: " << cost << " $\n";
+    std::cout << "\nThe cost of the rental will be: " << cost << " $\n";
 
     auto returnTime = newRental->getRentTime() + std::chrono::hours(24 * duration);
     std::time_t returnTime_t = std::chrono::system_clock::to_time_t(returnTime);
-    std::cout << "The rental will end on: " << std::ctime(&returnTime_t) << std::endl;
+    std::cout << "The rental will end on: " << std::ctime(&returnTime_t);
+    std::cout << "The rental will be terminated within the " << selectedDropOffLocation->getName() << " zone\n\n";
+
+    newRental->setDropOffLocation(selectedDropOffLocation);
 
     rentalManagement->openRental(newRental);
+
+    usleep(2000000);
 }
 
 void UserInterface::returnCarOption()
@@ -260,7 +284,6 @@ Vehicle UserInterface::readVehicle()
     throw NotImplementedError();
 }
 
-
 Rental UserInterface::rentCar(Customer &customer, Vehicle &vehicle, Location &location, int duration)
 {
     // const std::string rentalId = "R" + customer->getId() + "/" + vehicle->getLicensePlate();
@@ -273,5 +296,3 @@ Rental UserInterface::returnCar()
 {
     throw NotImplementedError();
 }
-
-
