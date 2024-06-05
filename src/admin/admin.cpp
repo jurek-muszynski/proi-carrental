@@ -14,3 +14,11 @@ void AdminUser::finishVehicleMaintenance(Vehicle *vehicle)
 {
     vehicle->updateAvailabilityStatus(true);
 }
+
+std::ostream &operator<<(std::ostream &os, const AdminUser &adminUser)
+{
+    os << adminUser.getFirstName() << " " << adminUser.getLastName();
+    os << " ID: " << adminUser.getId() << std::endl;
+
+    return os;
+}

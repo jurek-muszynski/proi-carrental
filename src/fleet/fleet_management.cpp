@@ -51,6 +51,11 @@ std::vector<Vehicle *> FleetManagement::getUnavailableVehicles()
     return unavailableVehicles;
 }
 
+std::vector<AdminUser *> FleetManagement::getAdmins() const
+{
+    return admins;
+}
+
 size_t FleetManagement::getVehicleCount() const
 {
     return vehicles.size();
@@ -79,6 +84,35 @@ bool FleetManagement::removeVehicle(const std::string id)
     {
         delete *it;
         vehicles.erase(it);
+        return true;
+    }
+
+    return false;
+}
+
+bool FleetManagement::addAdmin(AdminUser *admin)
+{
+    auto it = std::find_if(admins.begin(), admins.end(), [&](AdminUser *a)
+                           { return a->getId() == admin->getId(); });
+
+    if (it == admins.end())
+    {
+        admins.push_back(admin);
+        return true;
+    }
+
+    return false;
+}
+
+bool FleetManagement::removeAdmin(const std::string id)
+{
+    auto it = std::find_if(admins.begin(), admins.end(), [&](AdminUser *admin)
+                           { return admin->getId() == id; });
+
+    if (it != admins.end())
+    {
+        delete *it;
+        admins.erase(it);
         return true;
     }
 

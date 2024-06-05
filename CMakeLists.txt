@@ -16,7 +16,9 @@ FetchContent_MakeAvailable(json)
 
 set(PROJECT_SOURCES
     src/address/address.cpp
+    src/user/user.cpp
     src/customer/customer.cpp
+    src/admin/admin.cpp
     src/customer/customer_management.cpp
     src/fleet/fleet_management.cpp
     src/rental/rental.cpp
@@ -26,8 +28,6 @@ set(PROJECT_SOURCES
     src/simulation/simulation.cpp
     src/simulation/simulation_report.cpp
     src/simulation/simulation_report_entity.cpp
-    src/user/user.cpp
-    src/admin/admin.cpp
     src/userInterface/userInterface.cpp
 )
 

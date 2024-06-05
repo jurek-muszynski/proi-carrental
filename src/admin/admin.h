@@ -10,4 +10,7 @@ public:
 
     void performVehicleMaintenance(Vehicle *vehicle);
     void finishVehicleMaintenance(Vehicle *vehicle);
+
+    // overload the << operator that is derived from the user class
+    friend std::ostream &operator<<(std::ostream &os, const AdminUser &adminUser);
 };

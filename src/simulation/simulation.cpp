@@ -61,8 +61,13 @@ void Simulation::run()
 
         for (int j = 0; j < newRentals; j++)
         {
-            if (customerManagement->getCustomerCount() > 0 && generateRandomly(0.55))
-                newRentalOpened();
+            if (customerManagement->getCustomerCount() > 0)
+            {
+                if (generateRandomly(0.55))
+                    newRentalOpened();
+            }
+            else
+                break;
         }
 
         while (rentalManagement->getRentalsToBeTerminated(current_time).size() > 0)
@@ -88,6 +93,7 @@ void Simulation::loadData()
 {
     loadAddresses();
     loadCustomers();
+    loadAdmins();
     loadLocations();
     loadVehicles();
 }
@@ -142,6 +148,34 @@ void Simulation::loadAddresses()
     }
 }
 
+void Simulation::loadAdmins()
+{
+    std::ifstream file(dataPath + "/admins.json");
+
+    if (!file.is_open())
+        throw std::runtime_error("Cannot open json file");
+
+    json source = json::parse(file);
+
+    for (const auto &admin : source)
+    {
+        std::tm birthDate = {};
+        birthDate.tm_year = 2000 - 1900; // years since 1900
+        birthDate.tm_mon = 12 - 1;       // months since January (0-11)
+        birthDate.tm_mday = 1;           // day of the month (1-31)
+        std::string id = admin["id"];
+        std::string first_name = admin["fname"];
+        std::string last_name = admin["lname"];
+        std::string email = admin["email"];
+        std::string phone = admin["phoneNumber"];
+        std::string gender = admin["gender"];
+
+        Address *address = loadedAddresses[rand() % loadedAddresses.size()];
+        AdminUser *newAdmin = new AdminUser(id, first_name, last_name, birthDate, gender, email, phone, address);
+        fleetManagement->addAdmin(newAdmin);
+    }
+}
+
 void Simulation::loadLocations()
 {
     std::ifstream file(dataPath + "/locations.json");
@@ -190,6 +224,13 @@ void Simulation::loadVehicles()
         newVehicle->updateLocation(location);
         fleetManagement->addVehicle(newVehicle);
     }
+}
+
+AdminUser *Simulation::chooseRandomAdminForMaintenance(std::vector<AdminUser *> admins) const
+{
+    if (admins.empty())
+        throw std::runtime_error("No admins to choose from");
+    return admins[rand() % admins.size()];
 }
 
 Customer *Simulation::chooseRandomCustomer(std::vector<Customer *> customers) const
@@ -251,15 +292,15 @@ Vehicle *Simulation::chooseRandomVehicleForMaintenance() const
     return availableVehiclesForMaintenance[rand() % availableVehiclesForMaintenance.size()];
 }
 
-Vehicle *Simulation::chooseRandomVehicleUnderMaintenance(std::vector<std::pair<Vehicle *, std::chrono::system_clock::time_point>> vehicles) const
+std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>> Simulation::chooseRandomVehicleUnderMaintenance(std::vector<std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>>> vehicles) const
 {
     if (vehicles.empty())
         throw std::runtime_error("No vehicles to choose from");
 
-    std::pair<Vehicle *, std::chrono::system_clock::time_point> randomVehicleUnderMaintenancePair = vehicles[rand() % vehicles.size()];
-    while (current_time == randomVehicleUnderMaintenancePair.second)
+    std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>> randomVehicleUnderMaintenancePair = vehicles[rand() % vehicles.size()];
+    while (current_time == randomVehicleUnderMaintenancePair.second.second)
         randomVehicleUnderMaintenancePair = vehicles[rand() % vehicles.size()];
-    return randomVehicleUnderMaintenancePair.first;
+    return randomVehicleUnderMaintenancePair;
 }
 
 std::vector<Vehicle *> Simulation::getVehiclesUnderMaintenance() const
@@ -331,23 +372,31 @@ void Simulation::newRentalClosed()
 void Simulation::scheduleVehicleMaintenance()
 {
     Vehicle *vehicle = chooseRandomVehicleForMaintenance();
-    vehicle->updateAvailabilityStatus(false);
-    vehiclesUnderMaintenance.push_back(std::make_pair(vehicle, current_time));
+
+    AdminUser *admin = chooseRandomAdminForMaintenance(fleetManagement->getAdmins());
+    admin->performVehicleMaintenance(vehicle);
+
+    vehiclesUnderMaintenance.push_back(std::make_pair(vehicle, std::make_pair(admin, current_time)));
+
     std::stringstream ss;
     ss << "Scheduled maintenance for " << *vehicle << "\n";
+    ss << "\tMaintained by Admin: " << *admin;
     logs.push_back(ss.str());
     report.addMaintenanceData(vehicle);
 }
 
 void Simulation::finishVehicleMaintenance()
 {
-    Vehicle *vehicle = chooseRandomVehicleUnderMaintenance(vehiclesUnderMaintenance);
-    vehicle->updateAvailabilityStatus(true);
-    vehiclesUnderMaintenance.erase(std::remove_if(vehiclesUnderMaintenance.begin(), vehiclesUnderMaintenance.end(), [vehicle](const std::pair<Vehicle *, std::chrono::system_clock::time_point> &pair)
+    std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>> vehicleData = chooseRandomVehicleUnderMaintenance(vehiclesUnderMaintenance);
+    Vehicle *vehicle = vehicleData.first;
+    AdminUser *admin = vehicleData.second.first;
+    admin->finishVehicleMaintenance(vehicle);
+    vehiclesUnderMaintenance.erase(std::remove_if(vehiclesUnderMaintenance.begin(), vehiclesUnderMaintenance.end(), [vehicle](const std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>> &pair)
                                                   { return pair.first == vehicle; }),
                                    vehiclesUnderMaintenance.end());
     std::stringstream ss;
     ss << "Finished maintenance for: " << *vehicle << "\n";
+    ss << "\tMaintained by Admin: " << *admin << "\n";
     logs.push_back(ss.str());
 }
 
