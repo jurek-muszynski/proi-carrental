@@ -1,25 +1,21 @@
 #pragma once
 
-#include <iomanip>
 #include <map>
-#include <sstream>
+#include <memory>
 #include <vector>
 
+#include "simulation_report_entity.h"
 #include "../rental/rental.h"
 
 class SimulationReport
 {
 private:
-    struct CustomerData
-    {
-        int rentalCount = 0;
-        double totalCost = 0;
-        double totalDuration = 0;
-    };
-
-    std::map<Customer *, CustomerData> customerRentals;
+    std::map<Customer *, std::unique_ptr<ReportEntity>> customerRentals;
+    std::map<Vehicle *, std::unique_ptr<ReportEntity>> vehicleUsage;
 
 public:
     void addRentalData(const Rental *rental);
-    void generateSummary() const;
+    void addMaintenanceData(Vehicle *vehicle);
+    void generateCustomerSummary();
+    void generateVehicleSummary();
 };

@@ -66,7 +66,8 @@ void Simulation::run()
         passTime();
         usleep(2000000);
     }
-    report.generateSummary();
+    report.generateCustomerSummary();
+    report.generateVehicleSummary();
 }
 
 void Simulation::loadData()
@@ -317,6 +318,7 @@ void Simulation::scheduleVehicleMaintenance()
     std::stringstream ss;
     ss << "Scheduled maintenance for " << *vehicle << "\n";
     logs.push_back(ss.str());
+    report.addMaintenanceData(vehicle);
 }
 
 void Simulation::finishVehicleMaintenance()

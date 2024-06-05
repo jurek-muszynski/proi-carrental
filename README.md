@@ -32,31 +32,83 @@
 ## Przykładowa demonstracja symulatora
 
 ```
-Sun Jun  2 21:28:05 2024
+Wed Jun  5 20:09:47 2024
 
-1. New customer registered: Artemis Eastabrook - aeastabrook27@addthis.com
-
-Sun Jun  2 23:28:05 2024
-
-1. New customer registered: Cirillo Walbrun - cwalbrun2c@myspace.com
-2. New rental opened: Artemis Eastabrook - aeastabrook27@addthis.com rented
-        Vehicle: GMC License Plate: MT80587 Rental Rates: 57.3
-        Location ID: 9 Name: Sutherland
-        Address: 6th Street Cashel
+1. New customer registered: Freedman Issitt - fissitt18@mediafire.com
+2. New rental opened: Freedman Issitt - fissitt18@mediafire.com rented
+        Vehicle: Nissan License Plate: WI87174 Rental Rates: 10.98$
+        Location ID: 29 Name: 7th
+        Address: Trailsway Street Västerås
         Duration: 4 hours
+3. Scheduled maintenance for Vehicle: BMW License Plate: WK28161 Rental Rates: 50.71$
+        Location ID: 16 Name: Lakewood Gardens
+        Address: Miller Street Boli
+4. Finished maintenance for: Vehicle: MINI License Plate: WY05310 Rental Rates: 39.54$
+        Location ID: 13 Name: Corben
+        Address: Mccormick Street Pedro Carbo
 
-Mon Jun  3 01:28:05 2024
+Wed Jun  5 22:09:47 2024
 
-1. New customer registered: Tedra Benezet - tbenezet2m@is.gd
+1. New customer registered: Stearn Boyce - sboyce2q@google.co.uk
+2. New rental opened: Stearn Boyce - sboyce2q@google.co.uk rented
+        Vehicle: Mitsubishi License Plate: WR00649 Rental Rates: 51.24$
+        Location ID: 56 Name: Mandrake
+        Address: Eagan Street Mali
+        Duration: 8 hours
+3. Rental closed: Garreth Nielson - gnielson8@google.ca returned
+        Vehicle: Mitsubishi License Plate: WT95467 Rental Rates: 29.92$
+        Location ID: 27 Name: David
+        Address: Corry Street Yanghe
+        Total Cost: 119.68 $
+4. Scheduled maintenance for Vehicle: Mitsubishi License Plate: WP43062 Rental Rates: 29.69$
+        Location ID: 25 Name: Forest Run
+        Address: Raven Street Gīvī
 
-Mon Jun  3 03:28:05 2024
+Customer Summary Report
+-------------------------
+Customer: Garreth Nielson - gnielson8@google.ca
+Total Rentals: 2
+Total Cost: 264.65$
+Total Rental Duration: 11.00 hours
+Average Rental Duration: 5.50 hours
+-------------------------
+Customer: Irene Guille - iguilleh@friendfeed.com
+Total Rentals: 2
+Total Cost: 514.00$
+Total Rental Duration: 12.00 hours
+Average Rental Duration: 6.00 hours
+-------------------------
+Customer: Rianon Daughton - rdaughton13@sphinn.com
+Total Rentals: 1
+Total Cost: 322.02$
+Total Rental Duration: 6.00 hours
+Average Rental Duration: 6.00 hours
+-------------------------
+Customer: Freedman Issitt - fissitt18@mediafire.com
+Total Rentals: 1
+Total Cost: 43.92$
+Total Rental Duration: 4.00 hours
+Average Rental Duration: 4.00 hours
+-------------------------
+Customer: Stearn Boyce - sboyce2q@google.co.uk
+Total Rentals: 1
+Total Cost: 409.92$
+Total Rental Duration: 8.00 hours
+Average Rental Duration: 8.00 hours
+-------------------------
 
-1. New customer registered: Hillie Adolthine - hadolthine26@dropbox.com
-2. Rental closed: Artemis Eastabrook - aeastabrook27@addthis.com returned
-        Vehicle: GMC License Plate: MT80587 Rental Rates: 57.3
-        Location ID: 9 Name: Sutherland
-        Address: 6th Street Cashel
-        Total Cost: 229.2 $
+Vehicle Summary Report
+--------------------
+Vehicle: Buick License Plate: WA65431
+Total Rentals: 0
+Total Cost: 0.00$
+Total Maintenance Count: 1
+--------------------
+Vehicle: Toyota License Plate: WY09795
+Total Rentals: 1
+Total Cost: 322.02$
+Total Maintenance Count: 0
+--------------------
 ```
 
 ## Instrukcja obsługi

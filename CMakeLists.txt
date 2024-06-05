@@ -25,6 +25,7 @@ set(PROJECT_SOURCES
     src/vehicle/vehicle.cpp
     src/simulation/simulation.cpp
     src/simulation/simulation_report.cpp
+    src/simulation/simulation_report_entity.cpp
     src/userInterface/userInterface.cpp
 )
 
