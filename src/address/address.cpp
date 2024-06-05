@@ -1,7 +1,7 @@
 #include "address.h"
 
-Address::Address(const std::string &id, const std::string &street, const std::string &city, const std::string &country, const std::string &zipCode)
-    : id(id), street(street), city(city), country(country), zipCode(zipCode) {}
+Address::Address(const std::string &id, const std::string &street, const std::string &city, const std::string &country, const std::string &zipCode, double longitude, double latitude)
+    : id(id), street(street), city(city), country(country), zipCode(zipCode), longitude(longitude), latitude(latitude) {}
 
 std::string Address::getId() const
 {
@@ -26,6 +26,16 @@ std::string Address::getCountry() const
 std::string Address::getZipCode() const
 {
     return this->zipCode;
+}
+
+double Address::getLongitude() const
+{
+    return this->longitude;
+}
+
+double Address::getLatitude() const
+{
+    return this->latitude;
 }
 
 std::ostream &operator<<(std::ostream &os, const Address &address)

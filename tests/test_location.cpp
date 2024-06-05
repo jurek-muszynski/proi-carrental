@@ -57,3 +57,15 @@ TEST(LocationTest, Destructor)
     delete location;
     EXPECT_EQ(location->getAddress(), nullptr);
 }
+
+TEST(LocationTest, CalculateDistance)
+{
+    Address address1("5", "123 Main St", "Springfield", "USA", "12345", 23.15, 53.1333);
+    Address address2("6", "456 Elm St", "Shelbyville", "USA", "67890", 21.00, 52.13);
+
+    Location location1(107, "Main Office", &address1);
+    Location location2(108, "Secondary Office", &address2);
+
+    double distance = location1.calculateDistance(location2);
+    EXPECT_NEAR(distance, 183.0, 5.0);
+}

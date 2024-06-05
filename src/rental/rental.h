@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <iomanip>
 #include <string>
 #include "../vehicle/vehicle.h"
 #include "../customer/customer.h"
@@ -14,7 +15,6 @@ private:
     Location *pickupLocation;
     Location *dropOffLocation = nullptr;
     int duration;
-    // double totalCharges;
     double rate;
     std::chrono::system_clock::time_point rent_time;
 
@@ -23,6 +23,7 @@ public:
     ~Rental();
 
     double calculateCost() const;
+    double calculateDistance() const;
     int getDuration() const;
     std::string getId() const;
     Customer *getCustomer() const;

@@ -142,8 +142,10 @@ void Simulation::loadAddresses()
         std::string city = address["city"];
         std::string zip = address["zip_code"];
         std::string country = address["country"];
+        double latitude = address["latitude"];
+        double longitude = address["longitude"];
 
-        Address *newAddress = new Address(id, street, city, country, zip);
+        Address *newAddress = new Address(id, street, city, country, zip, longitude, latitude);
         loadedAddresses.push_back(newAddress);
     }
 }
@@ -348,6 +350,7 @@ void Simulation::newRentalOpened()
     const std::string rentalId = "R" + customer->getId() + "/" + vehicle->getLicensePlate();
     int duration = rand() % 10 + 1;
     Rental *newRental = new Rental(rentalId, customer, vehicle, duration, current_time);
+    newRental->setDropOffLocation(chooseRandomDropOffLocation(loadedLocations, newRental->getVehicle()->getLocation()));
     std::stringstream ss;
     if (rentalManagement->openRental(newRental))
     {
@@ -360,7 +363,6 @@ void Simulation::newRentalOpened()
 void Simulation::newRentalClosed()
 {
     Rental *rental = rentalManagement->getRentalsToBeTerminated(current_time)[0];
-    rental->setDropOffLocation(chooseRandomDropOffLocation(loadedLocations, rental->getVehicle()->getLocation()));
     std::stringstream ss;
     if (rentalManagement->closeRental(rental->getId()))
     {

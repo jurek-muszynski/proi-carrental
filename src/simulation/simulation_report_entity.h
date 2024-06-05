@@ -32,6 +32,7 @@ class VehicleData : public ReportEntity
 {
 private:
     int maintenanceCount = 0;
+    int mileage = 0;
 
 public:
     void addMaintenanceCount();

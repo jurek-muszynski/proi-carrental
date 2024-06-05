@@ -47,6 +47,7 @@ add_executable(car_rental_tests
     tests/test_rental.cpp
     tests/test_vehicle.cpp
     tests/test_address.cpp
+    tests/test_location.cpp
 
  ${PROJECT_SOURCES})
 

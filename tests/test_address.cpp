@@ -3,7 +3,7 @@
 
 TEST(AddressTest, ConstructorAndGetters)
 {
-    Address address("1", "123 Main St", "Springfield", "USA", "12345");
+    Address address("1", "123 Main St", "Springfield", "USA", "12345", 0.0, 0.0);
 
     EXPECT_EQ(address.getId(), "1");
     EXPECT_EQ(address.getStreet(), "123 Main St");
