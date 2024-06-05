@@ -18,6 +18,7 @@ public:
 
     Vehicle *getVehicle(const std::string id) const;
     std::vector<Vehicle *> getAvailableVehicles();
+    std::vector<Vehicle *> getUnavailableVehicles();
 
     size_t getVehicleCount() const;
 

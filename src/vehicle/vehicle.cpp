@@ -93,7 +93,7 @@ void Vehicle::updateLocation(Location *newLocation)
 
 std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle)
 {
-    os << "Vehicle: " << vehicle.make << " License Plate: " << vehicle.licensePlate << " Rental Rates: " << vehicle.rentalRates;
+    os << "Vehicle: " << vehicle.make << " License Plate: " << vehicle.licensePlate << " Rental Rates: " << vehicle.rentalRates << "$";
     if (vehicle.location)
     {
         os << "\n\t"

@@ -38,6 +38,19 @@ std::vector<Vehicle *> FleetManagement::getAvailableVehicles()
     return availableVehicles;
 }
 
+std::vector<Vehicle *> FleetManagement::getUnavailableVehicles()
+{
+    std::vector<Vehicle *> unavailableVehicles;
+    for (Vehicle *vehicle : vehicles)
+    {
+        if (!vehicle->getAvailabilityStatus())
+        {
+            unavailableVehicles.push_back(vehicle);
+        }
+    }
+    return unavailableVehicles;
+}
+
 size_t FleetManagement::getVehicleCount() const
 {
     return vehicles.size();

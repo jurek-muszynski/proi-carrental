@@ -40,10 +40,12 @@ std::string Simulation::getDateTime() const
 
 void Simulation::run()
 {
+    std::cout << "Simulation has just started\n";
+    usleep(2000000);
     logs.push_back(getDateTime() + "\n");
     for (unsigned int i = 0; i < simulations_run; i++)
     {
-        if (generateRandomly(0.95))
+        if (generateRandomly(0.85))
             newCustomerRegistered();
 
         if (customerManagement->getCustomerCount() > 0 && generateRandomly(0.55))
@@ -54,10 +56,17 @@ void Simulation::run()
             newRentalClosed();
         }
 
+        if (generateRandomly(0.8))
+            scheduleVehicleMaintenance();
+
+        if (vehiclesUnderMaintenance.size() > 0 && generateRandomly(0.4))
+            finishVehicleMaintenance();
+
         printLogs();
         passTime();
         usleep(2000000);
     }
+    report.generateSummary();
 }
 
 void Simulation::loadData()
@@ -217,6 +226,43 @@ Location *Simulation::chooseRandomDropOffLocation(std::vector<Location *> locati
     return location;
 }
 
+Vehicle *Simulation::chooseRandomVehicleForMaintenance() const
+{
+    std::vector<Vehicle *> availableVehiclesForMaintenance = fleetManagement->getAvailableVehicles();
+
+    if (availableVehiclesForMaintenance.empty())
+        throw std::runtime_error("No vehicles to choose from");
+
+    return availableVehiclesForMaintenance[rand() % availableVehiclesForMaintenance.size()];
+}
+
+Vehicle *Simulation::chooseRandomVehicleUnderMaintenance(std::vector<std::pair<Vehicle *, std::chrono::system_clock::time_point>> vehicles) const
+{
+    if (vehicles.empty())
+        throw std::runtime_error("No vehicles to choose from");
+
+    std::pair<Vehicle *, std::chrono::system_clock::time_point> randomVehicleUnderMaintenancePair = vehicles[rand() % vehicles.size()];
+    while (current_time == randomVehicleUnderMaintenancePair.second)
+        randomVehicleUnderMaintenancePair = vehicles[rand() % vehicles.size()];
+    return randomVehicleUnderMaintenancePair.first;
+}
+
+std::vector<Vehicle *> Simulation::getVehiclesUnderMaintenance() const
+{
+    std::vector<Vehicle *> vehiclesUnderMaintenance;
+    std::vector<Vehicle *> unavailableVehicles = fleetManagement->getUnavailableVehicles();
+
+    for (auto &vehicle : unavailableVehicles)
+    {
+        if (!rentalManagement->isVehicleCurrentlyRented(vehicle))
+        {
+            vehiclesUnderMaintenance.push_back(vehicle);
+        }
+    }
+
+    return vehiclesUnderMaintenance;
+}
+
 void Simulation::newCustomerRegistered()
 {
     Customer *newCustomer = chooseRandomCustomerToRegister(loadedCustomers);
@@ -247,6 +293,7 @@ void Simulation::newRentalOpened()
     {
         ss << "New rental opened: " << *customer << " rented\n\t" << *vehicle << "\n\tDuration: " << duration << " hours\n";
         logs.push_back(ss.str());
+        report.addRentalData(newRental);
     }
 }
 
@@ -260,6 +307,28 @@ void Simulation::newRentalClosed()
         ss << "Rental closed: " << *rental->getCustomer() << " returned\n\t" << *rental->getVehicle() << "\n\t" << *rental << "\n";
         logs.push_back(ss.str());
     }
+}
+
+void Simulation::scheduleVehicleMaintenance()
+{
+    Vehicle *vehicle = chooseRandomVehicleForMaintenance();
+    vehicle->updateAvailabilityStatus(false);
+    vehiclesUnderMaintenance.push_back(std::make_pair(vehicle, current_time));
+    std::stringstream ss;
+    ss << "Scheduled maintenance for " << *vehicle << "\n";
+    logs.push_back(ss.str());
+}
+
+void Simulation::finishVehicleMaintenance()
+{
+    Vehicle *vehicle = chooseRandomVehicleUnderMaintenance(vehiclesUnderMaintenance);
+    vehicle->updateAvailabilityStatus(true);
+    vehiclesUnderMaintenance.erase(std::remove_if(vehiclesUnderMaintenance.begin(), vehiclesUnderMaintenance.end(), [vehicle](const std::pair<Vehicle *, std::chrono::system_clock::time_point> &pair)
+                                                  { return pair.first == vehicle; }),
+                                   vehiclesUnderMaintenance.end());
+    std::stringstream ss;
+    ss << "Finished maintenance for: " << *vehicle << "\n";
+    logs.push_back(ss.str());
 }
 
 void Simulation::printLogs()

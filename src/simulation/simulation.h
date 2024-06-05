@@ -11,6 +11,7 @@
 #include "../customer/customer_management.h"
 #include "../fleet/fleet_management.h"
 #include "../rental/rental_management.h"
+#include "simulation_report.h"
 
 using ordered_json = nlohmann::ordered_json;
 using namespace nlohmann;
@@ -32,7 +33,11 @@ private:
     std::vector<Address *> loadedAddresses;
     std::vector<Location *> loadedLocations;
 
+    std::vector<std::pair<Vehicle *, std::chrono::system_clock::time_point>> vehiclesUnderMaintenance;
+
     std::vector<std::string> logs;
+
+    SimulationReport report;
 
 public:
     Simulation(unsigned int sims, const std::string &filePath);
@@ -55,9 +60,16 @@ public:
 
     Location *chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const;
 
+    Vehicle *chooseRandomVehicleForMaintenance() const;
+    Vehicle *chooseRandomVehicleUnderMaintenance(std::vector<std::pair<Vehicle *, std::chrono::system_clock::time_point>> vehicles) const;
+
+    std::vector<Vehicle *> getVehiclesUnderMaintenance() const;
+
     void newCustomerRegistered();
     void newRentalOpened();
     void newRentalClosed();
+    void scheduleVehicleMaintenance();
+    void finishVehicleMaintenance();
 
     void printLogs();
 };
