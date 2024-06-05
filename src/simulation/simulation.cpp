@@ -43,13 +43,27 @@ void Simulation::run()
     std::cout << "Simulation has just started\n";
     usleep(2000000);
     logs.push_back(getDateTime() + "\n");
+
+    std::default_random_engine generator(time(0));
+    std::poisson_distribution<int> newCustomerDistribution(1);
+    std::poisson_distribution<int> newRentalDistribution(2);
+
     for (unsigned int i = 0; i < simulations_run; i++)
     {
-        if (generateRandomly(0.85))
-            newCustomerRegistered();
+        int newCustomers = newCustomerDistribution(generator);
+        int newRentals = newRentalDistribution(generator);
 
-        if (customerManagement->getCustomerCount() > 0 && generateRandomly(0.55))
-            newRentalOpened();
+        for (int j = 0; j < newCustomers; j++)
+        {
+            if (generateRandomly(0.85))
+                newCustomerRegistered();
+        }
+
+        for (int j = 0; j < newRentals; j++)
+        {
+            if (customerManagement->getCustomerCount() > 0 && generateRandomly(0.55))
+                newRentalOpened();
+        }
 
         while (rentalManagement->getRentalsToBeTerminated(current_time).size() > 0)
         {
@@ -209,7 +223,7 @@ Customer *Simulation::chooseRandomCustomerToRent(std::vector<Customer *> custome
     }
 
     if (availableCustomersToRent.empty())
-        throw std::runtime_error("No customers to choose from");
+        return nullptr;
 
     return availableCustomersToRent[rand() % availableCustomersToRent.size()];
 }
@@ -282,6 +296,10 @@ void Simulation::newCustomerRegistered()
 void Simulation::newRentalOpened()
 {
     Customer *customer = chooseRandomCustomerToRent(customerManagement->getCustomers());
+    if (customer == nullptr)
+    {
+        return;
+    }
     std::vector<Vehicle *> availableVehicles = fleetManagement->getAvailableVehicles();
     Vehicle *vehicle = availableVehicles[rand() % availableVehicles.size()];
     Location *dropOff = loadedLocations[rand() % loadedLocations.size()];
