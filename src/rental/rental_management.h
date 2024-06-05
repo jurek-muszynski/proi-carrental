@@ -16,6 +16,7 @@ public:
     const std::vector<Rental *> getRentalsToBeTerminated(std::chrono::system_clock::time_point current_time) const;
 
     bool isCustomerCurrentlyRenting(Customer *customer) const;
+    bool isVehicleCurrentlyRented(Vehicle *vehicle) const;
     bool openRental(Rental *rental);
     bool closeRental(const std::string id);
 };

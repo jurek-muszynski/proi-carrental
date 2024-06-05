@@ -4,8 +4,6 @@ project(car_rental VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# find_package(Qt5 COMPONENTS Widgets REQUIRED) GUI
-
 include(FetchContent)
 FetchContent_Declare(
    googletest
@@ -26,6 +24,8 @@ set(PROJECT_SOURCES
     src/location/location.cpp
     src/vehicle/vehicle.cpp
     src/simulation/simulation.cpp
+    src/simulation/simulation_report.cpp
+    src/simulation/simulation_report_entity.cpp
     src/userInterface/userInterface.cpp
 )
 
@@ -33,7 +33,9 @@ add_executable(car_rental main.cpp ${PROJECT_SOURCES})
 
 target_link_libraries(car_rental PRIVATE nlohmann_json::nlohmann_json)
 
-# target_link_libraries(MyProject Qt5::Widgets) GUI
+add_executable(car_rental_simulation simulation.cpp ${PROJECT_SOURCES})
+
+target_link_libraries(car_rental_simulation PRIVATE nlohmann_json::nlohmann_json)
 
 add_executable(car_rental_tests
     tests/test_customer_management.cpp
@@ -45,6 +47,6 @@ add_executable(car_rental_tests
     tests/test_address.cpp
 
  ${PROJECT_SOURCES})
+
 target_link_libraries(car_rental_tests PUBLIC gtest_main)
 target_link_libraries(car_rental_tests PRIVATE nlohmann_json::nlohmann_json)
-

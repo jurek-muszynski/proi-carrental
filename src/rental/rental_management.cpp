@@ -13,10 +13,10 @@ const Rental *RentalManagement::getRental(std::string id) const
     return nullptr;
 }
 
-const std::vector< Customer *> RentalManagement::getCurrentCustomers() const
+const std::vector<Customer *> RentalManagement::getCurrentCustomers() const
 {
-    std::vector< Customer *> customers;
-    for ( Rental *rental : rentals)
+    std::vector<Customer *> customers;
+    for (Rental *rental : rentals)
     {
         customers.push_back(rental->getCustomer());
     }
@@ -41,6 +41,14 @@ bool RentalManagement::isCustomerCurrentlyRenting(Customer *customer) const
 {
     auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
                            { return rental->getCustomer()->getId() == customer->getId(); });
+
+    return it != rentals.end();
+}
+
+bool RentalManagement::isVehicleCurrentlyRented(Vehicle *vehicle) const
+{
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
+                           { return rental->getVehicle()->getId() == vehicle->getId(); });
 
     return it != rentals.end();
 }
