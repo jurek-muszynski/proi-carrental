@@ -23,7 +23,7 @@ int main()
     Customer *customer = new Customer(id, firstName, lastName, birthDate, gender, email, phoneNumber, address);
 
     // Ścieżka do pliku
-    std::string dataPath = "data";
+    std::string dataPath = "/home/mlewko/proi/24l-proi-lewko-muszynski/data";
 
     // Stworzenie interfejsu dla użytkownika
     UserInterface ui(dataPath, customer);

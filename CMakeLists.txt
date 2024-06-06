@@ -42,6 +42,7 @@ target_link_libraries(car_rental_simulation PRIVATE nlohmann_json::nlohmann_json
 add_executable(car_rental_tests
     tests/test_customer_management.cpp
     tests/test_customer.cpp
+    tests/test_admin.cpp
     tests/test_fleet_management.cpp
     tests/test_rental_management.cpp
     tests/test_rental.cpp

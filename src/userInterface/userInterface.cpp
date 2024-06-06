@@ -162,7 +162,8 @@ void UserInterface::printRental()
         std::cout << "No current rental.\n";
         return;
     }
-
+    usleep(1000000);
+    std::cout << "\n";
     std::cout << "Rental ID: " << rental->getId() << "\n";
     std::cout << "Vehicle: " << rental->getVehicle()->getMake() << " " << rental->getVehicle()->getModel() << "\n";
     std::cout << "Customer: " << rental->getCustomer()->getFirstName() << " " << rental->getCustomer()->getLastName() << "\n";
