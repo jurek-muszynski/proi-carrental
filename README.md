@@ -1,186 +1,297 @@
 
 
-# Projekt: Symulator Wypożyczalni Aut w C++
+# Symulator Wypożyczalni Aut
 
-   * [Roadmap](#roadmap)
-   * [Demo](#przykładowa-demonstracja-symulatora)
+   * [Autorzy](#autorzy)
+   * [Technologie](#technologie)
+   * [Opis Projektu](#opis-projektu)
+      * [Interfejs Użytkownika](#interfejs-użytkownika)
+      * [Symulacja](#symulacja)
    * [Instrukcja obsługi](#instrukcja-obsługi)
-   * [Cel Projektu](#cel-projektu)
-   * [Główne Funkcjonalności](#główne-funkcjonalności)
+   * [Struktura Plików](#struktura-plików)
+   * [Roadmap](#roadmap)
+   * [Demonstracja](#przykładowa-demonstracja-symulatora)
    * [Diagram UML](#diagram-uml)
+
+## Autorzy
+ - **Mateusz Lewko**: @mlewko
+ - **Jerzy Muszyński**: @jmuszyns
+
+## Technologie
+   - **Język Programowania**: C++
+   - **Biblioteki/Frameworki**: Standard Template Library (STL), Nlohmann/Json, Random, Chrono, Cmath, Google Test
+   - **Przechowywanie Danych**: Przykładowe dane do symulacji przechowywane w folderze ``data`` w postaci plików .json
+   - **System Budowy**: CMake
+
+## Opis Projektu
+Celem projektu jest stworzenie aplikacji w języku C++, która symuluje działanie wypożyczalni samochodów. Aplikacja będzie umożliwiać zarządzanie flotą pojazdów, klientami oraz procesem wypożyczania i zwracania samochodów. Projekt można podzielić na dwie części, **[interfejs użytkownika](#interfejs-użytkownika)** oraz **[symulacje](#symulacja)**.
+
+### Interfejs Użytkownika
+
+Intefejs pełni rolę pośrednika między użytkownikiem a systemem wypożyczalni samochodowej. Zapewnia interakcję poprzez prosty interfejs tekstowy w konsoli, umożliwiając klientom wypożyczenie i zwrot pojazdów oraz przeglądanie dostępnych opcji.
+
+#### Działanie:
+
+- Wyświetlanie Menu: Interfejs prezentuje użytkownikowi główne menu, gdzie może wybrać odpowiednią opcję.
+
+- Obsługa Wyboru Użytkownika: Po wybraniu opcji przez użytkownika, interfejs przekazuje odpowiednie żądanie do systemu wypożyczalni, aby obsłużyć akcję.
+
+#### Wypożyczenie Samochodu:
+- Użytkownik może wybrać opcję wypożyczenia samochodu. Interfejs umożliwia wybór lokalizacji, określenie czasu trwania wypożyczenia oraz wybór pojazdu zgodnie z preferencjami.
+
+#### Zwrot Samochodu:
+- Po zakończeniu wypożyczenia, użytkownik może dokonać zwrotu samochodu. Interfejs prezentuje aktualne informacje o wypożyczeniu i prosi użytkownika o potwierdzenie.
+
+#### Wyświetlanie Dostępnych Opcji:
+- Interfejs pozwala użytkownikowi na przeglądanie dostępnych lokalizacji, pojazdów oraz informacji o aktualnym wypożyczeniu.
+
+### Symulacja
+Symulacja w projekcie Wypożyczalni Samochodów odgrywa kluczową rolę w testowaniu i analizie codziennej pracy systemu, została oparta przede wszystkim na losowości zapewnionej przy pomocy biblioteki ``<random>`` oraz zarządzaniu __wirtualnym__ zegarem przy pomocy biblioteki ``<chrono>``
+
+#### Inicjalizacja Symulacji:
+
+- Symulacja rozpoczyna się od inicjalizacji, gdzie wczytywane są dane z plików JSON, ``Simulation::loadData()`` takie jak klienci, adresy, lokalizacje, pojazdy itp.
+- Dane te są wykorzystywane do utworzenia obiektów klientów, adresów, lokalizacji i pojazdów, które są później używane w symulacji.
+
+#### Pojedyncza Iteracja Symulacji:
+
+- Po inicjalizacji następuje uruchomienie pętli głównej, ``Simulation::run()``, która wykonuje określoną liczbę iteracji symulacji.
+- W każdej iteracji symulacji losowo generowani są nowi klienci oraz nowe wynajmy.
+- Następnie sprawdzane są warunki, które powodują zakończenie wynajmów, takie jak upłynięcie czasu trwania wynajmu.
+- Symulacja obsługuje także inne zdarzenia, takie jak planowana konserwacja pojazdów, zgłaszanie wypadków czy aktualizacja danych klientów.
+
+#### Zarządzanie Czasem:
+
+- Symulacja kontroluje upływ czasu, przesuwając aktualną datę o 2 godziny w każdej iteracji, ``Simulation::passTime()``.
+- Aktualizacja czasu jest wykorzystywana do planowania różnych operacji, takich jak zakończenie wynajmu po upływie określonego czasu.
+
+#### Generowanie Logów:
+
+- W trakcie symulacji generowane są logi zawierające informacje o wykonywanych operacjach, takich jak rejestracja nowych klientów, otwieranie nowych wynajmów, zakończenie wynajmów, rozpoczęcie i zakończenie konserwacji pojazdów, zgłaszanie wypadków itp.
+- Logi te są wyświetlane na standardowym wyjściu i przechowywane w pamięci symulacji, ``Simulation::printLogs()``.
+
+#### Raporty:
+
+- Po zakończeniu symulacji generowane są raporty, ``SimulationReport`` zawierające podsumowanie różnych aspektów działania systemu.
+   1. Podsumowanie Klientów: Informacje o zarejestrowanych klientach:
+      - łączna liczba wynajmów
+      - łączna długość wynajmów (hr)
+      - srednia długość wynajmów (hr)
+      - łączne koszta wynajmów ($).
+
+   2. Podsumowanie Pojazdów: Informacje o zarządzanych pojazdach:
+      - łączna liczba wypożyczeń
+      - łączna liczba napraw
+      - łaczny przejechany dystans (km)
+      - liczba napraw
+
+
+#### Zakończenie Symulacji:
+
+- Po zakończeniu określonej liczby iteracji, symulacja kończy swoje działanie i generuje raporty dotyczące działalności systemu, takie jak podsumowanie klientów czy podsumowanie pojazdów, ``SimulationReport::GenerateCustomerSummary()`` oraz ``SimulationReport::GenerateVehicleSummary()``.
+
+
+## Instrukcja obsługi
+
+#### Przygotowanie środowiska
+
+Najpierw należy sklonować repozytorium na własną maszynę i przejść do głównego katalogu projektu
+
+```bash
+git clone https://gitlab-stud.elka.pw.edu.pl/jmuszyns/24l-proi-lewko-muszynski.git
+cd 24l-proi-lewko-muszynski
+```
+
+Następnie trzeba utworzyć konieczne zależności i konfiguracje budowania projektu. Można to zrealizować za pomocą Visual Studio Code, bądź w konsoli, używając poniższych poleceń
+
+```bash
+mkdir build
+cd build
+cmake ..
+make
+cd ..
+```
+
+#### Uruchomienie projektu
+Zawsze przed uruchomieniem wybranej części projektu, upewniamy się, że znajdujemy się w głównym katalogu ``~/24l-proi-lewko-muszynski$``, a następnie wykonujemy wybrane polecenia
+
+- W przypadku **Symulacji**
+```bash
+./build/car_rental_simulation
+```
+
+- W przypadku **Interfejsu użytkownika**
+```bash
+./build/car_rental
+```
+
+- W przypadku **Testów jednostkowych**
+```bash
+./build/car_rental_tests
+```
+
+## Struktura Plików
+```
+├── CMakeLists.txt
+├── README.md
+├── data
+├── figures
+│   └── diagram.png
+├── main.cpp
+├── simulation.cpp
+├── src
+│   ├── address
+│   ├── admin
+│   ├── car
+│   ├── customer
+│   ├── fleet
+│   ├── location
+│   ├── rental
+│   ├── simulation
+│   ├── truck
+│   ├── user
+│   ├── userInterface
+│   └── vehicle
+├── tests
+└── utils
+```
 
 ## Roadmap
 
 - [x] Praca nad interfejsem użytkownika - @mlewko #3
 - [x] Praca nad symulacją systemu, klasa ``Simulation`` - @jmuszyns #4
-- [ ] Implementacja klas projektu
+- [x] Implementacja klas projektu
    - [x] Wstępny wybór i implementacja klas - @mlewko
    - [x] Refaktoryzacja i dalsza praca - @jmuszyns
    - [x] Implementacja klas dziedziczących ``User`` & ``Admin`` #1 - @jmuszyns
    - [x] Implementacja klas dziedziczących ``Car`` & ``Truck`` #1 - @jmuszyns
    - [x] Modyfikacja klas ``Vehicle`` & ``Customer`` #1 - @all
-   - [ ] Implementacja klasy ``userInteface`` #3 - @mlewko
+   - [x] Implementacja klasy ``userInteface`` #3 - @mlewko
 - [ ] Implementacja testów jednostkowych
    - [x] Wstępne testy obecnie używanych klas - @jmuszyns
    - [ ] Dalsza praca nad weryfikacją różnych scenariuszy - @mlewko
-- [ ] Obsługa wyjątków
-   - [ ] W obrębie symulacji - @jmuszyns
+- [x] Obsługa wyjątków
+   - [x] W obrębie symulacji - @jmuszyns
    - [x] W obrębie interfejsu użytkownika - @mlewko
 - [~] wydajne zarządzanie wskaźnikami (unique pointers) #2
-- [ ] dokumentacja - @all
+- [x] dokumentacja - @all
 - [~] Implementacja interfejsu graficznego
 
 ## Przykładowa demonstracja symulatora
 
+Przykładowa demonstracja (zawiera niepełny przebieg symulacji, jedynie jej przykładowe fragmenty)
+
 ```
-Thu Jun  6 15:34:03 2024
+Enter the number of simulations: 10
 
-1. New customer registered: Armand Clitheroe - aclitheroe2f@newsvine.com
-2. Rental closed: Roseanna Sachno - rsachno1s@bravesites.com returned
-        Vehicle: Pontiac License Plate: WH49854 Rental Rates: 32.38$
-        Location ID: 24 Name: Michigan
-        Address: Northridge Street Ron Phibun
-        Total Cost: 194.28 $
-        Duration: 6 hours
-        Distance: 154.59 km
-3. Scheduled maintenance for Vehicle: Dodge License Plate: WQ99023 Rental Rates: 19.22$
-        Location ID: 5 Name: Judy
-        Address: Stuart Street Al Masallamiyya
-        Maintained by Admin: Jobie Dictus ID: fae6ad1a-41c7-4984-a7e4-3934e24ae50c
+Simulation has just started
 
-Thu Jun  6 17:34:03 2024
-
-1. New customer registered: Shea Cool - scool11@mozilla.com
-
-Thu Jun  6 19:34:03 2024
+Fri Jun  7 05:05:03 2024
 
 1. New customer registered: Penny D'Alessandro - pdalessandro16@biblegateway.com
-2. New customer registered: Hillie Adolthine - hadolthine26@dropbox.com
-3. New customer registered: Dukey Abel - dabel1k@t-online.de
-4. Rental closed: Janka Handmore - jhandmore1f@csmonitor.com returned
-        Vehicle: Nissan License Plate: WX44781 Rental Rates: 46.38$
-        Location ID: 52 Name: Northwestern
-        Address: Northridge Street Ron Phibun
-        Total Cost: 417.42 $
+2. New rental opened: Gerard Coppo - gcoppo4@slate.com rented
+        Vehicle: Mitsubishi License Plate: WO76011 Rental Rates: 42.9$
+        Location ID: 1 Name: Spenser
+        Address: Mifflin Street Plei Kần
         Duration: 9 hours
-        Distance: 193.38 km
-5. Rental closed: Elena Donett - edonett12@wikispaces.com returned
-        Vehicle: Chevrolet License Plate: WE12837 Rental Rates: 41.59$
-        Location ID: 17 Name: Pleasure
-        Address: Columbus Street Mulchén
-        Total Cost: 332.72 $
-        Duration: 8 hours
-        Distance: 127.26 km
-6. Scheduled maintenance for Vehicle: Suzuki License Plate: WI44581 Rental Rates: 43.76$
-        Location ID: 64 Name: Moulton
-        Address: Buhler Street Cafarnaum
-        Maintained by Admin: Tedra Benezet ID: 42772b54-bf50-4479-a4ed-f320502ca9fa
+3. New rental opened: Penny D'Alessandro - pdalessandro16@biblegateway.com rented
+        Vehicle: Mazda License Plate: WL65327 Rental Rates: 16.25$
+        Location ID: 82 Name: Dawn
+        Address: Buhler Street Araçatuba
+        Duration: 3 hours
+4. Accident reported for: Vehicle: Mitsubishi License Plate: WX78405 Rental Rates: 24.92$
+        Location ID: 69 Name: Cherokee
+        Address: Mallory Street Nuevo Arraiján
+5. Rental terminated after an accident: Caleb Richford - crichford1a@w3.org
+6. Maintenance after an accident Vehicle: Mitsubishi License Plate: WX78405 Rental Rates: 24.92$
+        Location ID: 69 Name: Cherokee
+        Address: Mallory Street Nuevo Arraiján
+        To be repaired by Admin: Emile Wardale ID: 2efba389-fff5-48db-882a-b99e0fdef8eb
+
+Fri Jun  7 09:05:03 2024
+
+1. Rental closed: Penny D'Alessandro - pdalessandro16@biblegateway.com returned
+        Vehicle: Mazda License Plate: WL65327 Rental Rates: 16.25$
+        Location ID: 82 Name: Dawn
+        Address: Buhler Street Araçatuba
+        Total Cost: 48.75 $
+        Duration: 3 hours
+        Distance: 160.78 km
+2. Rental closed: Caleb Richford - crichford1a@w3.org returned
+        Vehicle: Nissan License Plate: WI87174 Rental Rates: 10.98$
+        Location ID: 95 Name: Carpenter
+        Address: Crowley Street Saint-Lambert-de-Lauzon
+        Total Cost: 21.96 $
+        Duration: 2 hours
+        Distance: 705.84 km
+3. Scheduled maintenance for Vehicle: Mazda License Plate: WB61999 Rental Rates: 44.83$
+        Location ID: 89 Name: North
+        Address: Heath Street Dammarie-les-Lys
+        To be repaired by Admin: Joycelin Prestedge ID: d9bb7418-3d08-4fa6-8501-edda66d94b23
+4. Finished maintenance for: Vehicle: Mitsubishi License Plate: WP43062 Rental Rates: 29.69$
+        Location ID: 6 Name: Spaight
+        Address: Arizona Street Otse
+        Maintained by Admin: Jobie Dictus ID: fae6ad1a-41c7-4984-a7e4-3934e24ae50c
+5. Updated data for: Caleb Richford - Caleb.Richford84@example.com
+        Old email: crichford1a@w3.org
+        New email: Caleb.Richford84@example.com
+
+Fri Jun  7 19:05:03 2024
+
+1. New customer registered: Zita Nunson - znunson22@chronoengine.com
+2. New rental opened: Zita Nunson - znunson22@chronoengine.com rented
+        Vehicle: Mazda License Plate: WL65327 Rental Rates: 16.25$
+        Location ID: 74 Name: Cascade
+        Address: Main Street Itapaci
+        Duration: 5 hours
+
+Simulation has ended after 10 iterations
 
 Customer Summary Report
 -------------------------
-Customer: Gottfried Cheeld - gcheeldo@oaic.gov.au
+Customer: Gerard Coppo - gcoppo4@slate.com
 Total Rentals: 2
-Total Cost: 433.89$
+Total Cost: 685.32$
 Total Rental Duration: 15.00 hours
 Average Rental Duration: 7.50 hours
 -------------------------
-Customer: Quintina Joannic - qjoannicp@amazon.com
-Total Rentals: 1
-Total Cost: 191.88$
-Total Rental Duration: 6.00 hours
-Average Rental Duration: 6.00 hours
+Customer: Caleb Richford - Caleb.Richford84@example.com
+Total Rentals: 3
+Total Cost: 296.16$
+Total Rental Duration: 12.00 hours
+Average Rental Duration: 4.00 hours
 -------------------------
-Customer: Elena Donett - edonett12@wikispaces.com
+Customer: Zita Nunson - znunson22@chronoengine.com
 Total Rentals: 1
-Total Cost: 332.72$
-Total Rental Duration: 8.00 hours
-Average Rental Duration: 8.00 hours
--------------------------
-Customer: Janka Handmore - jhandmore1f@csmonitor.com
-Total Rentals: 1
-Total Cost: 417.42$
-Total Rental Duration: 9.00 hours
-Average Rental Duration: 9.00 hours
--------------------------
-Customer: Roseanna Sachno - rsachno1s@bravesites.com
-Total Rentals: 1
-Total Cost: 194.28$
-Total Rental Duration: 6.00 hours
-Average Rental Duration: 6.00 hours
+Total Cost: 81.25$
+Total Rental Duration: 5.00 hours
+Average Rental Duration: 5.00 hours
 -------------------------
 
 Vehicle Summary Report
 --------------------
-Vehicle: Lincoln License Plate: WP43799
+Vehicle: Mitsubishi License Plate: WO76011
 Total Rentals: 1
-Total Maintenance Count: 0
-Total Mileage: 84.9358 km
+Total Maintenance Count: 1
+Total Accident Count: 1
+Total Mileage: 172.62 km
 --------------------
-Vehicle: Chevrolet License Plate: WE12837
+Vehicle: Ford License Plate: WZ64963
+Total Maintenance Count: 1
+--------------------
+Vehicle: Mitsubishi License Plate: WX78405
 Total Rentals: 1
-Total Maintenance Count: 0
-Total Mileage: 127.256 km
+Total Maintenance Count: 1
+Total Accident Count: 1
+Total Mileage: 192.96 km
 --------------------
-Vehicle: Buick License Plate: WA65431
-Total Rentals: 1
-Total Maintenance Count: 0
-Total Mileage: 67.6749 km
+Vehicle: Mitsubishi License Plate: WP43062
+Total Maintenance Count: 1
 --------------------
 ```
-
-## Instrukcja obsługi
-
-Symulacja
-```bash
-cd build
-cmake ..
-make
-./car_rental_simulation
-```
-Interfejsu użytkownika
-```bash
-cd build
-cmake ..
-make
-./car_rental
-```
-testy
-```bash
-cd build
-cmake ..
-make
-./car_rental_tests
-```
-## Cel Projektu
-Celem projektu jest stworzenie aplikacji w języku C++, która symuluje działanie wypożyczalni samochodów. Aplikacja będzie umożliwiać zarządzanie flotą pojazdów, klientami oraz procesem wypożyczania i zwracania samochodów.
-
-## Główne Funkcjonalności
-1. **Zarządzanie Flotą Pojazdów**
-   - Dodawanie nowych pojazdów do floty.
-   - Usuwanie pojazdów z floty.
-   - Aktualizacja danych pojazdu (np. stanu technicznego, dostępności).
-   - Wyświetlanie listy dostępnych pojazdów.
-
-2. **Zarządzanie Klientami**
-   - Dodawanie nowych klientów do systemu.
-   - Usuwanie klientów.
-   - Aktualizacja danych klientów (np. danych kontaktowych, historii wypożyczeń).
-   - Wyświetlanie listy klientów.
-
-3. **Proces Wypożyczania i Zwrotu Pojazdów**
-   - Wypożyczanie pojazdu przez klienta.
-   - Rejestracja zwrotu pojazdu.
-   - Obliczanie kosztów wypożyczenia na podstawie czasu wypożyczenia i cennika.
-   - Wyświetlanie historii wypożyczeń dla poszczególnych klientów i pojazdów.
-
-4. **Raportowanie i Statystyki**
-   - Generowanie raportów o stanie floty (np. liczba dostępnych pojazdów, pojazdy w naprawie).
-   - Generowanie statystyk dotyczących wypożyczeń (np. najczęściej wypożyczane pojazdy, najbardziej aktywni klienci).
 
 
 ## Diagram UML
 <img src = "figures/diagram.png" width = "80%">
-
-
 
 
