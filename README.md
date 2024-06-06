@@ -27,7 +27,7 @@
 Celem projektu jest stworzenie aplikacji w języku C++, która symuluje działanie wypożyczalni samochodów. Aplikacja będzie umożliwiać zarządzanie flotą pojazdów, klientami oraz procesem wypożyczania i zwracania samochodów. Projekt można podzielić na dwie części, **[interfejs użytkownika](#interfejs-użytkownika)** oraz **[symulacje](#symulacja)**.
 
 ### Interfejs Użytkownika
-
+<hr>
 Intefejs pełni rolę pośrednika między użytkownikiem a systemem wypożyczalni samochodowej. Zapewnia interakcję poprzez prosty interfejs tekstowy w konsoli, umożliwiając klientom wypożyczenie i zwrot pojazdów oraz przeglądanie dostępnych opcji.
 
 #### Działanie:
@@ -46,6 +46,7 @@ Intefejs pełni rolę pośrednika między użytkownikiem a systemem wypożyczaln
 - Interfejs pozwala użytkownikowi na przeglądanie dostępnych lokalizacji, pojazdów oraz informacji o aktualnym wypożyczeniu.
 
 ### Symulacja
+<hr>
 Symulacja w projekcie Wypożyczalni Samochodów odgrywa kluczową rolę w testowaniu i analizie codziennej pracy systemu, została oparta przede wszystkim na losowości zapewnionej przy pomocy biblioteki ``<random>`` oraz zarządzaniu __wirtualnym__ zegarem przy pomocy biblioteki ``<chrono>``
 
 #### Inicjalizacja Symulacji:
