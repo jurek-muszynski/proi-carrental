@@ -33,7 +33,7 @@ bool CustomerManagement::isCustomerAlreadyRegistered(const Customer *customer) c
 
 bool CustomerManagement::addCustomer(Customer *customer)
 {
-    if (!isCustomerAlreadyRegistered(customer))
+    if (!isCustomerAlreadyRegistered(customer) and customer != nullptr)
     {
         customers.push_back(customer);
         return true;

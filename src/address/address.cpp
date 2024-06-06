@@ -1,7 +1,15 @@
 #include "address.h"
 
 Address::Address(const std::string &id, const std::string &street, const std::string &city, const std::string &country, const std::string &zipCode, double longitude, double latitude)
-    : id(id), street(street), city(city), country(country), zipCode(zipCode), longitude(longitude), latitude(latitude) {}
+    : id(id), street(street), city(city), country(country), zipCode(zipCode), longitude(longitude), latitude(latitude) 
+    {
+        if (longitude < -180.0) {
+            throw std::invalid_argument("Invalid longitude");
+        }
+        if (latitude < -90.0) {
+            throw std::invalid_argument("Invalid latitude");
+        }
+    }
 
 std::string Address::getId() const
 {
