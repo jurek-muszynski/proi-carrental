@@ -16,6 +16,7 @@ private:
 public:
     void addRentalData(const Rental *rental);
     void addMaintenanceData(Vehicle *vehicle);
+    void addAccidentData(Vehicle *vehicle);
     void generateCustomerSummary();
     void generateVehicleSummary();
 };

@@ -33,9 +33,11 @@ class VehicleData : public ReportEntity
 private:
     int maintenanceCount = 0;
     int mileage = 0;
+    int accidentCount = 0;
 
 public:
     void addMaintenanceCount();
+    void addAccidentCount();
 
     std::string generateReport() const override;
 };

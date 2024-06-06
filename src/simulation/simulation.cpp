@@ -55,7 +55,7 @@ void Simulation::run()
 
         for (int j = 0; j < newCustomers; j++)
         {
-            if (generateRandomly(0.85))
+            if (generateRandomly(0.88))
                 newCustomerRegistered();
         }
 
@@ -63,7 +63,7 @@ void Simulation::run()
         {
             if (customerManagement->getCustomerCount() > 0)
             {
-                if (generateRandomly(0.55))
+                if (generateRandomly(0.65))
                     newRentalOpened();
             }
             else
@@ -75,16 +75,24 @@ void Simulation::run()
             newRentalClosed();
         }
 
-        if (generateRandomly(0.8))
+        if (fleetManagement->getVehicleCount() > 0 && generateRandomly(0.35))
             scheduleVehicleMaintenance();
 
         if (vehiclesUnderMaintenance.size() > 0 && generateRandomly(0.4))
             finishVehicleMaintenance();
 
+        if (fleetManagement->getVehicleCount() > 0 && customerManagement->getCustomerCount() > 0 && generateRandomly(0.15))
+            reportAccident();
+
+        if (customerManagement->getCustomerCount() > 0 && generateRandomly(0.22))
+            updateCustomerData();
+
         printLogs();
         passTime();
         usleep(2000000);
     }
+
+    std::cout << "\nSimulation has ended after " << simulations_run << " iterations\n";
     report.generateCustomerSummary();
     report.generateVehicleSummary();
 }
@@ -254,7 +262,7 @@ Customer *Simulation::chooseRandomCustomerToRegister(std::vector<Customer *> cus
     return customer;
 }
 
-Customer *Simulation::chooseRandomCustomerToRent(std::vector<Customer *> customers) const
+Customer *Simulation::chooseRandomCustomerNotRenting(std::vector<Customer *> customers) const
 {
     std::vector<Customer *> availableCustomersToRent;
     for (auto &customer : customers)
@@ -305,6 +313,14 @@ std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_poin
     return randomVehicleUnderMaintenancePair;
 }
 
+Vehicle *Simulation::chooseRandomVehicleForAccident(std::vector<Vehicle *> vehicles) const
+{
+    if (vehicles.empty())
+        return nullptr;
+
+    return vehicles[rand() % vehicles.size()];
+}
+
 std::vector<Vehicle *> Simulation::getVehiclesUnderMaintenance() const
 {
     std::vector<Vehicle *> vehiclesUnderMaintenance;
@@ -338,11 +354,11 @@ void Simulation::newCustomerRegistered()
 
 void Simulation::newRentalOpened()
 {
-    Customer *customer = chooseRandomCustomerToRent(customerManagement->getCustomers());
+    Customer *customer = chooseRandomCustomerNotRenting(customerManagement->getCustomers());
+
     if (customer == nullptr)
-    {
         return;
-    }
+
     std::vector<Vehicle *> availableVehicles = fleetManagement->getAvailableVehicles();
     Vehicle *vehicle = availableVehicles[rand() % availableVehicles.size()];
     Location *dropOff = loadedLocations[rand() % loadedLocations.size()];
@@ -360,20 +376,30 @@ void Simulation::newRentalOpened()
     }
 }
 
-void Simulation::newRentalClosed()
+void Simulation::newRentalClosed(Rental *rentalToBeTerminated)
 {
-    Rental *rental = rentalManagement->getRentalsToBeTerminated(current_time)[0];
+    Rental *rental = rentalToBeTerminated;
+
+    if (rentalToBeTerminated == nullptr)
+        rental = rentalManagement->getRentalsToBeTerminated(current_time)[0];
+
     std::stringstream ss;
     if (rentalManagement->closeRental(rental->getId()))
     {
-        ss << "Rental closed: " << *rental->getCustomer() << " returned\n\t" << *rental->getVehicle() << "\n\t" << *rental << "\n";
+        if (rentalToBeTerminated == nullptr)
+            ss << "Rental closed: " << *rental->getCustomer() << " returned\n\t" << *rental->getVehicle() << "\n\t" << *rental << "\n";
+        else
+            ss << "Rental terminated after an accident: " << *rental->getCustomer() << "\n";
+
         logs.push_back(ss.str());
     }
 }
 
-void Simulation::scheduleVehicleMaintenance()
+void Simulation::scheduleVehicleMaintenance(Vehicle *vehicleToMaintain)
 {
-    Vehicle *vehicle = chooseRandomVehicleForMaintenance();
+    Vehicle *vehicle = vehicleToMaintain;
+    if (vehicleToMaintain == nullptr)
+        vehicle = chooseRandomVehicleForMaintenance();
 
     AdminUser *admin = chooseRandomAdminForMaintenance(fleetManagement->getAdmins());
     admin->performVehicleMaintenance(vehicle);
@@ -381,10 +407,30 @@ void Simulation::scheduleVehicleMaintenance()
     vehiclesUnderMaintenance.push_back(std::make_pair(vehicle, std::make_pair(admin, current_time)));
 
     std::stringstream ss;
-    ss << "Scheduled maintenance for " << *vehicle << "\n";
-    ss << "\tMaintained by Admin: " << *admin;
+    if (vehicleToMaintain == nullptr)
+        ss << "Scheduled maintenance for " << *vehicle << "\n";
+    else
+        ss << "Maintenance after an accident " << *vehicle << "\n";
+    ss << "\tTo be repaired by Admin: " << *admin << "\n";
     logs.push_back(ss.str());
     report.addMaintenanceData(vehicle);
+}
+
+void Simulation::updateCustomerData()
+{
+    Customer *customer = chooseRandomCustomerNotRenting(customerManagement->getCustomers());
+
+    if (customer == nullptr)
+        return;
+
+    std::string oldEmail = customer->getEmail();
+
+    std::stringstream ss;
+    customer->updateEmail(generateRandomlyEmail(customer->getFirstName(), customer->getLastName()));
+    ss << "Updated data for: " << *customer << "\n";
+    ss << "\tOld email: " << oldEmail << "\n";
+    ss << "\tNew email: " << customer->getEmail() << "\n";
+    logs.push_back(ss.str());
 }
 
 void Simulation::finishVehicleMaintenance()
@@ -400,6 +446,23 @@ void Simulation::finishVehicleMaintenance()
     ss << "Finished maintenance for: " << *vehicle << "\n";
     ss << "\tMaintained by Admin: " << *admin << "\n";
     logs.push_back(ss.str());
+}
+
+void Simulation::reportAccident()
+{
+    Vehicle *vehicle = chooseRandomVehicleForAccident(rentalManagement->getCurrentVehicles());
+
+    if (vehicle == nullptr)
+        return;
+
+    Rental *rentalToBeClosed = rentalManagement->getRentalByVehicleId(vehicle->getId());
+
+    std::stringstream ss;
+    ss << "Accident reported for: " << *vehicle << "\n";
+    logs.push_back(ss.str());
+    newRentalClosed(rentalToBeClosed);
+    scheduleVehicleMaintenance(vehicle);
+    report.addAccidentData(vehicle);
 }
 
 void Simulation::printLogs()
