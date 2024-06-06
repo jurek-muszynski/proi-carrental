@@ -17,7 +17,6 @@ TEST(RentalTest, CalculateCost)
     EXPECT_EQ(rental.calculateCost(), 700.0);
 }
 
-// test the destructor of Rental
 TEST(RentalTest, GetId)
 {
     std::tm birthDate = {};
@@ -70,7 +69,6 @@ TEST(RentalTest, Destructor)
     delete rental;
     EXPECT_EQ(rental->getCustomer(), nullptr);
     EXPECT_EQ(rental->getVehicle(), nullptr);
-    // EXPECT_EQ(rental, nullptr); TODO: Fix this
 }
 
 TEST(RentalTest, RentalWithUnavailableVehicle)
