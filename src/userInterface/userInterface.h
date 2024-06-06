@@ -21,13 +21,11 @@ public:
     ~UserInterface();
 
     void displayMenu();
-
     void handleUserChoice(int choice);
 
     void loadVehicles();
     void loadLocations();
     void loadAddresses();
-
     void loadData();
 
     void printLocations();
@@ -38,13 +36,13 @@ private:
     std::chrono::system_clock::time_point current_time;
     std::string dataPath;
     Customer *customer;
-    FleetManagement *fleetManagement;
-    Rental *rental;
-    RentalManagement *rentalManagement;
 
+    FleetManagement *fleetManagement;
     std::vector<Address *> loadedAddresses;
     std::vector<Location *> loadedLocations;
-    std::vector<Vehicle *> loadedVehicles;
+
+    Rental *rental;
+    RentalManagement *rentalManagement;
 
     void rentCarOption();
     void returnCarOption();

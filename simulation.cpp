@@ -16,7 +16,7 @@ int main()
     CustomerManagement *cm = new CustomerManagement();
     FleetManagement *fm = new FleetManagement();
 
-    Simulation sim(10, cm, fm, rm, "/home/jurek/proi/24l-proi-lewko-muszynski/data");
+    Simulation sim(10, cm, fm, rm, "/home/mlewko/proi/24l-proi-lewko-muszynski/data");
     sim.run();
     return 0;
 }
