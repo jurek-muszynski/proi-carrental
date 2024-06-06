@@ -28,7 +28,7 @@ int main()
         ui.displayMenu();
         std::cin >> choice;
         ui.handleUserChoice(choice);
-    } while (choice != 0); // Zakładam, że 0 to wybór wyjścia z programu
+    } while (choice != 2); // Zakładam, że 0 to wybór wyjścia z programu
 
     return 0;
 }

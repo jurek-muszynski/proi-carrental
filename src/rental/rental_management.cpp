@@ -13,6 +13,11 @@ const Rental *RentalManagement::getRental(std::string id) const
     return nullptr;
 }
 
+const std::vector<Rental *> RentalManagement::getRentals() const
+{
+    return rentals;
+}
+
 const std::vector<Customer *> RentalManagement::getCurrentCustomers() const
 {
     std::vector<Customer *> customers;
@@ -63,6 +68,7 @@ bool RentalManagement::openRental(Rental *rental)
 
     if (rentalIndexIterator == rentals.end() && customerIndexIterator == rentals.end())
     {
+        rental->getVehicle()->updateAvailabilityStatus(false);
         rentals.push_back(rental);
         return true;
     }

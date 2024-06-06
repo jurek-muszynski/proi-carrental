@@ -9,6 +9,7 @@ Rental::Rental(std::string id, Customer *customer, Vehicle *vehicle, int duratio
     }
     vehicle->updateAvailabilityStatus(false);
     pickupLocation = vehicle->getLocation();
+    return_time = rent_time + std::chrono::hours(duration);
 }
 
 Rental::~Rental()
@@ -53,6 +54,23 @@ Vehicle *Rental::getVehicle() const
 std::chrono::system_clock::time_point Rental::getRentTime() const
 {
     return rent_time;
+}
+
+std::chrono::system_clock::time_point Rental::getReturnTime() const
+{
+    return return_time;
+}
+
+void Rental::printReturnTime() const
+{
+    std::time_t returnTime_t = std::chrono::system_clock::to_time_t(getReturnTime());
+    std::cout << "The rental will end on: " << std::ctime(&returnTime_t);
+}
+
+void Rental::printRentTime() const
+{
+    std::time_t rentTime_t = std::chrono::system_clock::to_time_t(getRentTime());
+    std::cout << "The rental started on: " << std::ctime(&rentTime_t);
 }
 
 void Rental::setDropOffLocation(Location *location)
