@@ -31,11 +31,11 @@ void UserInterface::displayMenu()
 
 void UserInterface::handleUserChoice(int choice)
 {
-    if (choice == 1 && (rental == nullptr or rental->getVehicle()->getAvailabilityStatus()))
+    if (choice == 1 && (rental == nullptr || rental->getVehicle()->getAvailabilityStatus()))
     {
         rentCarOption();
     }
-    else if (choice == 1 && (rental != nullptr or !rental->getVehicle()->getAvailabilityStatus()))
+    else if (choice == 1 && (rental != nullptr || !rental->getVehicle()->getAvailabilityStatus()))
     {
         returnCarOption();
     }
