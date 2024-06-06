@@ -1,13 +1,20 @@
 #include "vehicle.h"
 
-Vehicle::Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates)
-    : id(id), licensePlate(licensePlate), make(make), model(model), year(year), color(color), transmissionType(transmissionType), fuelType(fuelType), seatingCapacity(seatingCapacity), availabilityStatus(availabilityStatus), rentalRates(rentalRates)
+Vehicle::Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year,
+                 std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity,
+                 bool availabilityStatus, double rentalRates, double mileage)
+    : id(id), licensePlate(licensePlate), make(make), model(model), year(year), color(color), transmissionType(transmissionType),
+      fuelType(fuelType), seatingCapacity(seatingCapacity), availabilityStatus(availabilityStatus), rentalRates(rentalRates), mileage(mileage)
 {
     location = nullptr;
 }
 
-Vehicle::Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year, std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity, bool availabilityStatus, double rentalRates, Location *location)
-    : id(id), licensePlate(licensePlate), make(make), model(model), year(year), color(color), transmissionType(transmissionType), fuelType(fuelType), seatingCapacity(seatingCapacity), availabilityStatus(availabilityStatus), rentalRates(rentalRates), location(location)
+Vehicle::Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year,
+                 std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity,
+                 bool availabilityStatus, double rentalRates, Location *location, double mileage)
+    : id(id), licensePlate(licensePlate), make(make), model(model), year(year), color(color), transmissionType(transmissionType),
+      fuelType(fuelType), seatingCapacity(seatingCapacity), availabilityStatus(availabilityStatus), rentalRates(rentalRates),
+      location(location), mileage(mileage)
 {
 }
 
@@ -66,6 +73,11 @@ double Vehicle::getRentalRates() const
     return rentalRates;
 }
 
+double Vehicle::getMileage() const
+{
+    return mileage;
+}
+
 bool Vehicle::getAvailabilityStatus() const
 {
     return availabilityStatus;
@@ -89,6 +101,11 @@ void Vehicle::updateLocation(Location *newLocation)
         updateAvailabilityStatus(false);
     }
     location = newLocation;
+}
+
+void Vehicle::updateMileage(double distance)
+{
+    mileage += distance;
 }
 
 std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle)

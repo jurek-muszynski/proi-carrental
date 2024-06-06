@@ -34,7 +34,6 @@ std::string VehicleData::generateReport() const
 {
     std::stringstream ss;
     ss << "Total Rentals: " << rentalCount << "\n";
-    ss << "Total Cost: " << std::fixed << std::setprecision(2) << totalCost << "$\n";
     ss << "Total Maintenance Count: " << maintenanceCount << "\n";
     return ss.str();
 }

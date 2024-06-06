@@ -76,6 +76,7 @@ bool RentalManagement::closeRental(const std::string id)
 
     if (it != rentals.end())
     {
+        (*it)->getVehicle()->updateAvailabilityStatus(true);
         rentals.erase(it);
         return true;
     }

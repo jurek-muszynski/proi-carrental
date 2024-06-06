@@ -22,6 +22,19 @@ double Rental::calculateCost() const
     return duration * vehicle->getRentalRates();
 }
 
+double Rental::calculateDistance() const
+{
+    double distance = pickupLocation->calculateDistance(*dropOffLocation);
+
+    if (pickupLocation != nullptr && dropOffLocation != nullptr)
+        if (distance > 1000)
+            return distance / 100;
+        else
+            return distance;
+
+    return 0.0;
+}
+
 std::string Rental::getId() const
 {
     return id;
@@ -46,6 +59,7 @@ void Rental::setDropOffLocation(Location *location)
 {
     dropOffLocation = location;
     vehicle->updateLocation(location);
+    vehicle->updateMileage(calculateDistance());
 }
 
 int Rental::getDuration() const
@@ -56,6 +70,7 @@ int Rental::getDuration() const
 std::ostream &operator<<(std::ostream &os, const Rental &rental)
 {
     os << "Total Cost: " << rental.calculateCost() << " $";
-
+    os << "\n\tDuration: " << rental.getDuration() << " hours";
+    os << "\n\tDistance: " << std::fixed << std::setprecision(2) << rental.calculateDistance() << " km";
     return os;
 }

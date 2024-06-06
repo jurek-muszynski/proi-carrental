@@ -16,7 +16,9 @@ FetchContent_MakeAvailable(json)
 
 set(PROJECT_SOURCES
     src/address/address.cpp
+    src/user/user.cpp
     src/customer/customer.cpp
+    src/admin/admin.cpp
     src/customer/customer_management.cpp
     src/fleet/fleet_management.cpp
     src/rental/rental.cpp
@@ -45,6 +47,7 @@ add_executable(car_rental_tests
     tests/test_rental.cpp
     tests/test_vehicle.cpp
     tests/test_address.cpp
+    tests/test_location.cpp
 
  ${PROJECT_SOURCES})
 

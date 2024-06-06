@@ -5,9 +5,12 @@
 #include <ctime>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <random>
 #include <string>
 #include <time.h>
 #include <unistd.h>
+
+#include "../admin/admin.h"
 #include "../customer/customer_management.h"
 #include "../fleet/fleet_management.h"
 #include "../rental/rental_management.h"
@@ -33,7 +36,7 @@ private:
     std::vector<Address *> loadedAddresses;
     std::vector<Location *> loadedLocations;
 
-    std::vector<std::pair<Vehicle *, std::chrono::system_clock::time_point>> vehiclesUnderMaintenance;
+    std::vector<std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>>> vehiclesUnderMaintenance;
 
     std::vector<std::string> logs;
 
@@ -49,10 +52,13 @@ public:
     void run();
 
     void loadData();
-    void loadCustomers();
-    void loadVehicles();
     void loadAddresses();
+    void loadAdmins();
+    void loadCustomers();
     void loadLocations();
+    void loadVehicles();
+
+    AdminUser *chooseRandomAdminForMaintenance(std::vector<AdminUser *> admins) const;
 
     Customer *chooseRandomCustomer(std::vector<Customer *> customers) const;
     Customer *chooseRandomCustomerToRegister(std::vector<Customer *> customers) const;
@@ -61,7 +67,7 @@ public:
     Location *chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const;
 
     Vehicle *chooseRandomVehicleForMaintenance() const;
-    Vehicle *chooseRandomVehicleUnderMaintenance(std::vector<std::pair<Vehicle *, std::chrono::system_clock::time_point>> vehicles) const;
+    std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>> chooseRandomVehicleUnderMaintenance(std::vector<std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>>> vehicles) const;
 
     std::vector<Vehicle *> getVehiclesUnderMaintenance() const;
 

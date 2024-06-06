@@ -19,6 +19,27 @@ Address *Location::getAddress() const
     return address;
 }
 
+double Location::calculateDistance(const Location &other) const
+{
+    const double earthRadiusKm = 6371.0;
+
+    double lat1 = this->address->getLatitude() * M_PI / 180.0;
+    double lon1 = this->address->getLongitude() * M_PI / 180.0;
+    double lat2 = other.address->getLatitude() * M_PI / 180.0;
+    double lon2 = other.address->getLongitude() * M_PI / 180.0;
+
+    double dLat = lat2 - lat1;
+    double dLon = lon2 - lon1;
+
+    double a = sin(dLat / 2) * sin(dLat / 2) +
+               cos(lat1) * cos(lat2) *
+                   sin(dLon / 2) * sin(dLon / 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    double distance = earthRadiusKm * c;
+
+    return distance;
+}
+
 Location::~Location()
 {
     address = nullptr;

@@ -67,6 +67,7 @@ void SimulationReport::generateVehicleSummary()
 
         ss << "Vehicle: " << vehicle->getMake() << " License Plate: " << vehicle->getLicensePlate() << "\n";
         ss << data->generateReport();
+        ss << "Total Mileage: " << std::fixed << std::setprecision(2) << vehicle->getMileage() << " km\n";
         ss << "--------------------\n";
     }
 
