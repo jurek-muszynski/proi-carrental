@@ -9,7 +9,7 @@ Rental::Rental(std::string id, Customer *customer, Vehicle *vehicle, int duratio
     }
     vehicle->updateAvailabilityStatus(false);
     pickupLocation = vehicle->getLocation();
-    return_time = rent_time + std::chrono::hours(24 * duration);
+    return_time = rent_time + std::chrono::hours(duration);
 }
 
 Rental::~Rental()

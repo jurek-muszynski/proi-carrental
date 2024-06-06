@@ -213,7 +213,7 @@ void UserInterface::rentCarOption()
 
     std::cout << "2. Choose rental duration\n";
     int duration;
-    std::cout << "Enter rental duration (in days): ";
+    std::cout << "Enter rental duration (in hours): ";
     std::cin >> duration;
 
     std::cout << "3. Choose vehicle seating capacity\n";
