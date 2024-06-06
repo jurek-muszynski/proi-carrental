@@ -1,7 +1,8 @@
 #include <iostream>
 #include "src/userInterface/userInterface.h"
 
-void handleException(const std::string& message) {
+void handleException(const std::string &message)
+{
     std::cout << message;
 }
 
@@ -13,7 +14,7 @@ int main()
     std::string lastName = "Doe";
     std::tm birthDate = {};
     birthDate.tm_year = 2003 - 1900;
-    birthDate.tm_mon = 2 - 1;   
+    birthDate.tm_mon = 2 - 1;
     birthDate.tm_mday = 1;
     std::string gender = "Male";
     std::string email = "john.doe@example.com";
@@ -22,8 +23,8 @@ int main()
     Customer *customer = new Customer(id, firstName, lastName, birthDate, gender, email, phoneNumber, address);
 
     // Ścieżka do pliku
-    std::string dataPath = "/home/mlewko/proi/24l-proi-lewko-muszynski/data";
-    
+    std::string dataPath = "data";
+
     // Stworzenie interfejsu dla użytkownika
     UserInterface ui(dataPath, customer);
 
@@ -34,13 +35,18 @@ int main()
     {
         ui.displayMenu();
         std::cin >> input;
-        try {
+        try
+        {
             choice = std::stoi(input);
             ui.handleUserChoice(choice);
-        } catch (std::invalid_argument&) {
+        }
+        catch (std::invalid_argument &)
+        {
             handleException("Invalid choice. Please enter a number '1' or '2'.\n");
             continue;
-        } catch (std::out_of_range&) {
+        }
+        catch (std::out_of_range &)
+        {
             handleException("Invalid choice. Please enter a number '1' or '2'.\n");
             continue;
         }

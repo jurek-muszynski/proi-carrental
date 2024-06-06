@@ -11,6 +11,8 @@ UserInterface::UserInterface(const std::string &dataPath, Customer *customer) : 
 
 UserInterface::~UserInterface()
 {
+    delete fleetManagement;
+    delete rentalManagement;
 }
 
 void UserInterface::displayMenu()
@@ -169,7 +171,6 @@ void UserInterface::printRental()
     std::cout << "---------------------------------\n";
 }
 
-
 void UserInterface::rentCarOption()
 {
     std::cout << "1. Choose a location\n";
@@ -179,13 +180,17 @@ void UserInterface::rentCarOption()
 
     std::string locationIdTest;
     int selectedLocationId;
-    while (true) {
+    while (true)
+    {
         std::cout << "Enter location ID: ";
         std::cin >> locationIdTest;
-        try {
+        try
+        {
             selectedLocationId = std::stoi(locationIdTest);
             break;
-        } catch (std::invalid_argument&) {
+        }
+        catch (std::invalid_argument &)
+        {
             std::cout << "Invalid location ID. Please enter a number.\n";
         }
     }
@@ -210,14 +215,18 @@ void UserInterface::rentCarOption()
     usleep(1000000);
     std::cout << "2. Choose rental duration\n";
     int duration;
-    while (true) {
+    while (true)
+    {
         std::cout << "Enter rental duration in hours (1-24): ";
         std::cin >> duration;
-        if (std::cin.fail() || duration < 1 || duration > 24) {
+        if (std::cin.fail() || duration < 1 || duration > 24)
+        {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cout << "Invalid input. Please enter a number between 1 and 24.\n";
-        } else {
+        }
+        else
+        {
             break;
         }
     }
@@ -225,14 +234,18 @@ void UserInterface::rentCarOption()
     usleep(1000000);
     std::cout << "3. Choose vehicle seating capacity (2-5)\n";
     int seatingCapacity;
-    while (true) {
+    while (true)
+    {
         std::cout << "Enter seating capacity: ";
         std::cin >> seatingCapacity;
-        if (std::cin.fail() || seatingCapacity < 2 || seatingCapacity > 5) {
-            std::cin.clear(); 
+        if (std::cin.fail() || seatingCapacity < 2 || seatingCapacity > 5)
+        {
+            std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cout << "Invalid input. Please enter a number between 2 and 5.\n";
-        } else {
+        }
+        else
+        {
             break;
         }
     }
@@ -243,13 +256,17 @@ void UserInterface::rentCarOption()
     usleep(500000);
 
     std::string vehicleId;
-    while (true) {
+    while (true)
+    {
         std::cout << "Enter vehicle ID: ";
         std::cin >> vehicleId;
 
-        if (std::all_of(vehicleId.begin(), vehicleId.end(), ::isdigit)) {
+        if (std::all_of(vehicleId.begin(), vehicleId.end(), ::isdigit))
+        {
             break;
-        } else {
+        }
+        else
+        {
             std::cout << "Invalid input. Vehicle ID should be numeric.\n";
         }
     }
@@ -274,13 +291,17 @@ void UserInterface::rentCarOption()
 
     std::string dropOffLocationIdTest;
     int selectedDropOffLocationId;
-    while (true) {
+    while (true)
+    {
         std::cout << "Enter drop-off location ID: ";
         std::cin >> dropOffLocationIdTest;
-        try {
+        try
+        {
             selectedDropOffLocationId = std::stoi(dropOffLocationIdTest);
             break;
-        } catch (std::invalid_argument&) {
+        }
+        catch (std::invalid_argument &)
+        {
             std::cout << "Invalid drop-off location ID. Please enter a number.\n";
         }
     }
@@ -311,16 +332,16 @@ void UserInterface::rentCarOption()
     rental->printReturnTime();
 
     std::cout << "The rental will be terminated within the " << selectedDropOffLocation->getName() << " zone\n\n";
-    
+
     rental->setDropOffLocation(selectedDropOffLocation);
 
     rentalManagement->openRental(rental);
-    
+
     usleep(2000000);
 }
 
 void UserInterface::returnCarOption()
-{   
+{
     if (rental == nullptr)
     {
         std::cout << "You don't have open rental\n";
