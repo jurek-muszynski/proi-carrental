@@ -45,6 +45,7 @@ private:
 public:
     Simulation(unsigned int sims, const std::string &filePath);
     Simulation(unsigned int sims, CustomerManagement *cm, FleetManagement *fm, RentalManagement *rm, const std::string &filePath);
+    ~Simulation();
 
     std::string getDateTime() const;
 

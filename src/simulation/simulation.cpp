@@ -25,6 +25,33 @@ Simulation::Simulation(unsigned int sims, CustomerManagement *cm, FleetManagemen
     loadData();
 }
 
+Simulation::~Simulation()
+{
+    delete customerManagement;
+    delete fleetManagement;
+    delete rentalManagement;
+
+    for (auto &customer : loadedCustomers)
+    {
+        delete customer;
+    }
+
+    for (auto &vehicle : loadedVehicles)
+    {
+        delete vehicle;
+    }
+
+    for (auto &address : loadedAddresses)
+    {
+        delete address;
+    }
+
+    for (auto &location : loadedLocations)
+    {
+        delete location;
+    }
+}
+
 void Simulation::passTime()
 {
     current_time += std::chrono::hours(2);
@@ -59,15 +86,15 @@ void Simulation::run()
                 newCustomerRegistered();
         }
 
-        for (int j = 0; j < newRentals; j++)
+        if (customerManagement->getCustomerCount() > 0)
         {
-            if (customerManagement->getCustomerCount() > 0)
+            if (newRentals > customerManagement->getCustomerCount())
+                newRentals = customerManagement->getCustomerCount();
+            for (int j = 0; j < newRentals; j++)
             {
                 if (generateRandomly(0.65))
                     newRentalOpened();
             }
-            else
-                break;
         }
 
         while (rentalManagement->getRentalsToBeTerminated(current_time).size() > 0)
@@ -118,9 +145,9 @@ void Simulation::loadCustomers()
     for (const auto &customer : source)
     {
         std::tm birthDate = {};
-        birthDate.tm_year = 2000 - 1900; // years since 1900
-        birthDate.tm_mon = 12 - 1;       // months since January (0-11)
-        birthDate.tm_mday = 1;           // day of the month (1-31)
+        birthDate.tm_year = 2000 - 1900;
+        birthDate.tm_mon = 12 - 1;
+        birthDate.tm_mday = 1;
         std::string id = customer["id"];
         std::string first_name = customer["fname"];
         std::string last_name = customer["lname"];
@@ -239,21 +266,22 @@ void Simulation::loadVehicles()
 AdminUser *Simulation::chooseRandomAdminForMaintenance(std::vector<AdminUser *> admins) const
 {
     if (admins.empty())
-        throw std::runtime_error("No admins to choose from");
+        return nullptr;
     return admins[rand() % admins.size()];
 }
 
 Customer *Simulation::chooseRandomCustomer(std::vector<Customer *> customers) const
 {
     if (customers.empty())
-        throw std::runtime_error("No customers to choose from");
+        return nullptr;
     return customers[rand() % customers.size()];
 }
 
 Customer *Simulation::chooseRandomCustomerToRegister(std::vector<Customer *> customers) const
 {
     if (customers.empty())
-        throw std::runtime_error("No customers to choose from");
+        return nullptr;
+
     Customer *customer = customers[rand() % customers.size()];
     while (customerManagement->isCustomerAlreadyRegistered(customer))
     {
@@ -282,7 +310,7 @@ Customer *Simulation::chooseRandomCustomerNotRenting(std::vector<Customer *> cus
 Location *Simulation::chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const
 {
     if (locations.empty())
-        throw std::runtime_error("No locations to choose from");
+        return nullptr;
 
     Location *location = locations[rand() % locations.size()];
     while (location == currentLocation)
@@ -297,7 +325,7 @@ Vehicle *Simulation::chooseRandomVehicleForMaintenance() const
     std::vector<Vehicle *> availableVehiclesForMaintenance = fleetManagement->getAvailableVehicles();
 
     if (availableVehiclesForMaintenance.empty())
-        throw std::runtime_error("No vehicles to choose from");
+        return nullptr;
 
     return availableVehiclesForMaintenance[rand() % availableVehiclesForMaintenance.size()];
 }
@@ -306,6 +334,9 @@ std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_poin
 {
     if (vehicles.empty())
         throw std::runtime_error("No vehicles to choose from");
+
+    if (vehicles.size() == 1)
+        return vehicles[0];
 
     std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>> randomVehicleUnderMaintenancePair = vehicles[rand() % vehicles.size()];
     while (current_time == randomVehicleUnderMaintenancePair.second.second)
@@ -340,6 +371,10 @@ std::vector<Vehicle *> Simulation::getVehiclesUnderMaintenance() const
 void Simulation::newCustomerRegistered()
 {
     Customer *newCustomer = chooseRandomCustomerToRegister(loadedCustomers);
+
+    if (newCustomer == nullptr)
+        return;
+
     std::stringstream ss;
     if (customerManagement->addCustomer(newCustomer))
     {
@@ -402,8 +437,11 @@ void Simulation::scheduleVehicleMaintenance(Vehicle *vehicleToMaintain)
         vehicle = chooseRandomVehicleForMaintenance();
 
     AdminUser *admin = chooseRandomAdminForMaintenance(fleetManagement->getAdmins());
-    admin->performVehicleMaintenance(vehicle);
 
+    if (admin == nullptr)
+        return;
+
+    admin->performVehicleMaintenance(vehicle);
     vehiclesUnderMaintenance.push_back(std::make_pair(vehicle, std::make_pair(admin, current_time)));
 
     std::stringstream ss;
