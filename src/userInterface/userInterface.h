@@ -32,12 +32,14 @@ public:
 
     void printLocations();
     void printVehicles(int seatingCapacity);
+    void printRental();
 
 private:
     std::chrono::system_clock::time_point current_time;
     std::string dataPath;
     Customer *customer;
     FleetManagement *fleetManagement;
+    Rental *rental;
     RentalManagement *rentalManagement;
 
     std::vector<Address *> loadedAddresses;
@@ -46,12 +48,4 @@ private:
 
     void rentCarOption();
     void returnCarOption();
-
-    Location readLocation();
-    int readDuration();
-    int readSeatingCapacity();
-    Vehicle readVehicle();
-
-    Rental rentCar(Customer &customer, Vehicle &car, Location &location, int duration);
-    Rental returnCar();
 };

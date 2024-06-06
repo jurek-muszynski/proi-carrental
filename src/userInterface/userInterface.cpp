@@ -22,24 +22,37 @@ UserInterface::~UserInterface()
 
 void UserInterface::displayMenu()
 {
-    std::cout << "1. Wypożycz samochód\n";
-    std::cout << "2. Oddaj samochód\n";
-    std::cout << "Wybierz opcję: ";
+    if (rental == nullptr or rental->getVehicle()->getAvailabilityStatus())
+    {
+        std::cout << "1. Rent a car\n";
+        std::cout << "2. Quit\n";
+        std::cout << "Choose option: ";
+    }
+    else
+    {
+        std::cout << "1. Return a car\n";
+        std::cout << "2. Quit\n";
+        std::cout << "Choose option: ";
+    }
 }
 
 void UserInterface::handleUserChoice(int choice)
 {
-    switch (choice)
+    if (choice == 1 && (rental == nullptr or rental->getVehicle()->getAvailabilityStatus()))
     {
-    case 1:
         rentCarOption();
-        break;
-    case 2:
+    }
+    else if (choice == 1 && (rental != nullptr or !rental->getVehicle()->getAvailabilityStatus()))
+    {
         returnCarOption();
-        break;
-    default:
-        std::cout << "Nieznana opcja\n";
-        break;
+    }
+    else if (choice == 2)
+    {
+        std::cout << "Comeback later!\n";
+    }
+    else
+    {
+        std::cout << "Unknown option\n";
     }
 }
 
@@ -148,6 +161,23 @@ void UserInterface::printVehicles(int seatingCapacity)
     }
 }
 
+void UserInterface::printRental()
+{
+    if (rental == nullptr)
+    {
+        std::cout << "No current rental.\n";
+        return;
+    }
+
+    std::cout << "Rental ID: " << rental->getId() << "\n";
+    std::cout << "Vehicle: " << rental->getVehicle()->getMake() << " " << rental->getVehicle()->getModel() << "\n";
+    std::cout << "Customer: " << rental->getCustomer()->getFirstName() << " " << rental->getCustomer()->getLastName() << "\n";
+    rental->printRentTime();
+    rental->printReturnTime();
+    std::cout << "---------------------------------\n";
+}
+
+
 void UserInterface::rentCarOption()
 {
     std::cout << "1. Choose a location\n";
@@ -193,8 +223,6 @@ void UserInterface::rentCarOption()
 
     std::cout << "4. Choose a vehicle\n";
     printVehicles(seatingCapacity);
-
-    // TODO: jakoś inaczej wybierać samochody
 
     std::string vehicleId;
     std::cout << "Enter vehicle ID: ";
@@ -242,57 +270,48 @@ void UserInterface::rentCarOption()
     usleep(1000000);
 
     const std::string rentalId = "R" + customer->getId() + "/" + selectedVehicle->getLicensePlate();
-    Rental *newRental = new Rental(rentalId, customer, selectedVehicle, duration);
+    this->rental = new Rental(rentalId, customer, selectedVehicle, duration);
 
-    double cost = newRental->calculateCost();
+    double cost = rental->calculateCost();
     std::cout << "\nThe cost of the rental will be: " << cost << " $\n";
 
-    auto returnTime = newRental->getRentTime() + std::chrono::hours(24 * duration);
-    std::time_t returnTime_t = std::chrono::system_clock::to_time_t(returnTime);
-    std::cout << "The rental will end on: " << std::ctime(&returnTime_t);
+    rental->printReturnTime();
     std::cout << "The rental will be terminated within the " << selectedDropOffLocation->getName() << " zone\n\n";
+    rental->setDropOffLocation(selectedDropOffLocation);
 
-    newRental->setDropOffLocation(selectedDropOffLocation);
-
-    rentalManagement->openRental(newRental);
-
+    rentalManagement->openRental(rental);
     usleep(2000000);
 }
 
 void UserInterface::returnCarOption()
-{
-    throw NotImplementedError();
-}
-
-Location UserInterface::readLocation()
-{
-    throw NotImplementedError();
-}
-
-int UserInterface::readDuration()
-{
-    throw NotImplementedError();
-}
-
-int UserInterface::readSeatingCapacity()
-{
-    throw NotImplementedError();
-}
-
-Vehicle UserInterface::readVehicle()
-{
-    throw NotImplementedError();
-}
-
-Rental UserInterface::rentCar(Customer &customer, Vehicle &vehicle, Location &location, int duration)
-{
-    // const std::string rentalId = "R" + customer->getId() + "/" + vehicle->getLicensePlate();
-    // const Rental *newRental = new Rental(rentalId, customer, vehicle, duration);
-    // return *newRental;
-    throw NotImplementedError();
-}
-
-Rental UserInterface::returnCar()
-{
-    throw NotImplementedError();
+{   
+    if (rental == nullptr)
+    {
+        std::cout << "You don't have open rental\n";
+        return;
+    }
+    else
+    {
+        printRental();
+        std::string closeRental;
+        while (true)
+        {
+            std::cout << "If you want to close your rental type 'yes', if not type 'no': ";
+            std::cin >> closeRental;
+            if (closeRental == "yes")
+            {
+                rentalManagement->closeRental(rental->getId());
+                std::cout << "The rental has been successfully returned.\n";
+                break;
+            }
+            else if (closeRental == "no")
+            {
+                break;
+            }
+            else
+            {
+                std::cout << "Try again. Write 'yes' or 'no'.\n";
+            }
+        }
+    }
 }

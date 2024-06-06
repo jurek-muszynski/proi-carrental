@@ -17,6 +17,7 @@ private:
     // double totalCharges;
     double rate;
     std::chrono::system_clock::time_point rent_time;
+    std::chrono::system_clock::time_point return_time;
 
 public:
     Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration, std::chrono::system_clock::time_point rent_time = std::chrono::system_clock::now());
@@ -28,6 +29,10 @@ public:
     Customer *getCustomer() const;
     Vehicle *getVehicle() const;
     std::chrono::system_clock::time_point getRentTime() const;
+    std::chrono::system_clock::time_point getReturnTime() const;
+
+    void printReturnTime() const;
+    void printRentTime() const;
 
     void setDropOffLocation(Location *location);
 
