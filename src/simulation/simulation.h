@@ -45,6 +45,7 @@ private:
 public:
     Simulation(unsigned int sims, const std::string &filePath);
     Simulation(unsigned int sims, CustomerManagement *cm, FleetManagement *fm, RentalManagement *rm, const std::string &filePath);
+    ~Simulation();
 
     std::string getDateTime() const;
 
@@ -62,20 +63,23 @@ public:
 
     Customer *chooseRandomCustomer(std::vector<Customer *> customers) const;
     Customer *chooseRandomCustomerToRegister(std::vector<Customer *> customers) const;
-    Customer *chooseRandomCustomerToRent(std::vector<Customer *> customers) const;
+    Customer *chooseRandomCustomerNotRenting(std::vector<Customer *> customers) const;
 
     Location *chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const;
 
     Vehicle *chooseRandomVehicleForMaintenance() const;
     std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>> chooseRandomVehicleUnderMaintenance(std::vector<std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>>> vehicles) const;
+    Vehicle *chooseRandomVehicleForAccident(std::vector<Vehicle *> vehicles) const;
 
     std::vector<Vehicle *> getVehiclesUnderMaintenance() const;
 
     void newCustomerRegistered();
     void newRentalOpened();
-    void newRentalClosed();
-    void scheduleVehicleMaintenance();
+    void newRentalClosed(Rental *rental = nullptr);
+    void scheduleVehicleMaintenance(Vehicle *vehicle = nullptr);
+    void updateCustomerData();
     void finishVehicleMaintenance();
+    void reportAccident();
 
     void printLogs();
 };

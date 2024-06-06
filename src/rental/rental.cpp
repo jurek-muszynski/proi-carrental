@@ -16,6 +16,8 @@ Rental::~Rental()
 {
     customer = nullptr;
     vehicle = nullptr;
+    pickupLocation = nullptr;
+    dropOffLocation = nullptr;
 }
 
 double Rental::calculateCost() const
