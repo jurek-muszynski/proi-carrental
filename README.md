@@ -11,10 +11,10 @@
 
 ## Roadmap
 
-- [ ] Praca nad interfejsem użytkownika #3 - @mlewko
-- [x] Praca nad symulacją systemu, klasa ``Simulation`` #4 - @jmuszyns
-- [x] Implementacja klas projektu
-   - [x] Wstępny wybór i implementacja podstawowych klas projektu - @mlewko
+- [x] Praca nad interfejsem użytkownika - @mlewko #3
+- [x] Praca nad symulacją systemu, klasa ``Simulation`` - @jmuszyns #4
+- [ ] Implementacja klas projektu
+   - [x] Wstępny wybór i implementacja klas - @mlewko
    - [x] Refaktoryzacja i dalsza praca - @jmuszyns
    - [x] Implementacja klas dziedziczących ``User`` & ``Admin`` #1 - @jmuszyns
    - [x] Implementacja klas dziedziczących ``Car`` & ``Truck`` #1 - @jmuszyns
@@ -25,7 +25,7 @@
    - [ ] Dalsza praca nad weryfikacją różnych scenariuszy - @mlewko
 - [ ] Obsługa wyjątków
    - [ ] W obrębie symulacji - @jmuszyns
-   - [ ] W obrębie interfejsu użytkownika - @mlewko
+   - [x] W obrębie interfejsu użytkownika - @mlewko
 - [~] wydajne zarządzanie wskaźnikami (unique pointers) #2
 - [ ] dokumentacja - @all
 - [~] Implementacja interfejsu graficznego
@@ -130,13 +130,27 @@ Total Mileage: 67.6749 km
 
 ## Instrukcja obsługi
 
+Symulacja
 ```bash
 cd build
 cmake ..
 make
-./MyProject
+./car_rental_simulation
 ```
-
+Interfejsu użytkownika
+```bash
+cd build
+cmake ..
+make
+./car_rental
+```
+testy
+```bash
+cd build
+cmake ..
+make
+./car_rental_tests
+```
 ## Cel Projektu
 Celem projektu jest stworzenie aplikacji w języku C++, która symuluje działanie wypożyczalni samochodów. Aplikacja będzie umożliwiać zarządzanie flotą pojazdów, klientami oraz procesem wypożyczania i zwracania samochodów.
 
