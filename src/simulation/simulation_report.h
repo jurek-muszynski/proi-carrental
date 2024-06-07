@@ -10,13 +10,13 @@
 class SimulationReport
 {
 private:
-    std::map<Customer *, std::unique_ptr<ReportEntity>> customerRentals;
-    std::map<Vehicle *, std::unique_ptr<ReportEntity>> vehicleUsage;
+    std::map<std::shared_ptr<Customer>, std::unique_ptr<ReportEntity>> customerRentals;
+    std::map<std::shared_ptr<Vehicle>, std::unique_ptr<ReportEntity>> vehicleUsage;
 
 public:
-    void addRentalData(const Rental *rental);
-    void addMaintenanceData(Vehicle *vehicle);
-    void addAccidentData(Vehicle *vehicle);
+    void addRentalData(std::shared_ptr<Rental>);
+    void addMaintenanceData(std::shared_ptr<Vehicle>);
+    void addAccidentData(std::shared_ptr<Vehicle>);
     void generateCustomerSummary();
     void generateVehicleSummary();
 };

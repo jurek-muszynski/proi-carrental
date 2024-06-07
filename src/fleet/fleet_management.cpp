@@ -1,26 +1,19 @@
 #include "fleet_management.h"
 
-FleetManagement::FleetManagement(std::vector<Vehicle *> vehicles)
+FleetManagement::FleetManagement(std::vector<std::shared_ptr<Vehicle>> vehicles)
     : vehicles(vehicles)
 {
 }
 
 FleetManagement::~FleetManagement()
 {
-    for (Vehicle *vehicle : vehicles)
-    {
-        delete vehicle;
-    }
-
-    for (AdminUser *admin : admins)
-    {
-        delete admin;
-    }
+    vehicles.clear();
+    admins.clear();
 }
 
-Vehicle *FleetManagement::getVehicle(const std::string id) const
+std::shared_ptr<Vehicle> FleetManagement::getVehicle(const std::string id) const
 {
-    for (Vehicle *vehicle : vehicles)
+    for (const auto &vehicle : vehicles)
     {
         if (vehicle->getId() == id)
         {
@@ -30,10 +23,10 @@ Vehicle *FleetManagement::getVehicle(const std::string id) const
     return nullptr;
 }
 
-std::vector<Vehicle *> FleetManagement::getAvailableVehicles()
+std::vector<std::shared_ptr<Vehicle>> FleetManagement::getAvailableVehicles()
 {
-    std::vector<Vehicle *> availableVehicles;
-    for (Vehicle *vehicle : vehicles)
+    std::vector<std::shared_ptr<Vehicle>> availableVehicles;
+    for (const auto &vehicle : vehicles)
     {
         if (vehicle->getAvailabilityStatus())
         {
@@ -43,10 +36,10 @@ std::vector<Vehicle *> FleetManagement::getAvailableVehicles()
     return availableVehicles;
 }
 
-std::vector<Vehicle *> FleetManagement::getUnavailableVehicles()
+std::vector<std::shared_ptr<Vehicle>> FleetManagement::getUnavailableVehicles()
 {
-    std::vector<Vehicle *> unavailableVehicles;
-    for (Vehicle *vehicle : vehicles)
+    std::vector<std::shared_ptr<Vehicle>> unavailableVehicles;
+    for (const auto &vehicle : vehicles)
     {
         if (!vehicle->getAvailabilityStatus())
         {
@@ -56,7 +49,7 @@ std::vector<Vehicle *> FleetManagement::getUnavailableVehicles()
     return unavailableVehicles;
 }
 
-std::vector<AdminUser *> FleetManagement::getAdmins() const
+std::vector<std::shared_ptr<AdminUser>> FleetManagement::getAdmins() const
 {
     return admins;
 }
@@ -66,9 +59,9 @@ size_t FleetManagement::getVehicleCount() const
     return vehicles.size();
 }
 
-bool FleetManagement::addVehicle(Vehicle *vehicle)
+bool FleetManagement::addVehicle(std::shared_ptr<Vehicle> vehicle)
 {
-    auto it = std::find_if(vehicles.begin(), vehicles.end(), [&](Vehicle *v)
+    auto it = std::find_if(vehicles.begin(), vehicles.end(), [&](const std::shared_ptr<Vehicle> &v)
                            { return v->getId() == vehicle->getId(); });
 
     if (it == vehicles.end())
@@ -82,12 +75,11 @@ bool FleetManagement::addVehicle(Vehicle *vehicle)
 
 bool FleetManagement::removeVehicle(const std::string id)
 {
-    auto it = std::find_if(vehicles.begin(), vehicles.end(), [&](Vehicle *vehicle)
+    auto it = std::find_if(vehicles.begin(), vehicles.end(), [&](const std::shared_ptr<Vehicle> &vehicle)
                            { return vehicle->getId() == id; });
 
     if (it != vehicles.end())
     {
-        delete *it;
         vehicles.erase(it);
         return true;
     }
@@ -95,14 +87,9 @@ bool FleetManagement::removeVehicle(const std::string id)
     return false;
 }
 
-bool FleetManagement::addAdmin(AdminUser *admin)
+bool FleetManagement::addAdmin(std::shared_ptr<AdminUser> admin)
 {
-    if (admin == nullptr)
-    {
-        return false;
-    }
-    
-    auto it = std::find_if(admins.begin(), admins.end(), [&](AdminUser *a)
+    auto it = std::find_if(admins.begin(), admins.end(), [&](const std::shared_ptr<AdminUser> &a)
                            { return a->getId() == admin->getId(); });
 
     if (it == admins.end())
@@ -116,12 +103,11 @@ bool FleetManagement::addAdmin(AdminUser *admin)
 
 bool FleetManagement::removeAdmin(const std::string id)
 {
-    auto it = std::find_if(admins.begin(), admins.end(), [&](AdminUser *admin)
+    auto it = std::find_if(admins.begin(), admins.end(), [&](const std::shared_ptr<AdminUser> &admin)
                            { return admin->getId() == id; });
 
     if (it != admins.end())
     {
-        delete *it;
         admins.erase(it);
         return true;
     }
@@ -131,7 +117,7 @@ bool FleetManagement::removeAdmin(const std::string id)
 
 std::ostream &operator<<(std::ostream &os, const FleetManagement &fleet)
 {
-    for (Vehicle *vehicle : fleet.vehicles)
+    for (const auto &vehicle : fleet.vehicles)
     {
         os << *vehicle << std::endl;
     }

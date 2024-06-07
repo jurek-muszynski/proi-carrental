@@ -1,9 +1,10 @@
 #include "rental_management.h"
 #include <algorithm>
+#include <memory>
 
-const Rental *RentalManagement::getRental(std::string id) const
+const std::shared_ptr<Rental> RentalManagement::getRental(const std::string &id) const
 {
-    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const std::shared_ptr<Rental> rental)
                            { return rental->getId() == id; });
 
     if (it != rentals.end())
@@ -13,9 +14,9 @@ const Rental *RentalManagement::getRental(std::string id) const
     return nullptr;
 }
 
-Rental *RentalManagement::getRentalByVehicleId(const std::string id) const
+std::shared_ptr<Rental> RentalManagement::getRentalByVehicleId(const std::string &id) const
 {
-    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const std::shared_ptr<Rental> rental)
                            { return rental->getVehicle()->getId() == id; });
 
     if (it != rentals.end())
@@ -25,36 +26,36 @@ Rental *RentalManagement::getRentalByVehicleId(const std::string id) const
     return nullptr;
 }
 
-const std::vector<Rental *> RentalManagement::getRentals() const
+const std::vector<std::shared_ptr<Rental>> RentalManagement::getRentals() const
 {
     return rentals;
 }
 
-const std::vector<Customer *> RentalManagement::getCurrentCustomers() const
+const std::vector<std::shared_ptr<Customer>> RentalManagement::getCurrentCustomers() const
 {
-    std::vector<Customer *> customers;
-    for (Rental *rental : rentals)
+    std::vector<std::shared_ptr<Customer>> customers;
+    for (const auto &rental : rentals)
     {
         customers.push_back(rental->getCustomer());
     }
     return customers;
 }
 
-const std::vector<Vehicle *> RentalManagement::getCurrentVehicles() const
+const std::vector<std::shared_ptr<Vehicle>> RentalManagement::getCurrentVehicles() const
 {
-    std::vector<Vehicle *> vehicles;
-    for (Rental *rental : rentals)
+    std::vector<std::shared_ptr<Vehicle>> vehicles;
+    for (const auto &rental : rentals)
     {
         vehicles.push_back(rental->getVehicle());
     }
     return vehicles;
 }
 
-const std::vector<Rental *> RentalManagement::getRentalsToBeTerminated(std::chrono::system_clock::time_point current_time) const
+const std::vector<std::shared_ptr<Rental>> RentalManagement::getRentalsToBeTerminated(std::chrono::system_clock::time_point current_time) const
 {
-    std::vector<Rental *> rentalsToBeTerminated;
+    std::vector<std::shared_ptr<Rental>> rentalsToBeTerminated;
 
-    for (Rental *rental : rentals)
+    for (const auto &rental : rentals)
     {
         if (rental->getRentTime() + std::chrono::hours(rental->getDuration()) <= current_time)
         {
@@ -64,35 +65,41 @@ const std::vector<Rental *> RentalManagement::getRentalsToBeTerminated(std::chro
     return rentalsToBeTerminated;
 }
 
-bool RentalManagement::isCustomerCurrentlyRenting(Customer *customer) const
+bool RentalManagement::isCustomerCurrentlyRenting(const std::shared_ptr<Customer> customer) const
 {
+<<<<<<< HEAD
     if (customer == nullptr) {
         return false;
     }
 
     auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
+=======
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const std::shared_ptr<Rental> rental)
+>>>>>>> c6445df218ca895a94818eac88ccf4b821d70a5e
                            { return rental->getCustomer()->getId() == customer->getId(); });
 
     return it != rentals.end();
 }
 
-bool RentalManagement::isVehicleCurrentlyRented(Vehicle *vehicle) const
+bool RentalManagement::isVehicleCurrentlyRented(const std::shared_ptr<Vehicle> vehicle) const
 {
-    if (vehicle == nullptr) {
-        return false;
-    }
-    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const std::shared_ptr<Rental> rental)
                            { return rental->getVehicle()->getId() == vehicle->getId(); });
 
     return it != rentals.end();
 }
 
-bool RentalManagement::openRental(Rental *rental)
+bool RentalManagement::openRental(const std::shared_ptr<Rental> rental)
 {
-    auto rentalIndexIterator = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *r)
+    if (rental == nullptr)
+    {
+        return false;
+    }
+
+    auto rentalIndexIterator = std::find_if(rentals.begin(), rentals.end(), [&](const std::shared_ptr<Rental> &r)
                                             { return r->getId() == rental->getId(); });
 
-    auto customerIndexIterator = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *r)
+    auto customerIndexIterator = std::find_if(rentals.begin(), rentals.end(), [&](const std::shared_ptr<Rental> &r)
                                               { return r->getCustomer()->getId() == rental->getCustomer()->getId(); });
 
     if (rentalIndexIterator == rentals.end() && customerIndexIterator == rentals.end())
@@ -104,9 +111,9 @@ bool RentalManagement::openRental(Rental *rental)
     return false;
 }
 
-bool RentalManagement::closeRental(const std::string id)
+bool RentalManagement::closeRental(const std::string &id)
 {
-    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const std::shared_ptr<Rental> rental)
                            { return rental->getId() == id; });
 
     if (it != rentals.end())

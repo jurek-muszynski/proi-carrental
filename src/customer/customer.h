@@ -4,7 +4,6 @@
 
 class Customer : public User
 {
-
 public:
-    Customer(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string contact, Address *address);
+    Customer(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string contact, std::shared_ptr<Address> address);
 };

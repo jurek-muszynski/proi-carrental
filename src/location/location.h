@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include <string>
+#include <memory>
 #include "../address/address.h"
 
 class Location
@@ -10,17 +11,17 @@ class Location
 private:
     int locationId;
     std::string name;
-    Address *address;
+    std::shared_ptr<Address> address;
 
 public:
-    Location(int id, std::string name, Address *address);
+    Location(int id, std::string name, std::shared_ptr<Address> address);
     ~Location();
 
     int getLocationId() const;
     std::string getName() const;
-    Address *getAddress() const;
+    std::shared_ptr<Address> getAddress() const;
 
-    double calculateDistance(const Location &other) const;
+    double calculateDistance(const Location& other) const;
 
-    friend std::ostream &operator<<(std::ostream &os, const Location &location);
+    friend std::ostream& operator<<(std::ostream& os, const Location& location);
 };

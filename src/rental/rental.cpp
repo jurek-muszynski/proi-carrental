@@ -1,6 +1,6 @@
 #include "rental.h"
 
-Rental::Rental(std::string id, Customer *customer, Vehicle *vehicle, int duration, std::chrono::system_clock::time_point rent_time)
+Rental::Rental(std::string id, std::shared_ptr<Customer> customer, std::shared_ptr<Vehicle> vehicle, int duration, std::chrono::system_clock::time_point rent_time)
     : id(id), customer(customer), vehicle(vehicle), duration(duration), rent_time(rent_time)
 {
     if (!vehicle->getAvailabilityStatus())
@@ -43,12 +43,12 @@ std::string Rental::getId() const
     return id;
 }
 
-Customer *Rental::getCustomer() const
+std::shared_ptr<Customer> Rental::getCustomer() const
 {
     return customer;
 }
 
-Vehicle *Rental::getVehicle() const
+std::shared_ptr<Vehicle> Rental::getVehicle() const
 {
     return vehicle;
 }
@@ -75,7 +75,7 @@ void Rental::printRentTime() const
     std::cout << "The rental started on: " << std::ctime(&rentTime_t);
 }
 
-void Rental::setDropOffLocation(Location *location)
+void Rental::setDropOffLocation(std::shared_ptr<Location> location)
 {
     dropOffLocation = location;
     vehicle->updateLocation(location);

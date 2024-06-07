@@ -11,16 +11,11 @@ Vehicle::Vehicle(std::string id, std::string licensePlate, std::string make, std
 
 Vehicle::Vehicle(std::string id, std::string licensePlate, std::string make, std::string model, int year,
                  std::string color, std::string transmissionType, std::string fuelType, int seatingCapacity,
-                 bool availabilityStatus, double rentalRates, Location *location, double mileage)
+                 bool availabilityStatus, double rentalRates, std::shared_ptr<Location> location, double mileage)
     : id(id), licensePlate(licensePlate), make(make), model(model), year(year), color(color), transmissionType(transmissionType),
       fuelType(fuelType), seatingCapacity(seatingCapacity), availabilityStatus(availabilityStatus), rentalRates(rentalRates),
-      location(location), mileage(mileage)
+      location(std::move(location)), mileage(mileage)
 {
-}
-
-Vehicle::~Vehicle()
-{
-    location = nullptr;
 }
 
 std::string Vehicle::getMake() const
@@ -83,7 +78,7 @@ bool Vehicle::getAvailabilityStatus() const
     return availabilityStatus;
 }
 
-Location *Vehicle::getLocation() const
+std::shared_ptr<Location> Vehicle::getLocation() const
 {
     return location;
 }
@@ -93,14 +88,14 @@ void Vehicle::updateAvailabilityStatus(bool status)
     availabilityStatus = status;
 }
 
-void Vehicle::updateLocation(Location *newLocation)
+void Vehicle::updateLocation(std::shared_ptr<Location> newLocation)
 {
     if (newLocation == nullptr)
     {
-        location = newLocation;
+        location = nullptr;
         updateAvailabilityStatus(false);
     }
-    location = newLocation;
+    this->location = std::move(newLocation);
 }
 
 void Vehicle::updateMileage(double distance)
@@ -113,8 +108,7 @@ std::ostream &operator<<(std::ostream &os, const Vehicle &vehicle)
     os << "Vehicle: " << vehicle.make << " License Plate: " << vehicle.licensePlate << " Rental Rates: " << vehicle.rentalRates << "$";
     if (vehicle.location)
     {
-        os << "\n\t"
-           << *vehicle.location;
+        os << "\n\t" << *vehicle.location;
     }
     else
     {

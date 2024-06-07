@@ -1,11 +1,11 @@
 #include "user.h"
 
-User::User(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string phoneNumber, Address *address)
+User::User(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string phoneNumber, std::shared_ptr<Address> address)
     : id(id), firstName(firstName), lastName(lastName), birthDate(birthDate), gender(gender), email(email), phoneNumber(phoneNumber), address(address) {}
 
 User::~User()
 {
-    address = nullptr;
+    address.reset();
 }
 
 std::string User::getId() const
@@ -46,12 +46,12 @@ std::string User::getPhoneNumber() const
     return phoneNumber;
 }
 
-Address *User::getAddress() const
+std::shared_ptr<Address> User::getAddress() const
 {
     return address;
 }
 
-void User::updateAddress(Address *new_address)
+void User::updateAddress(std::shared_ptr<Address> new_address)
 {
     address = new_address;
 }

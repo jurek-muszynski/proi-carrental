@@ -1,10 +1,14 @@
 #include "userInterface.h"
 
-UserInterface::UserInterface(const std::string &dataPath, Customer *customer) : dataPath(dataPath), customer(customer), fleetManagement(fleetManagement), rentalManagement(rentalManagement)
+class NotImplementedError : public std::logic_error
+{
+public:
+    NotImplementedError() : std::logic_error("Function not yet implemented"){};
+};
+
+UserInterface::UserInterface(const std::string &dataPath, std::shared_ptr<Customer> customer) : dataPath(dataPath), customer(customer), fleetManagement(std::make_unique<FleetManagement>()), rentalManagement(std::make_unique<RentalManagement>())
 {
     srand(time(0));
-    fleetManagement = new FleetManagement();
-    rentalManagement = new RentalManagement();
     current_time = std::chrono::system_clock::now();
     loadData();
 }
@@ -17,7 +21,7 @@ UserInterface::~UserInterface()
 
 void UserInterface::displayMenu()
 {
-    if (rental == nullptr or rental->getVehicle()->getAvailabilityStatus())
+    if (rental == nullptr || rental->getVehicle()->getAvailabilityStatus())
     {
         std::cout << "1. Rent a car\n";
         std::cout << "2. Quit\n";
@@ -74,8 +78,8 @@ void UserInterface::loadVehicles()
         bool status = vehicle["availabilityStatus"];
         double rentalRates = vehicle["rentalRates"];
 
-        Location *location = loadedLocations[rand() % loadedLocations.size()];
-        Vehicle *newVehicle = new Vehicle(id, licensePlate, make, model, year, color, transmissionType, fuelType, seatingCapacity, status, rentalRates);
+        std::shared_ptr<Location> location = loadedLocations[rand() % loadedLocations.size()];
+        std::shared_ptr<Vehicle> newVehicle = std::make_shared<Vehicle>(id, licensePlate, make, model, year, color, transmissionType, fuelType, seatingCapacity, status, rentalRates);
         newVehicle->updateLocation(location);
         fleetManagement->addVehicle(newVehicle);
     }
@@ -95,8 +99,8 @@ void UserInterface::loadLocations()
         int id = location["id"];
         std::string name = location["name"];
 
-        Address *address = loadedAddresses[rand() % loadedAddresses.size()];
-        Location *newLocation = new Location(id, name, address);
+        std::shared_ptr<Address> address = loadedAddresses[rand() % loadedAddresses.size()];
+        std::shared_ptr<Location> newLocation = std::make_shared<Location>(id, name, address);
         loadedLocations.push_back(newLocation);
     }
 }
@@ -118,7 +122,7 @@ void UserInterface::loadAddresses()
         std::string zip = address["zip_code"];
         std::string country = address["country"];
 
-        Address *newAddress = new Address(id, street, city, country, zip);
+        std::shared_ptr<Address> newAddress = std::make_shared<Address>(id, street, city, country, zip);
         loadedAddresses.push_back(newAddress);
     }
 }
@@ -134,7 +138,7 @@ void UserInterface::printLocations()
 {
     for (auto location : loadedLocations)
     {
-        const Address *address = location->getAddress();
+        const std::shared_ptr<Address> address = location->getAddress();
         std::cout << "ID: " << location->getLocationId() << " Zone: " << location->getName() << " City: " << address->getCity() << " Street: " << address->getStreet() << "\n";
     }
 }
@@ -198,7 +202,7 @@ void UserInterface::rentCarOption()
 
     std::cout << selectedLocationId << "\n";
 
-    Location *selectedLocation = nullptr;
+    std::shared_ptr<Location> selectedLocation = nullptr;
     for (const auto &location : loadedLocations)
     {
         if (location->getLocationId() == selectedLocationId)
@@ -272,7 +276,7 @@ void UserInterface::rentCarOption()
         }
     }
 
-    Vehicle *selectedVehicle = nullptr;
+    std::shared_ptr<Vehicle> selectedVehicle = nullptr;
     for (const auto &vehicle : fleetManagement->getAvailableVehicles())
     {
         if (vehicle->getId() == vehicleId && vehicle->getSeatingCapacity() == seatingCapacity)
@@ -307,7 +311,7 @@ void UserInterface::rentCarOption()
         }
     }
 
-    Location *selectedDropOffLocation = nullptr;
+    std::shared_ptr<Location> selectedDropOffLocation = nullptr;
     for (const auto &location : loadedLocations)
     {
         if (location->getLocationId() == selectedDropOffLocationId)
@@ -325,7 +329,7 @@ void UserInterface::rentCarOption()
     usleep(1000000);
 
     const std::string rentalId = "R" + customer->getId() + "/" + selectedVehicle->getLicensePlate();
-    this->rental = new Rental(rentalId, customer, selectedVehicle, duration);
+    rental = std::make_shared<Rental>(rentalId, customer, selectedVehicle, duration);
 
     double cost = rental->calculateCost();
     std::cout << "\nThe cost of the rental will be: " << cost << " $\n";

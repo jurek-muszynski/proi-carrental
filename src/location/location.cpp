@@ -1,6 +1,7 @@
 #include "location.h"
 
-Location::Location(int id, std::string locName, Address *address) : locationId(id), name(locName), address(address)
+Location::Location(int id, std::string locName, std::shared_ptr<Address> address)
+    : locationId(id), name(locName), address(std::move(address))
 {
 }
 
@@ -14,7 +15,7 @@ std::string Location::getName() const
     return name;
 }
 
-Address *Location::getAddress() const
+std::shared_ptr<Address> Location::getAddress() const
 {
     return address;
 }
@@ -26,8 +27,8 @@ double Location::calculateDistance(const Location &other) const
     }
     const double earthRadiusKm = 6371.0;
 
-    double lat1 = this->address->getLatitude() * M_PI / 180.0;
-    double lon1 = this->address->getLongitude() * M_PI / 180.0;
+    double lat1 = address->getLatitude() * M_PI / 180.0;
+    double lon1 = address->getLongitude() * M_PI / 180.0;
     double lat2 = other.address->getLatitude() * M_PI / 180.0;
     double lon2 = other.address->getLongitude() * M_PI / 180.0;
 
@@ -45,7 +46,6 @@ double Location::calculateDistance(const Location &other) const
 
 Location::~Location()
 {
-    address = nullptr;
 }
 
 std::ostream& operator<<(std::ostream& os, const Location& location) {

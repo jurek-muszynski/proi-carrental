@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ctime>
+#include <memory>
 #include <string>
 #include "../address/address.h"
 
@@ -14,10 +15,10 @@ protected:
     std::string gender;
     std::string email;
     std::string phoneNumber;
-    Address *address;
+    std::shared_ptr<Address> address;
 
 public:
-    User(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string contact, Address *address);
+    User(std::string id, std::string firstName, std::string lastName, std::tm birthDate, std::string gender, std::string email, std::string contact, std::shared_ptr<Address> address);
     ~User();
 
     std::string getId() const;
@@ -27,11 +28,11 @@ public:
     std::string getGender() const;
     std::string getEmail() const;
     std::string getPhoneNumber() const;
-    Address *getAddress() const;
+    std::shared_ptr<Address> getAddress() const;
 
     void updateEmail(std::string new_email);
     void updatePhoneNumber(std::string new_number);
-    void updateAddress(Address *new_address);
+    void updateAddress(std::shared_ptr<Address> new_address);
 
     friend std::ostream &operator<<(std::ostream &os, const User &user);
 };
