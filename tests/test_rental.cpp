@@ -84,3 +84,26 @@ TEST(RentalTest, RentalWithUnavailableVehicle)
     delete customer;
     delete vehicle;
 }
+
+TEST(RentalTest, SetDropOffLocation) {
+    std::tm birthDate = {};
+    birthDate.tm_year = 1990 - 1900;
+    birthDate.tm_mon = 1 - 1;
+    birthDate.tm_mday = 1;
+
+    Address* address1 = new Address("5", "123 Main St", "Springfield", "USA", "12345", 23.15, 53.1333);
+    Address* address2 = new Address("6", "456 Elm St", "Shelbyville", "USA", "67890", 21.00, 52.13);
+    
+    Customer *customer = new Customer("id1", "John", "Doe", birthDate, "Male", "john.doe@example.com", "1234567890", address1);
+    
+    Location pickUpLocation(1, "Location1", address1);
+    Location dropOffLocation(2, "Location2", address2);
+
+    Vehicle* vehicle = new Vehicle("V1", "XYZ123", "Toyota", "Camry", 2020, "Red", "Automatic", "Gasoline", 5, true, 50.0);
+    vehicle->updateLocation(&pickUpLocation);
+    Rental* rental = new Rental("1", customer, vehicle, 7);
+
+    rental->setDropOffLocation(&dropOffLocation);
+
+    EXPECT_EQ(vehicle->getLocation(), &dropOffLocation);
+}

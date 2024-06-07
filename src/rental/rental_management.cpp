@@ -44,6 +44,10 @@ const std::vector<Rental *> RentalManagement::getRentalsToBeTerminated(std::chro
 
 bool RentalManagement::isCustomerCurrentlyRenting(Customer *customer) const
 {
+    if (customer == nullptr) {
+        return false;
+    }
+
     auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
                            { return rental->getCustomer()->getId() == customer->getId(); });
 
@@ -52,6 +56,9 @@ bool RentalManagement::isCustomerCurrentlyRenting(Customer *customer) const
 
 bool RentalManagement::isVehicleCurrentlyRented(Vehicle *vehicle) const
 {
+    if (vehicle == nullptr) {
+        return false;
+    }
     auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
                            { return rental->getVehicle()->getId() == vehicle->getId(); });
 

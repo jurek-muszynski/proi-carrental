@@ -3,6 +3,15 @@
 #include "../src/rental/rental.h"
 #include "../src/rental/rental_management.h"
 
+TEST(FleetManagementTest, Constructor) {
+    std::vector<Vehicle *> vehicles;
+    vehicles.push_back(new Vehicle("1", "ABC123", "Toyota", "Corolla", 2020, "White", "Automatic", "Gasoline", 5, true, 100.0));
+
+    FleetManagement *fleet = new FleetManagement(vehicles);
+    EXPECT_EQ(fleet->getAvailableVehicles().size(), 1);
+    EXPECT_EQ(fleet->getAvailableVehicles()[0]->getId(), "1");
+}
+
 TEST(FleetManagementTest, AddAndRemoveVehicle)
 {
     FleetManagement fleetManagement;
@@ -82,25 +91,21 @@ TEST(FleetManagementTest, GetUnavailableVehicles) {
 }
 
 TEST(FleetManagementTest, AddAdmin) {
-    Vehicle *vehicle1 = new Vehicle("1", "ABC123", "Toyota", "Corolla", 2020, "White", "Automatic", "Gasoline", 5, true, 100.0);
-    FleetManagement fleet({vehicle1});
-
+    FleetManagement fleet;
     std::tm birthDate = {};
     birthDate.tm_year = 2000 - 1900;
     birthDate.tm_mon = 1;
     birthDate.tm_mday = 1;
     Address address("Street", "City", "State", "Country", "PostalCode");
-    AdminUser admin("1", "Admin", "User", birthDate, "M", "admin.user@example.com", "1234567890", &address);
+    AdminUser *admin = new AdminUser("1", "Admin", "User", birthDate, "M", "admin.user@example.com", "1234567890", &address);
 
-    EXPECT_TRUE(fleet.addAdmin(&admin));
+    EXPECT_TRUE(fleet.addAdmin(admin));
     EXPECT_EQ(fleet.getAdmins().size(), 1);
     EXPECT_EQ(fleet.getAdmins()[0]->getId(), "1");
 }
 
 TEST(FleetManagementTest, RemoveAdmin) {
-    Vehicle *vehicle1 = new Vehicle("1", "ABC123", "Toyota", "Corolla", 2020, "White", "Automatic", "Gasoline", 5, true, 100.0);
-    FleetManagement fleet({vehicle1});
-
+    FleetManagement fleet;
     std::tm birthDate = {};
     birthDate.tm_year = 2000 - 1900;
     birthDate.tm_mon = 1;
@@ -115,9 +120,7 @@ TEST(FleetManagementTest, RemoveAdmin) {
 }
 
 TEST(FleetManagementTest, AddAndRemoveAdmin) {
-    Vehicle *vehicle1 = new Vehicle("1", "ABC123", "Toyota", "Corolla", 2020, "White", "Automatic", "Gasoline", 5, true, 100.0);
-    FleetManagement fleet({vehicle1});
-    
+    FleetManagement fleet;
     std::tm birthDate = {};
     birthDate.tm_year = 2000 - 1900;
     birthDate.tm_mon = 1;
@@ -131,4 +134,18 @@ TEST(FleetManagementTest, AddAndRemoveAdmin) {
 
     EXPECT_TRUE(fleet.removeAdmin("1"));
     EXPECT_EQ(fleet.getAdmins().size(), 0);
+}
+
+TEST(FleetManagementTest, AddAdminIsNull) {
+    AdminUser *admin = nullptr;
+
+    FleetManagement fleet;
+
+    EXPECT_FALSE(fleet.addAdmin(admin));
+}
+
+TEST(FleetManagementTest, RemoveAdminNonExistent) {
+    FleetManagement fleet;
+
+    EXPECT_FALSE(fleet.removeAdmin("1"));
 }

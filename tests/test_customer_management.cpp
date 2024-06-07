@@ -31,6 +31,29 @@ TEST(CustomerManagementTest, AddAndRemoveCustomer)
     EXPECT_EQ(customerManagement.getCustomer("2"), nullptr);
 }
 
+TEST(CustomerManagementTest, GetCustomer) {
+    CustomerManagement customerManagement;
+
+    std::tm birthDate = {};
+    birthDate.tm_year = 2000 - 1900;
+    birthDate.tm_mon = 1;
+    birthDate.tm_mday = 1;
+    Address *address = new Address("id1", "123 Street", "Country", "City", "12345");
+    Customer *customer1 = new Customer("id1", "John", "Doe", birthDate, "Male", "john.doe@example.com", "1234567890", address);
+
+    customerManagement.addCustomer(customer1);
+
+    Customer *retrievedCustomer = customerManagement.getCustomer("id1");
+    EXPECT_EQ(retrievedCustomer->getId(), "id1");
+}
+
+TEST(CustomerManagementTest, GetCustomerNonExistent) {
+    CustomerManagement customerManagement;
+
+    Customer *retrievedCustomer = customerManagement.getCustomer("1");
+    EXPECT_EQ(retrievedCustomer, nullptr);
+}
+
 TEST(CustomerManagementTest, GetCustomers) {
     CustomerManagement cm;
 
@@ -58,6 +81,24 @@ TEST(CustomerManagementTest, GetCustomers) {
     delete customer1;
     delete customer2;
 }
+
+TEST(CustomerManagementTest, IsCustomerAlreadyRegistered) {
+    CustomerManagement customerManagement;
+
+    std::tm birthDate = {};
+    birthDate.tm_year = 2000 - 1900;
+    birthDate.tm_mon = 1;
+    birthDate.tm_mday = 1;
+    Address *address = new Address("id2", "321 Avenue", "Country", "City", "54321");
+    Customer *customer1 = new Customer("id1", "John", "Doe", birthDate, "Male", "john.doe@example.com", "1234567890", address);
+
+    EXPECT_FALSE(customerManagement.isCustomerAlreadyRegistered(customer1));
+
+    customerManagement.addCustomer(customer1);
+
+    EXPECT_TRUE(customerManagement.isCustomerAlreadyRegistered(customer1));
+}
+
 
 TEST(CustomerManagementTest, AddSameCustomer)
 {

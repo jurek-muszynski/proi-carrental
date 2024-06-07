@@ -92,6 +92,11 @@ bool FleetManagement::removeVehicle(const std::string id)
 
 bool FleetManagement::addAdmin(AdminUser *admin)
 {
+    if (admin == nullptr)
+    {
+        return false;
+    }
+    
     auto it = std::find_if(admins.begin(), admins.end(), [&](AdminUser *a)
                            { return a->getId() == admin->getId(); });
 

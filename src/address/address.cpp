@@ -48,6 +48,6 @@ double Address::getLatitude() const
 
 std::ostream &operator<<(std::ostream &os, const Address &address)
 {
-    os << "Address: " << address.street << " Street " << address.city;
+    os << "Address: " << address.getStreet() << " Street " << address.getCity();
     return os;
 }

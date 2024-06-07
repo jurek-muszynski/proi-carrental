@@ -99,11 +99,9 @@ TEST(VehicleAvailabilityTest, AvailabilityAfterRental)
     Vehicle vehicle("V4", "PQR123", "Tesla", "Model 3", 2021, "White", "Automatic", "Electric", 5, true, 100.0);
     vehicle.updateLocation(&location);
 
-    // Simulate renting the vehicle
     vehicle.updateAvailabilityStatus(false);
     EXPECT_FALSE(vehicle.getAvailabilityStatus());
 
-    // Simulate returning the vehicle
     vehicle.updateAvailabilityStatus(true);
     EXPECT_TRUE(vehicle.getAvailabilityStatus());
 }
@@ -115,11 +113,9 @@ TEST(VehicleAvailabilityTest, AvailabilityDuringMaintenance)
     Vehicle vehicle("V5", "XYZ789", "Chevrolet", "Malibu", 2021, "Black", "Automatic", "Hybrid", 5, true, 55.0);
     vehicle.updateLocation(&location);
 
-    // Simulate sending the vehicle for maintenance
     vehicle.updateAvailabilityStatus(false);
     EXPECT_FALSE(vehicle.getAvailabilityStatus());
 
-    // Simulate vehicle being ready for rental again
     vehicle.updateAvailabilityStatus(true);
     EXPECT_TRUE(vehicle.getAvailabilityStatus());
 }
