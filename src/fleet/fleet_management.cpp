@@ -11,6 +11,11 @@ FleetManagement::~FleetManagement()
     {
         delete vehicle;
     }
+
+    for (AdminUser *admin : admins)
+    {
+        delete admin;
+    }
 }
 
 Vehicle *FleetManagement::getVehicle(const std::string id) const

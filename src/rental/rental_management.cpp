@@ -13,6 +13,18 @@ const Rental *RentalManagement::getRental(std::string id) const
     return nullptr;
 }
 
+Rental *RentalManagement::getRentalByVehicleId(const std::string id) const
+{
+    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
+                           { return rental->getVehicle()->getId() == id; });
+
+    if (it != rentals.end())
+    {
+        return *it;
+    }
+    return nullptr;
+}
+
 const std::vector<Rental *> RentalManagement::getRentals() const
 {
     return rentals;
@@ -26,6 +38,16 @@ const std::vector<Customer *> RentalManagement::getCurrentCustomers() const
         customers.push_back(rental->getCustomer());
     }
     return customers;
+}
+
+const std::vector<Vehicle *> RentalManagement::getCurrentVehicles() const
+{
+    std::vector<Vehicle *> vehicles;
+    for (Rental *rental : rentals)
+    {
+        vehicles.push_back(rental->getVehicle());
+    }
+    return vehicles;
 }
 
 const std::vector<Rental *> RentalManagement::getRentalsToBeTerminated(std::chrono::system_clock::time_point current_time) const

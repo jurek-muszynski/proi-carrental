@@ -10,13 +10,39 @@
 
 int main()
 {
-    // SAMPLE DEMO -> pass the absolute path to the data folder in case it throws a json file error
 
-    RentalManagement *rm = new RentalManagement();
-    CustomerManagement *cm = new CustomerManagement();
-    FleetManagement *fm = new FleetManagement();
+    std::string numberOfSimulations;
+    int iterations = 10;
 
-    Simulation sim(10, cm, fm, rm, "/home/mlewko/proi/24l-proi-lewko-muszynski/data");
+    while (true)
+    {
+        std::cout << "Enter the number of simulations: ";
+        std::cin >> numberOfSimulations;
+
+        try
+        {
+            iterations = std::stoi(numberOfSimulations);
+        }
+        catch (const std::exception &e)
+        {
+            std::cout << "Invalid input" << std::endl;
+            continue;
+        }
+
+        if (iterations > 0)
+        {
+            break;
+        }
+        else
+        {
+            std::cout << "Number of simulations must be greater than 0" << std::endl;
+        }
+    }
+
+    std::cout << std::endl;
+
+    Simulation sim(iterations, "data");
     sim.run();
+
     return 0;
 }

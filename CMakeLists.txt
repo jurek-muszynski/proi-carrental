@@ -25,6 +25,8 @@ set(PROJECT_SOURCES
     src/rental/rental_management.cpp
     src/location/location.cpp
     src/vehicle/vehicle.cpp
+    src/car/car.h
+    src/truck/truck.h
     src/simulation/simulation.cpp
     src/simulation/simulation_report.cpp
     src/simulation/simulation_report_entity.cpp

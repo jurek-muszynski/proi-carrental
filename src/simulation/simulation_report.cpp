@@ -35,6 +35,16 @@ void SimulationReport::addMaintenanceData(Vehicle *vehicle)
     vehicleData->addMaintenanceCount();
 }
 
+void SimulationReport::addAccidentData(Vehicle *vehicle)
+{
+    if (vehicleUsage.find(vehicle) == vehicleUsage.end())
+    {
+        vehicleUsage[vehicle] = std::make_unique<VehicleData>();
+    }
+    VehicleData *vehicleData = static_cast<VehicleData *>(vehicleUsage[vehicle].get());
+    vehicleData->addAccidentCount();
+}
+
 void SimulationReport::generateCustomerSummary()
 {
     std::stringstream ss;
@@ -67,7 +77,8 @@ void SimulationReport::generateVehicleSummary()
 
         ss << "Vehicle: " << vehicle->getMake() << " License Plate: " << vehicle->getLicensePlate() << "\n";
         ss << data->generateReport();
-        ss << "Total Mileage: " << std::fixed << std::setprecision(2) << vehicle->getMileage() << " km\n";
+        if (vehicle->getMileage() > 0)
+            ss << "Total Mileage: " << std::fixed << std::setprecision(2) << vehicle->getMileage() << " km\n";
         ss << "--------------------\n";
     }
 

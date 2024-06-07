@@ -18,7 +18,7 @@ void AdminUser::finishVehicleMaintenance(Vehicle *vehicle)
 std::ostream &operator<<(std::ostream &os, const AdminUser &adminUser)
 {
     os << adminUser.getFirstName() << " " << adminUser.getLastName();
-    os << " ID: " << adminUser.getId() << std::endl;
+    os << " ID: " << adminUser.getId();
 
     return os;
 }
