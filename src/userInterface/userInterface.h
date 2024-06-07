@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <unistd.h>
+#include <memory>
 #include "../fleet/fleet_management.h"
 #include "../vehicle/vehicle.h"
 #include "../rental/rental.h"
@@ -16,7 +17,7 @@ using namespace nlohmann;
 class UserInterface
 {
 public:
-    UserInterface(const std::string &dataPath, Customer *customer);
+    UserInterface(const std::string &dataPath, std::shared_ptr<Customer> customer);
 
     ~UserInterface();
 
@@ -37,14 +38,14 @@ public:
 private:
     std::chrono::system_clock::time_point current_time;
     std::string dataPath;
-    Customer *customer;
-    FleetManagement *fleetManagement;
-    Rental *rental;
-    RentalManagement *rentalManagement;
+    std::shared_ptr<Customer> customer;
+    std::unique_ptr<FleetManagement> fleetManagement;
+    std::shared_ptr<Rental> rental;
+    std::unique_ptr<RentalManagement> rentalManagement;
 
-    std::vector<Address *> loadedAddresses;
-    std::vector<Location *> loadedLocations;
-    std::vector<Vehicle *> loadedVehicles;
+    std::vector<std::shared_ptr<Address>> loadedAddresses;
+    std::vector<std::shared_ptr<Location>> loadedLocations;
+    std::vector<std::shared_ptr<Vehicle>> loadedVehicles;
 
     void rentCarOption();
     void returnCarOption();

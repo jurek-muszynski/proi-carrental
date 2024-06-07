@@ -1,9 +1,9 @@
 #include "simulation_report.h"
 
-void SimulationReport::addRentalData(const Rental *rental)
+void SimulationReport::addRentalData(std::shared_ptr<Rental> rental)
 {
-    Customer *customer = rental->getCustomer();
-    Vehicle *vehicle = rental->getVehicle();
+    std::shared_ptr<Customer> customer = rental->getCustomer();
+    std::shared_ptr<Vehicle> vehicle = rental->getVehicle();
 
     double rentalCost = rental->calculateCost();
 
@@ -25,7 +25,7 @@ void SimulationReport::addRentalData(const Rental *rental)
     vehicleData->addCost(rentalCost);
 }
 
-void SimulationReport::addMaintenanceData(Vehicle *vehicle)
+void SimulationReport::addMaintenanceData(std::shared_ptr<Vehicle> vehicle)
 {
     if (vehicleUsage.find(vehicle) == vehicleUsage.end())
     {
@@ -35,7 +35,7 @@ void SimulationReport::addMaintenanceData(Vehicle *vehicle)
     vehicleData->addMaintenanceCount();
 }
 
-void SimulationReport::addAccidentData(Vehicle *vehicle)
+void SimulationReport::addAccidentData(std::shared_ptr<Vehicle> vehicle)
 {
     if (vehicleUsage.find(vehicle) == vehicleUsage.end())
     {
@@ -53,7 +53,7 @@ void SimulationReport::generateCustomerSummary()
 
     for (const auto &entry : customerRentals)
     {
-        const Customer *customer = entry.first;
+        const std::shared_ptr<Customer> customer = entry.first;
         const CustomerData *data = static_cast<CustomerData *>(entry.second.get());
 
         ss << "Customer: " << *customer << "\n";
@@ -72,7 +72,7 @@ void SimulationReport::generateVehicleSummary()
 
     for (const auto &entry : vehicleUsage)
     {
-        const Vehicle *vehicle = entry.first;
+        const std::shared_ptr<Vehicle> vehicle = entry.first;
         const VehicleData *data = static_cast<VehicleData *>(entry.second.get());
 
         ss << "Vehicle: " << vehicle->getMake() << " License Plate: " << vehicle->getLicensePlate() << "\n";

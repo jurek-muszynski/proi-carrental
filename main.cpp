@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include "src/userInterface/userInterface.h"
 
@@ -14,20 +15,20 @@ int main()
     std::string gender = "Male";
     std::string email = "john.doe@example.com";
     std::string phoneNumber = "123456789";
-    Address *address = new Address("Street", "City", "State", "Country", "ZipCode");
+    std::shared_ptr<Address> address = std::make_shared<Address>("Street", "City", "State", "Country", "ZipCode");
 
-    std::string dataPath = "/home/mlewko/proi/24l-proi-lewko-muszynski/data";
-    Customer *customer = new Customer(id, firstName, lastName, birthDate, gender, email, phoneNumber, address);
+    std::string dataPath = "../data";
+    std::shared_ptr<Customer> customer = std::make_shared<Customer>(id, firstName, lastName, birthDate, gender, email, phoneNumber, address);
 
-    UserInterface ui(dataPath, customer);
+    std::unique_ptr<UserInterface> ui = std::make_unique<UserInterface>(dataPath, customer);
 
     // Wyświetl menu i obsłuż wybór użytkownika
     int choice;
     do
     {
-        ui.displayMenu();
+        ui->displayMenu();
         std::cin >> choice;
-        ui.handleUserChoice(choice);
+        ui->handleUserChoice(choice);
     } while (choice != 2); // Zakładam, że 0 to wybór wyjścia z programu
 
     return 0;
