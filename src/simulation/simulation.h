@@ -9,6 +9,7 @@
 #include <string>
 #include <time.h>
 #include <unistd.h>
+#include <memory>
 
 #include "../admin/admin.h"
 #include "../customer/customer_management.h"
@@ -27,16 +28,16 @@ private:
 
     std::string dataPath;
 
-    CustomerManagement *customerManagement;
-    FleetManagement *fleetManagement;
-    RentalManagement *rentalManagement;
+    std::unique_ptr<CustomerManagement> customerManagement;
+    std::unique_ptr<FleetManagement> fleetManagement;
+    std::unique_ptr<RentalManagement> rentalManagement;
 
-    std::vector<Customer *> loadedCustomers;
-    std::vector<Vehicle *> loadedVehicles;
-    std::vector<Address *> loadedAddresses;
-    std::vector<Location *> loadedLocations;
+    std::vector<std::shared_ptr<Customer>> loadedCustomers;
+    std::vector<std::shared_ptr<Vehicle>> loadedVehicles;
+    std::vector<std::shared_ptr<Address>> loadedAddresses;
+    std::vector<std::shared_ptr<Location>> loadedLocations;
 
-    std::vector<std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>>> vehiclesUnderMaintenance;
+    std::vector<std::pair<std::shared_ptr<Vehicle>, std::pair<std::shared_ptr<AdminUser>, std::chrono::system_clock::time_point>>> vehiclesUnderMaintenance;
 
     std::vector<std::string> logs;
 
@@ -44,7 +45,7 @@ private:
 
 public:
     Simulation(unsigned int sims, const std::string &filePath);
-    Simulation(unsigned int sims, CustomerManagement *cm, FleetManagement *fm, RentalManagement *rm, const std::string &filePath);
+    Simulation(unsigned int sims, std::unique_ptr<CustomerManagement> cm, std::unique_ptr<FleetManagement> fm, std::unique_ptr<RentalManagement> rm, const std::string &filePath);
     ~Simulation();
 
     std::string getDateTime() const;
@@ -59,24 +60,24 @@ public:
     void loadLocations();
     void loadVehicles();
 
-    AdminUser *chooseRandomAdminForMaintenance(std::vector<AdminUser *> admins) const;
+    std::shared_ptr<AdminUser> chooseRandomAdminForMaintenance(std::vector<std::shared_ptr<AdminUser>> admins) const;
 
-    Customer *chooseRandomCustomer(std::vector<Customer *> customers) const;
-    Customer *chooseRandomCustomerToRegister(std::vector<Customer *> customers) const;
-    Customer *chooseRandomCustomerNotRenting(std::vector<Customer *> customers) const;
+    std::shared_ptr<Customer> chooseRandomCustomer(std::vector<std::shared_ptr<Customer>> customers) const;
+    std::shared_ptr<Customer> chooseRandomCustomerToRegister(std::vector<std::shared_ptr<Customer>> customers) const;
+    std::shared_ptr<Customer> chooseRandomCustomerNotRenting(std::vector<std::shared_ptr<Customer>> customers) const;
 
-    Location *chooseRandomDropOffLocation(std::vector<Location *> locations, Location *currentLocation) const;
+    std::shared_ptr<Location> chooseRandomDropOffLocation(std::vector<std::shared_ptr<Location>> locations, std::shared_ptr<Location> currentLocation) const;
 
-    Vehicle *chooseRandomVehicleForMaintenance() const;
-    std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>> chooseRandomVehicleUnderMaintenance(std::vector<std::pair<Vehicle *, std::pair<AdminUser *, std::chrono::system_clock::time_point>>> vehicles) const;
-    Vehicle *chooseRandomVehicleForAccident(std::vector<Vehicle *> vehicles) const;
+    std::shared_ptr<Vehicle> chooseRandomVehicleForMaintenance() const;
+    std::pair<std::shared_ptr<Vehicle>, std::pair<std::shared_ptr<AdminUser>, std::chrono::system_clock::time_point>> chooseRandomVehicleUnderMaintenance(std::vector<std::pair<std::shared_ptr<Vehicle>, std::pair<std::shared_ptr<AdminUser>, std::chrono::system_clock::time_point>>> vehicles) const;
+    std::shared_ptr<Vehicle> chooseRandomVehicleForAccident(std::vector<std::shared_ptr<Vehicle>> vehicles) const;
 
-    std::vector<Vehicle *> getVehiclesUnderMaintenance() const;
+    std::vector<std::shared_ptr<Vehicle>> getVehiclesUnderMaintenance() const;
 
     void newCustomerRegistered();
     void newRentalOpened();
-    void newRentalClosed(Rental *rental = nullptr);
-    void scheduleVehicleMaintenance(Vehicle *vehicle = nullptr);
+    void newRentalClosed(std::shared_ptr<Rental> rental = nullptr);
+    void scheduleVehicleMaintenance(std::shared_ptr<Vehicle> vehicle = nullptr);
     void updateCustomerData();
     void finishVehicleMaintenance();
     void reportAccident();
