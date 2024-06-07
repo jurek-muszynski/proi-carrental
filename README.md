@@ -47,6 +47,7 @@ Intefejs pełni rolę pośrednika między użytkownikiem a systemem wypożyczaln
 
 ### Symulacja
 <hr>
+
 Symulacja w projekcie Wypożyczalni Samochodów odgrywa kluczową rolę w testowaniu i analizie codziennej pracy systemu, została oparta przede wszystkim na losowości zapewnionej przy pomocy biblioteki ``<random>`` oraz zarządzaniu __wirtualnym__ zegarem przy pomocy biblioteki ``<chrono>``
 
 #### Inicjalizacja Symulacji:
