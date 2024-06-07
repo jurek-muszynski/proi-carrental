@@ -11,7 +11,7 @@
    * [Struktura Plików](#struktura-plików)
    * [Roadmap](#roadmap)
    * [Demonstracja](#przykładowa-demonstracja-symulatora)
-   * [Diagram UML](#wstępny-diagram-uml)
+   * [Diagram UML](#poglądowy-diagram-uml)
 
 ## Autorzy
  - **Mateusz Lewko**: @mlewko
@@ -293,7 +293,7 @@ Total Maintenance Count: 1
 ```
 
 
-## Wstępny diagram UML
+## Poglądowy diagram UML
 <img src = "figures/diagram.png" width = "80%">
 
 
