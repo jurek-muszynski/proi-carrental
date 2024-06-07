@@ -16,19 +16,33 @@ using namespace nlohmann;
 
 class UserInterface
 {
+
+private:
+    std::chrono::system_clock::time_point current_time;
+    std::string dataPath;
+    Customer *customer;
+
+    FleetManagement *fleetManagement;
+    std::vector<Address *> loadedAddresses;
+    std::vector<Location *> loadedLocations;
+
+    Rental *rental = nullptr;
+    RentalManagement *rentalManagement;
+
+    void rentCarOption();
+    void returnCarOption();
+
 public:
     UserInterface(const std::string &dataPath, std::shared_ptr<Customer> customer);
 
     ~UserInterface();
 
     void displayMenu();
-
     void handleUserChoice(int choice);
 
     void loadVehicles();
     void loadLocations();
     void loadAddresses();
-
     void loadData();
 
     void printLocations();

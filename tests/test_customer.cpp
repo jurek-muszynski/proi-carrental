@@ -25,7 +25,6 @@ TEST(CustomerTest, GettersAndSetters)
     EXPECT_EQ(customer->getAddress()->getZipCode(), "54321");
 }
 
-// Customer destructor test
 TEST(CustomerTest, Destructor)
 {
     std::tm birthDate = {};

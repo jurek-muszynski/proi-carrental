@@ -33,7 +33,7 @@ set(PROJECT_SOURCES
     src/userInterface/userInterface.cpp
 )
 
-add_executable(car_rental main.cpp ${PROJECT_SOURCES})
+add_executable(car_rental user_interface.cpp ${PROJECT_SOURCES})
 
 target_link_libraries(car_rental PRIVATE nlohmann_json::nlohmann_json)
 
@@ -44,6 +44,7 @@ target_link_libraries(car_rental_simulation PRIVATE nlohmann_json::nlohmann_json
 add_executable(car_rental_tests
     tests/test_customer_management.cpp
     tests/test_customer.cpp
+    tests/test_admin.cpp
     tests/test_fleet_management.cpp
     tests/test_rental_management.cpp
     tests/test_rental.cpp

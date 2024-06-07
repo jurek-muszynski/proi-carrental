@@ -8,7 +8,6 @@ public:
 
 UserInterface::UserInterface(const std::string &dataPath, std::shared_ptr<Customer> customer) : dataPath(dataPath), customer(customer), fleetManagement(std::make_unique<FleetManagement>()), rentalManagement(std::make_unique<RentalManagement>())
 {
-
     srand(time(0));
     current_time = std::chrono::system_clock::now();
     loadData();
@@ -16,6 +15,8 @@ UserInterface::UserInterface(const std::string &dataPath, std::shared_ptr<Custom
 
 UserInterface::~UserInterface()
 {
+    delete fleetManagement;
+    delete rentalManagement;
 }
 
 void UserInterface::displayMenu()
@@ -144,7 +145,6 @@ void UserInterface::printLocations()
 
 void UserInterface::printVehicles(int seatingCapacity)
 {
-
     auto availableVehicles = fleetManagement->getAvailableVehicles();
 
     for (const auto &vehicle : availableVehicles)
@@ -166,7 +166,8 @@ void UserInterface::printRental()
         std::cout << "No current rental.\n";
         return;
     }
-
+    usleep(1000000);
+    std::cout << "\n";
     std::cout << "Rental ID: " << rental->getId() << "\n";
     std::cout << "Vehicle: " << rental->getVehicle()->getMake() << " " << rental->getVehicle()->getModel() << "\n";
     std::cout << "Customer: " << rental->getCustomer()->getFirstName() << " " << rental->getCustomer()->getLastName() << "\n";
@@ -180,14 +181,24 @@ void UserInterface::rentCarOption()
     std::cout << "1. Choose a location\n";
     usleep(500000);
     printLocations();
-
     usleep(500000);
 
-    std::string locationId;
-    std::cout << "Enter location ID: ";
-    std::cin >> locationId;
-
-    int selectedLocationId = std::stoi(locationId);
+    std::string locationIdTest;
+    int selectedLocationId;
+    while (true)
+    {
+        std::cout << "Enter location ID: ";
+        std::cin >> locationIdTest;
+        try
+        {
+            selectedLocationId = std::stoi(locationIdTest);
+            break;
+        }
+        catch (std::invalid_argument &)
+        {
+            std::cout << "Invalid location ID. Please enter a number.\n";
+        }
+    }
 
     std::cout << selectedLocationId << "\n";
 
@@ -207,23 +218,63 @@ void UserInterface::rentCarOption()
     }
 
     usleep(1000000);
-
     std::cout << "2. Choose rental duration\n";
     int duration;
-    std::cout << "Enter rental duration (in hours): ";
-    std::cin >> duration;
+    while (true)
+    {
+        std::cout << "Enter rental duration in hours (1-24): ";
+        std::cin >> duration;
+        if (std::cin.fail() || duration < 1 || duration > 24)
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please enter a number between 1 and 24.\n";
+        }
+        else
+        {
+            break;
+        }
+    }
 
-    std::cout << "3. Choose vehicle seating capacity\n";
+    usleep(1000000);
+    std::cout << "3. Choose vehicle seating capacity (2-5)\n";
     int seatingCapacity;
-    std::cout << "Enter seating capacity: ";
-    std::cin >> seatingCapacity;
+    while (true)
+    {
+        std::cout << "Enter seating capacity: ";
+        std::cin >> seatingCapacity;
+        if (std::cin.fail() || seatingCapacity < 2 || seatingCapacity > 5)
+        {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please enter a number between 2 and 5.\n";
+        }
+        else
+        {
+            break;
+        }
+    }
 
     std::cout << "4. Choose a vehicle\n";
+    usleep(500000);
     printVehicles(seatingCapacity);
+    usleep(500000);
 
     std::string vehicleId;
-    std::cout << "Enter vehicle ID: ";
-    std::cin >> vehicleId;
+    while (true)
+    {
+        std::cout << "Enter vehicle ID: ";
+        std::cin >> vehicleId;
+
+        if (std::all_of(vehicleId.begin(), vehicleId.end(), ::isdigit))
+        {
+            break;
+        }
+        else
+        {
+            std::cout << "Invalid input. Vehicle ID should be numeric.\n";
+        }
+    }
 
     std::shared_ptr<Vehicle> selectedVehicle = nullptr;
     for (const auto &vehicle : fleetManagement->getAvailableVehicles())
@@ -243,11 +294,22 @@ void UserInterface::rentCarOption()
     std::cout << "5. Choose a drop-off location\n";
     printLocations();
 
-    std::string dropOffLocationId;
-    std::cout << "Enter drop-off location ID: ";
-    std::cin >> dropOffLocationId;
-
-    int selectedDropOffLocationId = std::stoi(dropOffLocationId);
+    std::string dropOffLocationIdTest;
+    int selectedDropOffLocationId;
+    while (true)
+    {
+        std::cout << "Enter drop-off location ID: ";
+        std::cin >> dropOffLocationIdTest;
+        try
+        {
+            selectedDropOffLocationId = std::stoi(dropOffLocationIdTest);
+            break;
+        }
+        catch (std::invalid_argument &)
+        {
+            std::cout << "Invalid drop-off location ID. Please enter a number.\n";
+        }
+    }
 
     std::shared_ptr<Location> selectedDropOffLocation = nullptr;
     for (const auto &location : loadedLocations)
@@ -273,10 +335,13 @@ void UserInterface::rentCarOption()
     std::cout << "\nThe cost of the rental will be: " << cost << " $\n";
 
     rental->printReturnTime();
+
     std::cout << "The rental will be terminated within the " << selectedDropOffLocation->getName() << " zone\n\n";
+
     rental->setDropOffLocation(selectedDropOffLocation);
 
     rentalManagement->openRental(rental);
+
     usleep(2000000);
 }
 

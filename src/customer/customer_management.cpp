@@ -33,7 +33,7 @@ bool CustomerManagement::isCustomerAlreadyRegistered(const std::shared_ptr<Custo
 
 bool CustomerManagement::addCustomer(const std::shared_ptr<Customer> customer)
 {
-    if (!isCustomerAlreadyRegistered(customer))
+    if (!isCustomerAlreadyRegistered(customer) and customer != nullptr)
     {
         customers.push_back(customer);
         return true;
