@@ -67,15 +67,8 @@ const std::vector<std::shared_ptr<Rental>> RentalManagement::getRentalsToBeTermi
 
 bool RentalManagement::isCustomerCurrentlyRenting(const std::shared_ptr<Customer> customer) const
 {
-<<<<<<< HEAD
-    if (customer == nullptr) {
-        return false;
-    }
 
-    auto it = std::find_if(rentals.begin(), rentals.end(), [&](const Rental *rental)
-=======
     auto it = std::find_if(rentals.begin(), rentals.end(), [&](const std::shared_ptr<Rental> rental)
->>>>>>> c6445df218ca895a94818eac88ccf4b821d70a5e
                            { return rental->getCustomer()->getId() == customer->getId(); });
 
     return it != rentals.end();
