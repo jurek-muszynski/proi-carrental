@@ -8,37 +8,34 @@ void handleException(const std::string &message)
 
 int main()
 {
-    // Tworzenie przykładowego customera
     std::string id = "C001";
     std::string firstName = "John";
     std::string lastName = "Doe";
     std::tm birthDate = {};
-    birthDate.tm_year = 2003 - 1900;
-    birthDate.tm_mon = 2 - 1;
+    birthDate.tm_year = 2003 - 1900; // years since 1900
+    birthDate.tm_mon = 2 - 1;        // months since January (0-11)
     birthDate.tm_mday = 1;
     std::string gender = "Male";
     std::string email = "john.doe@example.com";
     std::string phoneNumber = "123456789";
-    Address *address = new Address("Street", "City", "State", "Country", "ZipCode");
-    Customer *customer = new Customer(id, firstName, lastName, birthDate, gender, email, phoneNumber, address);
+    std::shared_ptr<Address> address = std::make_shared<Address>("Street", "City", "State", "Country", "ZipCode");
 
-    // Ścieżka do pliku
-    std::string dataPath = "/home/mlewko/proi/24l-proi-lewko-muszynski/data";
+    std::string dataPath = "data";
+    std::shared_ptr<Customer> customer = std::make_shared<Customer>(id, firstName, lastName, birthDate, gender, email, phoneNumber, address);
 
-    // Stworzenie interfejsu dla użytkownika
-    UserInterface ui(dataPath, customer);
+    std::unique_ptr<UserInterface> ui = std::make_unique<UserInterface>(dataPath, customer);
 
     // Wyświetlenie menu i obsłużenie wyboru użytkownika, wraz z wyjątkami
     std::string input;
     int choice;
     do
     {
-        ui.displayMenu();
+        ui->displayMenu();
         std::cin >> input;
         try
         {
             choice = std::stoi(input);
-            ui.handleUserChoice(choice);
+            ui->handleUserChoice(choice);
         }
         catch (std::invalid_argument &)
         {

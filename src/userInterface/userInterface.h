@@ -20,14 +20,14 @@ class UserInterface
 private:
     std::chrono::system_clock::time_point current_time;
     std::string dataPath;
-    Customer *customer;
+    std::shared_ptr<Customer> customer;
+    std::unique_ptr<FleetManagement> fleetManagement;
+    std::shared_ptr<Rental> rental;
+    std::unique_ptr<RentalManagement> rentalManagement;
 
-    FleetManagement *fleetManagement;
-    std::vector<Address *> loadedAddresses;
-    std::vector<Location *> loadedLocations;
-
-    Rental *rental = nullptr;
-    RentalManagement *rentalManagement;
+    std::vector<std::shared_ptr<Address>> loadedAddresses;
+    std::vector<std::shared_ptr<Location>> loadedLocations;
+    std::vector<std::shared_ptr<Vehicle>> loadedVehicles;
 
     void rentCarOption();
     void returnCarOption();
@@ -35,7 +35,7 @@ private:
 public:
     UserInterface(const std::string &dataPath, std::shared_ptr<Customer> customer);
 
-    ~UserInterface();
+    ~UserInterface() = default;
 
     void displayMenu();
     void handleUserChoice(int choice);
@@ -48,19 +48,4 @@ public:
     void printLocations();
     void printVehicles(int seatingCapacity);
     void printRental();
-
-private:
-    std::chrono::system_clock::time_point current_time;
-    std::string dataPath;
-    std::shared_ptr<Customer> customer;
-    std::unique_ptr<FleetManagement> fleetManagement;
-    std::shared_ptr<Rental> rental;
-    std::unique_ptr<RentalManagement> rentalManagement;
-
-    std::vector<std::shared_ptr<Address>> loadedAddresses;
-    std::vector<std::shared_ptr<Location>> loadedLocations;
-    std::vector<std::shared_ptr<Vehicle>> loadedVehicles;
-
-    void rentCarOption();
-    void returnCarOption();
 };

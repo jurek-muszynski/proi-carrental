@@ -15,13 +15,13 @@ private:
 
 public:
     Location(int id, std::string name, std::shared_ptr<Address> address);
-    ~Location();
+    ~Location() = default;
 
     int getLocationId() const;
     std::string getName() const;
     std::shared_ptr<Address> getAddress() const;
 
-    double calculateDistance(const Location& other) const;
+    double calculateDistance(const Location &other) const;
 
-    friend std::ostream& operator<<(std::ostream& os, const Location& location);
+    friend std::ostream &operator<<(std::ostream &os, const Location &location);
 };

@@ -22,7 +22,8 @@ std::shared_ptr<Address> Location::getAddress() const
 
 double Location::calculateDistance(const Location &other) const
 {
-    if (other.address == nullptr) {
+    if (other.address == nullptr)
+    {
         throw std::invalid_argument("The other location does not have an address.");
     }
     const double earthRadiusKm = 6371.0;
@@ -44,14 +45,12 @@ double Location::calculateDistance(const Location &other) const
     return distance;
 }
 
-Location::~Location()
+std::ostream &operator<<(std::ostream &os, const Location &location)
 {
-}
-
-std::ostream& operator<<(std::ostream& os, const Location& location) {
-    os << "Location ID: " << location.getLocationId() 
+    os << "Location ID: " << location.getLocationId()
        << " Name: " << location.getName();
-    if (location.getAddress() != nullptr) {
+    if (location.getAddress() != nullptr)
+    {
         os << "\n\t" << *(location.getAddress());
     }
     return os;

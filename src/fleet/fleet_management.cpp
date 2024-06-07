@@ -89,6 +89,11 @@ bool FleetManagement::removeVehicle(const std::string id)
 
 bool FleetManagement::addAdmin(std::shared_ptr<AdminUser> admin)
 {
+    if (admin == nullptr)
+    {
+        return false;
+    }
+
     auto it = std::find_if(admins.begin(), admins.end(), [&](const std::shared_ptr<AdminUser> &a)
                            { return a->getId() == admin->getId(); });
 

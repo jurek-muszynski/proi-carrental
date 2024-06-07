@@ -161,6 +161,7 @@ Zawsze przed uruchomieniem wybranej części projektu, upewniamy się, że znajd
 
 - [x] Praca nad interfejsem użytkownika - @mlewko #3
 - [x] Praca nad symulacją systemu, klasa ``Simulation`` - @jmuszyns #4
+- [x] wydajne zarządzanie wskaźnikami (shared & unique pointers) #2 - @jmuszyns
 - [x] Implementacja klas projektu
    - [x] Wstępny wybór i implementacja klas - @mlewko
    - [x] Refaktoryzacja i dalsza praca - @jmuszyns
@@ -168,13 +169,12 @@ Zawsze przed uruchomieniem wybranej części projektu, upewniamy się, że znajd
    - [x] Implementacja klas dziedziczących ``Car`` & ``Truck`` #1 - @jmuszyns
    - [x] Modyfikacja klas ``Vehicle`` & ``Customer`` #1 - @all
    - [x] Implementacja klasy ``userInteface`` #3 - @mlewko
-- [ ] Implementacja testów jednostkowych
+- [x] Implementacja testów jednostkowych
    - [x] Wstępne testy obecnie używanych klas - @jmuszyns
-   - [ ] Dalsza praca nad weryfikacją różnych scenariuszy - @mlewko
+   - [x] Dalsza praca nad weryfikacją różnych scenariuszy - @mlewko
 - [x] Obsługa wyjątków
    - [x] W obrębie symulacji - @jmuszyns
    - [x] W obrębie interfejsu użytkownika - @mlewko
-- [~] wydajne zarządzanie wskaźnikami (unique pointers) #2
 - [x] dokumentacja - @all
 - [~] Implementacja interfejsu graficznego
 

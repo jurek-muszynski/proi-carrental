@@ -64,25 +64,29 @@ TEST(LocationTest, CalculateDistance)
     EXPECT_NEAR(distance, 183.0, 5.0);
 }
 
-TEST(LocationTest, CalculateDistanceNullAddress) {
-    Address address1("5", "123 Main St", "Springfield", "USA", "12345", 23.15, 53.1333);
-    Location location1(1, "Location1", &address1);
+TEST(LocationTest, CalculateDistanceNullAddress)
+{
+    std::shared_ptr<Address> address1 = std::make_shared<Address>("5", "123 Main St", "Springfield", "USA", "12345", 23.15, 53.1333);
+    Location location1(1, "Location1", address1);
 
     Location location2(2, "Location2", nullptr);
 
     EXPECT_THROW(location1.calculateDistance(location2), std::invalid_argument);
 }
 
-TEST(LocationTest, OperatorStreamInsertion) {
-    Address address("4", "123 Main St", "Springfield", "USA", "12345");
-    Location location(106, "Main Office", &address);
+TEST(LocationTest, OperatorStreamInsertion)
+{
+    std::shared_ptr<Address> address1 = std::make_shared<Address>("5", "123 Main St", "Springfield", "USA", "12345");
+
+    Location location(106, "Main Office", address1);
 
     std::ostringstream os;
     os << location;
     EXPECT_EQ(os.str(), "Location ID: 106 Name: Main Office\n\tAddress: 123 Main St Street Springfield");
 }
 
-TEST(LocationTest, OperatorStreamInsertionNullAddress) {
+TEST(LocationTest, OperatorStreamInsertionNullAddress)
+{
     Location location(106, "Main Office", nullptr);
 
     std::ostringstream os;

@@ -63,7 +63,7 @@ std::string Simulation::getDateTime() const
 void Simulation::run()
 {
     std::cout << "Simulation has just started\n";
-    // usleep(2000000);
+    usleep(2000000);
     logs.push_back(getDateTime() + "\n");
 
     std::default_random_engine generator(time(0));
@@ -111,7 +111,7 @@ void Simulation::run()
 
         printLogs();
         passTime();
-        // usleep(2000000);
+        usleep(2000000);
     }
 
     std::cout << "\nSimulation has ended after " << simulations_run << " iterations\n";
@@ -505,7 +505,7 @@ void Simulation::printLogs()
             std::cout << i << ". ";
         }
         std::cout << logs[i];
-        // usleep(1000000);
+        usleep(1000000);
     }
 
     logs.clear();

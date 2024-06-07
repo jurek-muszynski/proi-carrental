@@ -13,12 +13,6 @@ UserInterface::UserInterface(const std::string &dataPath, std::shared_ptr<Custom
     loadData();
 }
 
-UserInterface::~UserInterface()
-{
-    delete fleetManagement;
-    delete rentalManagement;
-}
-
 void UserInterface::displayMenu()
 {
     if (rental == nullptr || rental->getVehicle()->getAvailabilityStatus())
